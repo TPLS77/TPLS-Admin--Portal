@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Progress of Life School — Management System</title>
+<style>
+:root{
+  --blue:#1768c4;--blue2:#0b4f9e;--navy:#082e63;--gold:#f2b51d;
+  --bg:#f5f8fc;--card:#fff;--text:#172033;--muted:#6b778c;--line:#e5ebf3;
+  --danger:#dc3545;--success:#159957;--shadow:0 12px 35px rgba(20,64,120,.10);
+}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit} button{cursor:pointer}
+.hidden{display:none!important}.app{min-height:100vh}.login{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;background:#fff}
+.login-visual{background:linear-gradient(145deg,#073d82,#1768c4 55%,#4d93df);color:#fff;position:relative;overflow:hidden;padding:55px;display:flex;align-items:center}
+.login-visual:before,.login-visual:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}
+.login-visual:before{width:500px;height:500px;right:-230px;top:-160px}.login-visual:after{width:380px;height:380px;left:-200px;bottom:-180px}
+.school-mark{width:105px;height:105px;object-fit:contain;background:#fff;border-radius:50%;padding:6px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.login-copy{position:relative;z-index:2;max-width:620px}.login-copy h1{font-size:44px;line-height:1.05;margin:25px 0 12px}.login-copy p{font-size:18px;opacity:.9;line-height:1.7}
+.pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.pill{border:1px solid rgba(255,255,255,.3);padding:9px 13px;border-radius:30px;background:rgba(255,255,255,.1)}
+.login-panel{display:flex;align-items:center;justify-content:center;padding:35px}.auth-box{width:min(430px,100%)}.auth-box h2{font-size:30px;margin:0 0 8px}.auth-box .sub{color:var(--muted);margin-bottom:25px}
+.tabs{display:flex;background:#eef4fb;border-radius:12px;padding:4px;margin-bottom:20px}.tabs button{flex:1;border:0;background:transparent;padding:11px;border-radius:9px;color:var(--muted)}.tabs button.active{background:#fff;color:var(--blue);box-shadow:0 3px 10px #dbe6f5}
+.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:12px 13px;border:1px solid #d7e0eb;border-radius:10px;outline:0;background:#fff}.field input:focus,.field select:focus,.field textarea:focus{border-color:#6ba5e8;box-shadow:0 0 0 3px #e8f2ff}
+.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:700;transition:.2s}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--blue);color:#fff}.btn-secondary{background:#edf3fa;color:var(--navy)}.btn-danger{background:#fff0f1;color:var(--danger)}.btn-success{background:#eaf8f1;color:var(--success)}
+.full{width:100%}.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:15px}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:linear-gradient(180deg,#063a7d,#0b4f9e);color:#fff;padding:20px 14px;z-index:20}.brand{display:flex;align-items:center;gap:11px;padding:8px 8px 20px}.brand img{width:48px;height:48px;border-radius:50%;background:#fff;padding:3px}.brand strong{font-size:14px;line-height:1.15}.brand small{opacity:.75}
+.unpaid{background:#f0f2f5;color:#657184}.nav{display:grid;gap:5px;margin-top:10px}.nav button{border:0;color:#eaf3ff;background:transparent;text-align:left;padding:12px 13px;border-radius:10px;display:flex;gap:11px;align-items:center}.nav button.active,.nav button:hover{background:rgba(255,255,255,.13)}.nav .ico{width:22px;text-align:center}.logout{position:absolute;left:14px;right:14px;bottom:18px}
+.main{margin-left:245px;min-height:100vh}.topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10}.topbar h2{font-size:20px;margin:0}.user{display:flex;align-items:center;gap:10px}.avatar{width:38px;height:38px;border-radius:50%;background:#e6f0fd;color:var(--blue);display:grid;place-items:center;font-weight:800}
+.content{padding:28px}.page{display:none;animation:fade .3s ease}.page.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);padding:18px}.stat{display:flex;justify-content:space-between;align-items:flex-start}.stat .icon{width:44px;height:44px;border-radius:12px;background:#eaf3ff;display:grid;place-items:center;font-size:20px}.stat h3{font-size:27px;margin:12px 0 3px}.stat p{margin:0;color:var(--muted);font-size:13px}.positive{color:var(--success)}.negative{color:var(--danger)}
+.grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-top:18px}.section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.section-title h3{margin:0;font-size:17px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;white-space:nowrap}.table th{color:var(--muted);font-size:12px}.badge{padding:5px 8px;border-radius:20px;font-size:11px;font-weight:800;display:inline-block}.paid{background:#eaf8f1;color:#11854d}.pending{background:#fff0f1;color:#c92d3d}.partial{background:#fff7df;color:#9a6a00}.active-badge{background:#eaf3ff;color:#1260b8}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:15px}.toolbar input,.toolbar select{padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;min-width:170px}.toolbar .spacer{flex:1}
+.photo{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#e9eef5}.photo-lg{width:76px;height:76px;border-radius:14px;object-fit:cover;background:#e9eef5}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.form-grid .fullrow{grid-column:1/-1}.modal{position:fixed;inset:0;background:rgba(4,23,49,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal.show{display:flex}.modal-box{background:#fff;border-radius:18px;width:min(760px,100%);max-height:90vh;overflow:auto;box-shadow:0 25px 70px rgba(0,0,0,.25);animation:pop .2s ease}@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}.modal-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-body{padding:20px}.close{border:0;background:#eef3f8;width:34px;height:34px;border-radius:50%}
+.receipt{width:800px;max-width:100%;margin:auto;background:#fff;padding:28px;border:1px solid #ddd}.receipt-head{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--blue);padding-bottom:16px}.receipt-logo{width:65px;height:65px;object-fit:contain}.receipt-school{display:flex;gap:12px;align-items:center}.receipt-school h2{margin:0;color:var(--navy);font-size:19px}.receipt-school p{margin:3px 0 0;color:#667}.receipt-no{text-align:right;font-size:12px}.receipt-student{display:flex;gap:18px;margin:20px 0;align-items:center}.receipt-table{width:100%;border-collapse:collapse}.receipt-table th,.receipt-table td{padding:11px;border:1px solid #d8e0ea}.receipt-table th{background:#edf5ff;color:var(--navy);text-align:left}.receipt-total{font-size:18px;font-weight:800}.signs{display:flex;justify-content:space-between;margin-top:45px}.sign{width:180px;border-top:1px solid #555;text-align:center;padding-top:7px;font-size:12px}
+.empty{padding:35px;text-align:center;color:var(--muted)}.toast{position:fixed;right:22px;bottom:22px;background:#102b4e;color:#fff;padding:13px 17px;border-radius:10px;box-shadow:var(--shadow);opacity:0;transform:translateY(15px);transition:.25s;z-index:100}.toast.show{opacity:1;transform:none}
+@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.sidebar{width:75px}.sidebar .brand div,.sidebar .nav span:not(.ico),.logout span{display:none}.main{margin-left:75px}.brand{justify-content:center}.nav button{justify-content:center}.logout{left:14px;right:14px}.login{grid-template-columns:1fr}.login-visual{display:none}}
+@media(max-width:650px){.cards{grid-template-columns:1fr}.content{padding:16px}.topbar{padding:0 16px}.form-grid{grid-template-columns:1fr}.sidebar{display:none}.main{margin-left:0}.table th,.table td{font-size:12px}.login-panel{padding:22px}}
+@media print{body *{visibility:hidden!important}.print-area,.print-area *{visibility:visible!important}.print-area{position:absolute;left:0;top:0;width:100%}}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chip{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:20px;background:#eef4ff;color:#164b8a;font-size:12px}.chip button{border:0;background:none;cursor:pointer;font-weight:bold}.hint{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="loginScreen" class="login">
+  <div class="login-visual">
+    <div class="login-copy">
+      <img class="school-mark" src="assets/school-logo.jpg" onerror="this.style.display='none'">
+      <h1>The Progress of Life School</h1>
+      <p>School Management System</p>
+      <p>Manage students, teachers, fees and school finances in one simple, professional place.</p>
+      <div class="pills"><span class="pill">Student Records</span><span class="pill">Fee Receipts</span><span class="pill">Pending Fees</span><span class="pill">Financial Reports</span></div>
+    </div>
+  </div>
+  <div class="login-panel">
+    <div class="auth-box">
+      <div class="tabs"><button id="loginTab" class="active" onclick="showAuth('login')">Sign In</button><button id="signupTab" onclick="showAuth('signup')">Create Account</button></div>
+      <div id="loginForm">
+        <h2>Welcome Back!</h2><div class="sub">Sign in to continue to your school account.</div>
+        <div class="field"><label>Email</label><input id="loginEmail" type="email" placeholder="admin@school.com"></div>
+        <div class="field"><label>Password</label><input id="loginPassword" type="password" placeholder="••••••••"></div>
+        <button class="btn btn-primary full" onclick="login()">Sign In</button>
+        <div class="note">This first version stores your account and school data in this browser. No server or paid service is required.</div>
+      </div>
+      <div id="signupForm" class="hidden">
+        <h2>Create School Account</h2><div class="sub">Set up your administrator account to begin.</div>
+        <div class="field"><label>Administrator Name</label><input id="signupName" placeholder="School Administrator"></div>
+        <div class="field"><label>Email</label><input id="signupEmail" type="email" placeholder="admin@school.com"></div>
+        <div class="field"><label>Password</label><input id="signupPassword" type="password" placeholder="Create a password"></div>
+        <button class="btn btn-primary full" onclick="signup()">Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+<aside class="sidebar">
+  <div class="brand"><img src="assets/school-logo.jpg"><div><strong>THE PROGRESS OF LIFE</strong><small>SCHOOL</small></div></div>
+  <div class="nav">
+    <button data-page="dashboard" class="active" onclick="go('dashboard')"><span class="ico">⌂</span><span>Dashboard</span></button>
+    <button data-page="students" onclick="go('students')"><span class="ico">👨‍🎓</span><span>Students</span></button>
+    <button data-page="teachers" onclick="go('teachers')"><span class="ico">👩‍🏫</span><span>Teachers</span></button>
+    <button data-page="fees" onclick="go('fees')"><span class="ico">💳</span><span>Fees</span></button>
+    <button data-page="expenses" onclick="go('expenses')"><span class="ico">💰</span><span>Expenses</span></button>
+    <button data-page="receipts" onclick="go('receipts')"><span class="ico">🧾</span><span>Receipts</span></button>
+    <button data-page="reports" onclick="go('reports')"><span class="ico">📊</span><span>Reports</span></button>
+  </div>
+  <button class="btn logout" onclick="logout()">↪ <span>Sign Out</span></button>
+</aside>
+
+<main class="main">
+<header class="topbar"><h2 id="pageTitle">Dashboard</h2><div class="user"><div><strong id="adminName">Administrator</strong><div style="font-size:11px;color:var(--muted)">School Admin</div></div><div class="avatar" id="avatar">A</div></div></header>
+<section class="content">
+
+<div id="dashboard" class="page active">
+  <div class="section-title"><div><h3>School Overview</h3><div style="color:var(--muted);font-size:13px">Your financial and student snapshot</div></div><button class="btn btn-secondary" onclick="refreshDashboard()">↻ Refresh</button></div>
+  <div class="cards">
+    <div class="card stat"><div><p>Total Students</p><h3 id="sTotal">0</h3><p>Active students</p></div><div class="icon">👨‍🎓</div></div>
+    <div class="card stat"><div><p>Total Teachers</p><h3 id="tTotal">0</h3><p>Teaching staff</p></div><div class="icon">👩‍🏫</div></div>
+    <div class="card stat"><div><p>Fees Collected</p><h3 id="fCollected">PKR 0</h3><p>This month</p></div><div class="icon">💳</div></div>
+    <div class="card stat"><div><p>Pending Fees</p><h3 id="fPending" class="negative">PKR 0</h3><p>Outstanding</p></div><div class="icon">⏳</div></div>
+  </div>
+  <div class="cards" style="margin-top:16px">
+    <div class="card stat"><div><p>Expected Fees</p><h3 id="fExpected">PKR 0</h3><p>Monthly</p></div><div class="icon">📅</div></div>
+    <div class="card stat"><div><p>Expenses</p><h3 id="eTotal">PKR 0</h3><p>This month</p></div><div class="icon">💰</div></div>
+    <div class="card stat"><div><p>Net Balance</p><h3 id="netBalance" class="positive">PKR 0</h3><p>Collected − expenses</p></div><div class="icon">📈</div></div>
+    <div class="card stat"><div><p>Receipts</p><h3 id="rTotal">0</h3><p>Payments recorded</p></div><div class="icon">🧾</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><div class="section-title"><h3>Recent Payments</h3><button class="btn btn-secondary" onclick="go('fees')">View all</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Student</th><th>Month</th><th>Paid</th><th>Date</th></tr></thead><tbody id="recentPayments"></tbody></table></div></div>
+    <div class="card"><div class="section-title"><h3>Fee Status</h3></div><div id="statusBars"></div></div>
+  </div>
+</div>
+
+<div id="students" class="page">
+  <div class="section-title"><div><h3>Students</h3><div style="color:var(--muted);font-size:13px">Save complete student information and photos.</div></div><button class="btn btn-primary" onclick="openStudent()">+ Add Student</button></div>
+  <div class="card"><div class="toolbar"><input id="studentSearch" placeholder="Search name, ID or phone..." oninput="renderStudents()"><select id="studentClass" onchange="renderStudents()"><option value="">All Classes</option></select><div class="spacer"></div><button class="btn btn-secondary" onclick="exportStudents()">Export CSV</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Student</th><th>ID</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Monthly Fee</th><th>Status</th><th></th></tr></thead><tbody id="studentRows"></tbody></table></div></div>
+</div>
+
+<div id="teachers" class="page">
+  <div class="section-title"><div><h3>Teachers</h3><div style="color:var(--muted);font-size:13px">Keep teacher contact and employment details.</div></div><button class="btn btn-primary" onclick="openTeacher()">+ Add Teacher</button></div>
+  <div class="card"><div class="toolbar"><input id="teacherSearch" placeholder="Search teacher or subject..." oninput="renderTeachers()"></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Gender</th><th>Phone</th><th>Class & Subject Assignments</th><th>Status</th><th></th></tr></thead><tbody id="teacherRows"></tbody></table></div></div>
+</div>
+
+<div id="fees" class="page">
+  <div class="section-title"><div><h3>Fee Collection</h3><div style="color:var(--muted);font-size:13px">Record payments and automatically calculate balances.</div></div><button class="btn btn-primary" onclick="openFee()">+ Record Payment</button></div>
+  <div class="card"><div class="toolbar"><input id="feeSearch" placeholder="Search student..." oninput="renderFees()"><input id="feeMonthFilter" type="month" onchange="renderFees()" title="Select fee month"><select id="feeStatus" onchange="renderFees()"><option value="">All Status</option><option value="Paid">Paid</option><option value="Partial">Partial</option><option value="Pending">Pending</option><option value="Unpaid">Unpaid</option></select><div class="spacer"></div><button class="btn btn-secondary" onclick="go('reports')">Financial Report</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Receipt</th><th>Student</th><th>Month</th><th>Expected</th><th>Paid</th><th>Pending</th><th>Status</th><th>Date</th><th></th></tr></thead><tbody id="feeRows"></tbody></table></div></div>
+</div>
+
+<div id="expenses" class="page">
+  <div class="section-title"><div><h3>Expenses</h3><div style="color:var(--muted);font-size:13px">Track school expenses for accurate financial statistics.</div></div><button class="btn btn-primary" onclick="openExpense()">+ Add Expense</button></div>
+  <div class="card"><div class="toolbar"><select id="expenseCategory" onchange="renderExpenses()"><option value="">All Categories</option><option>Utilities</option><option>Salaries</option><option>Supplies</option><option>Maintenance</option><option>Transport</option><option>Other</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr></thead><tbody id="expenseRows"></tbody></table></div></div>
+</div>
+
+<div id="receipts" class="page">
+  <div class="section-title"><div><h3>Receipts</h3><div style="color:var(--muted);font-size:13px">Print any saved fee receipt with the student's photo.</div></div></div>
+  <div class="card"><div class="toolbar"><input id="receiptSearch" placeholder="Search receipt or student..." oninput="renderReceipts()"><input id="receiptMonthFilter" type="month" onchange="renderReceipts()"><div class="spacer"></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Receipt No.</th><th>Student</th><th>Month</th><th>Amount</th><th>Date</th><th></th></tr></thead><tbody id="receiptRows"></tbody></table></div></div>
+</div>
+
+<div id="reports" class="page">
+  <div class="section-title"><div><h3>Financial Reports</h3><div style="color:var(--muted);font-size:13px">Clear statistics for school management.</div></div><button class="btn btn-secondary" </div>
+  <div class="cards">
+    <div class="card"><p style="color:var(--muted)">Total collected</p><h2 id="repCollected">PKR 0</h2></div>
+    <div class="card"><p style="color:var(--muted)">Total pending</p><h2 id="repPending" class="negative">PKR 0</h2></div>
+    <div class="card"><p style="color:var(--muted)">Total expenses</p><h2 id="repExpenses">PKR 0</h2></div>
+    <div class="card"><p style="color:var(--muted)">Net balance</p><h2 id="repNet" class="positive">PKR 0</h2></div>
+  </div>
+  <div class="grid2"><div class="card"><div class="section-title"><h3>Collection by Month</h3></div><div class="toolbar" id="financialReportFilter" style="margin-bottom:14px">
+<label style="min-width:150px">Report Type<select id="reportType" onchange="renderReports()"><option value="month">Month</option><option value="year">Year</option><option value="day">Day</option></select></label>
+<label id="reportMonthWrap" style="min-width:150px">Month<input id="reportMonth" type="month" onchange="renderReports()"></label>
+<label id="reportYearWrap" style="min-width:150px;display:none">Year<input id="reportYear" type="number" min="2000" max="2100" onchange="renderReports()"></label>
+<label id="reportDayWrap" style="min-width:150px;display:none">Day<input id="reportDay" type="date" onchange="renderReports()"></label>
+<div class="spacer"></div><button class="btn btn-primary" onclick="printFinancialReport()">Print Financial Report</button>
+</div>
+<div id="monthReport"></div></div></div>
+</div>
+
+</section></main>
+</div>
+
+<!-- Student Modal -->
+<div id="studentModal" class="modal"><div class="modal-box"><div class="modal-head"><strong id="studentModalTitle">Add Student</strong><button class="close" onclick="closeModal('studentModal')">×</button></div><div class="modal-body"><input id="studentEditId" type="hidden"><div class="form-grid">
+<div class="field"><label>Student Name *</label><input id="stName"></div><div class="field"><label>Student ID *</label><input id="stId" placeholder="PLS-2026-001"></div>
+<div class="field"><label>Father / Guardian Name</label><input id="stGuardian"></div><div class="field"><label>Parent Phone</label><input id="stPhone"></div>
+<div class="field"><label>Class *</label><input id="stClass" placeholder="5th"></div><div class="field"><label>Section</label><input id="stSection" placeholder="A"></div>
+<div class="field"><label>Date of Birth</label><input id="stDob" type="date"></div><div class="field"><label>Gender</label><select id="stGender"><option>Male</option><option>Female</option></select></div>
+<div class="field"><label>Monthly Fee (PKR) *</label><input id="stFee" type="number" min="0" value="2000"></div><div class="field"><label>Admission Date</label><input id="stAdmission" type="date"></div>
+<div class="field fullrow"><label>Address</label><textarea id="stAddress" rows="2"></textarea></div>
+<div class="field fullrow"><label>Student Photo</label><input id="stPhoto" type="file" accept="image/*" onchange="previewPhoto(event)"><div style="margin-top:8px"><img id="photoPreview" class="photo-lg" alt="Photo preview"></div></div>
+</div><div style="display:flex;justify-content:flex-end;gap:9px;margin-top:18px"><button class="btn btn-secondary" onclick="closeModal('studentModal')">Cancel</button><button class="btn btn-primary" onclick="saveStudent()">Save Student</button></div></div></div></div>
+
+<!-- Teacher Modal -->
+<div id="teacherModal" class="modal"><div class="modal-box"><div class="modal-head"><strong id="teacherModalTitle">Add Teacher</strong><button class="close" onclick="closeModal('teacherModal')">×</button></div><div class="modal-body">
+<input id="teacherEditId" type="hidden">
+<div class="form-grid">
+<div class="field"><label>Teacher Name *</label><input id="teName"></div>
+<div class="field"><label>Gender</label><select id="teGender"><option>Male</option><option>Female</option></select></div>
+<div class="field"><label>Phone</label><input id="tePhone"></div>
+<div class="field"><label>Email</label><input id="teEmail" type="email"></div>
+<div class="field"><label>Qualification</label><input id="teQualification" placeholder="e.g. BS Chemistry, MA English"></div>
+<div class="field"><label>Joining Date</label><input id="teJoining" type="date"></div>
+<div class="field"><label>Status</label><select id="teStatus"><option>Active</option><option>Inactive</option></select></div>
+<div class="field fullrow"><label>Teacher Photo</label><input id="tePhoto" type="file" accept="image/*" onchange="previewTeacherPhoto(event)"><div style="margin-top:8px"><img id="teacherPhotoPreview" class="photo-lg" alt="Teacher photo preview"></div></div>
+</div>
+<div class="section-title" style="margin-top:18px"><h3>Teaching Assignments</h3></div>
+<div class="hint" style="margin-bottom:10px">Select the class and subject for this teacher. You can add as many different class/subject combinations as needed.</div>
+<div class="form-grid">
+<div class="field"><label>Class</label><select id="teClass"></select></div>
+<div class="field"><label>Subject</label><select id="teSubjectSelect"></select></div>
+</div>
+<div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:8px">
+<button type="button" class="btn btn-secondary" onclick="addTeacherAssignment()">+ Add Class & Subject</button>
+<div id="teacherAssignmentChips" class="chips"></div>
+</div>
+<div style="display:flex;justify-content:flex-end;gap:9px;margin-top:18px"><button class="btn btn-secondary" onclick="closeModal('teacherModal')">Cancel</button><button class="btn btn-primary" onclick="saveTeacher()">Save Teacher</button></div>
+</div></div></div>
+
+<!-- Fee Modal -->
+<div id="feeModal" class="modal"><div class="modal-box"><div class="modal-head"><strong>Record Fee Payment</strong><button class="close" onclick="closeModal('feeModal')">×</button></div><div class="modal-body"><div class="form-grid">
+<div class="field fullrow"><label>Student *</label><select id="feeStudent" onchange="updateFeeExpected()"></select></div>
+<div class="field"><label>Fee Month *</label><input id="feeMonth" type="month"></div><div class="field"><label>Expected Fee</label><input id="feeExpected" type="number" readonly></div>
+<div class="field"><label>Previous Pending</label><input id="feePrevious" type="number" value="0"></div><div class="field"><label>Discount</label><input id="feeDiscount" type="number" value="0"></div>
+<div class="field"><label>Amount Paid *</label><input id="feePaid" type="number" min="0"></div><div class="field"><label>Payment Date</label><input id="feeDate" type="date"></div>
+</div><div style="background:#edf5ff;border-radius:10px;padding:12px;margin-top:12px;color:var(--navy)">Remaining balance: <strong id="feeRemaining">PKR 0</strong></div><div style="display:flex;justify-content:flex-end;gap:9px;margin-top:18px"><button class="btn btn-secondary" onclick="closeModal('feeModal')">Cancel</button><button class="btn btn-primary" onclick="saveFee()">Save & Print Receipt</button></div></div></div></div>
+
+<!-- Expense Modal -->
+<div id="expenseModal" class="modal"><div class="modal-box"><div class="modal-head"><strong>Add Expense</strong><button class="close" onclick="closeModal('expenseModal')">×</button></div><div class="modal-body"><div class="form-grid">
+<div class="field"><label>Date</label><input id="exDate" type="date"></div><div class="field"><label>Category</label><select id="exCategory"><option>Utilities</option><option>Salaries</option><option>Supplies</option><option>Maintenance</option><option>Transport</option><option>Other</option></select></div>
+<div class="field fullrow"><label>Description</label><input id="exDescription"></div><div class="field"><label>Amount (PKR) *</label><input id="exAmount" type="number" min="0"></div>
+</div><div style="display:flex;justify-content:flex-end;gap:9px;margin-top:18px"><button class="btn btn-secondary" onclick="closeModal('expenseModal')">Cancel</button><button class="btn btn-primary" onclick="saveExpense()">Save Expense</button></div></div></div></div>
+
+<!-- Receipt Modal -->
+<div id="receiptModal" class="modal"><div class="modal-box" style="width:min(900px,100%)"><div class="modal-head"><strong>Fee Receipt</strong><div><button class="btn btn-primary" onclick="printReceipt()">🖨 Print Receipt</button> <button class="close" onclick="closeModal('receiptModal')">×</button></div></div><div class="modal-body"><div id="receiptPrintArea" class="print-area"></div></div></div></div>
+
+<div id="toast" class="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://znjtsykmpuhprikbscut.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_H0crIBF0FeRnPiZQa6i43A_KrZEyxbZ";
+let supabaseClient=null;
+function initSupabase(){ if(!window.supabase){toast('Supabase library did not load. Check your internet connection.');return false;} if(!supabaseClient) supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY); return true; }
+let remoteReady=false;
+const KEY='pls_school_v1';
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||{account:null,students:[],teachers:[],fees:[],expenses:[]};
+let currentPhoto='', currentTeacherPhoto='', currentReceipt=null;
+function saveLocal(){localStorage.setItem(KEY,JSON.stringify(db));}
+function money(n){return 'PKR '+Number(n||0).toLocaleString('en-PK');}
+function today(){return new Date().toISOString().slice(0,10)}
+function monthNow(){return new Date().toISOString().slice(0,7)}
+function uid(prefix='ID'){return prefix+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7).toUpperCase()}
+function uuid(){return crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16)})}
+async function uploadImageData(bucket, pathPrefix, dataUrl){
+ if(!dataUrl || !String(dataUrl).startsWith('data:image/')) return null;
+ const parts=String(dataUrl).split(',');
+ const mime=(parts[0].match(/data:(.*?);base64/)||[])[1]||'image/jpeg';
+ const bytes=Uint8Array.from(atob(parts[1]),c=>c.charCodeAt(0));
+ const ext=mime.includes('png')?'png':mime.includes('webp')?'webp':'jpg';
+ const path=`${pathPrefix}/${Date.now()}-${Math.random().toString(36).slice(2,7)}.${ext}`;
+ const up=await supabaseClient.storage.from(bucket).upload(path,new Blob([bytes],{type:mime}),{upsert:true,contentType:mime});
+ if(up.error) throw up.error;
+ return path;
+}
+async function signedImage(bucket,path){
+ if(!path) return '';
+ const signed=await supabaseClient.storage.from(bucket).createSignedUrl(path,60*60*24);
+ return signed.error?'':signed.data.signedUrl;
+}
+async function saveDB(){
+ saveLocal();
+ if(!remoteReady) return;
+ try{
+   for(const s of db.students){
+     if(s.photo && String(s.photo).startsWith('data:image/')){
+       s.photoPath=await uploadImageData('student-photos',s.id,s.photo);
+       s.photo=await signedImage('student-photos',s.photoPath);
+     }
+     const row={student_code:s.id,name:s.name,gender:s.gender||null,class_name:s.class||null,date_of_birth:s.dob||null,guardian_name:s.guardian||null,phone:s.phone||null,monthly_fee:Number(s.fee||0),photo_path:s.photoPath||null,status:s.status||'Active'};
+     const {data,error}=await supabaseClient.from('students').upsert(row,{onConflict:'student_code'}).select('id,student_code').single();
+     if(error) throw error; s._remoteId=data.id;
+   }
+   for(const t of db.teachers){
+     if(t.photo && String(t.photo).startsWith('data:image/')){
+       t.photoPath=await uploadImageData('teacher-photos',t.id,t.photo);
+       t.photo=await signedImage('teacher-photos',t.photoPath);
+     }
+     const row={teacher_code:t.id,name:t.name,gender:t.gender||null,phone:t.phone||null,email:t.email||null,qualification:t.qualification||null,joining_date:t.joining||null,photo_path:t.photoPath||null,status:t.status||'Active'};
+     const {data,error}=await supabaseClient.from('teachers').upsert(row,{onConflict:'teacher_code'}).select('id,teacher_code').single();
+     if(error) throw error; t._remoteId=data.id;
+     await supabaseClient.from('teacher_assignments').delete().eq('teacher_id',t._remoteId);
+     if((t.assignments||[]).length) {
+       const {error:e2}=await supabaseClient.from('teacher_assignments').insert(t.assignments.map(a=>({teacher_id:t._remoteId,class_name:a.className,subject:a.subject})));
+       if(e2) throw e2;
+     }
+   }
+   for(const f of db.fees){
+     const s=db.students.find(x=>x.id===f.studentId);
+     if(!s?._remoteId) continue;
+     const row={receipt_number:f.receipt,student_id:s._remoteId,fee_month:(f.month||monthNow())+'-01',paid_amount:Number(f.paid||0),discount:Number(f.discount||0),payment_date:f.date||today(),notes:f.notes||null};
+     const {error}=await supabaseClient.from('fee_payments').upsert(row,{onConflict:'receipt_number'});
+     if(error) throw error;
+   }
+   for(const e of db.expenses){
+     const row={expense_date:e.date||today(),title:e.description||e.category||'Expense',category:e.category||null,amount:Number(e.amount||0)};
+     // Expenses don't have a client id yet; only insert new local rows.
+     if(!e._remoteId){
+       const {data,error}=await supabaseClient.from('expenses').insert(row).select('id').single();
+       if(error) throw error; e._remoteId=data.id;
+     }
+   }
+   saveLocal();
+ }catch(err){
+   console.error('Cloud sync error',err);
+   toast('Saved locally. Cloud sync needs attention.');
+ }
+}
+async function loadRemote(){
+ if(!initSupabase()) throw new Error('Supabase library unavailable');
+ const [ss,tt,aa,ff,ee]=await Promise.all([
+   supabaseClient.from('students').select('*').order('created_at'),
+   supabaseClient.from('teachers').select('*').order('created_at'),
+   supabaseClient.from('teacher_assignments').select('*'),
+   supabaseClient.from('fee_payments').select('*').order('payment_date'),
+   supabaseClient.from('expenses').select('*').order('expense_date')
+ ]);
+ for(const r of [ss,tt,aa,ff,ee]) if(r.error) throw r.error;
+ const assignmentsByTeacher={};
+ (aa.data||[]).forEach(a=>(assignmentsByTeacher[a.teacher_id]??=[]).push({className:a.class_name,subject:a.subject}));
+ db.students=(ss.data||[]).map(s=>({id:s.student_code,_remoteId:s.id,name:s.name,gender:s.gender||'Male',guardian:s.guardian_name||'',phone:s.phone||'',class:s.class_name||'',section:'',dob:s.date_of_birth||'',fee:Number(s.monthly_fee||0),admission:'',address:'',photo:'',photoPath:s.photo_path||'',status:s.status||'Active'}));
+ for(const s of db.students){
+   if(s.photoPath){
+     const signed=await supabaseClient.storage.from('student-photos').createSignedUrl(s.photoPath,60*60);
+     if(!signed.error) s.photo=signed.data.signedUrl;
+   }
+ }
+ db.teachers=(tt.data||[]).map(t=>({id:t.teacher_code,_remoteId:t.id,name:t.name,gender:t.gender||'Male',phone:t.phone||'',email:t.email||'',qualification:t.qualification||'',joining:t.joining_date||'',photo:'',photoPath:t.photo_path||'',status:t.status||'Active',assignments:assignmentsByTeacher[t.id]||[]}));
+ for(const t of db.teachers){ if(t.photoPath) t.photo=await signedImage('teacher-photos',t.photoPath); }
+ db.fees=(ff.data||[]).map(f=>({id:f.id,receipt:f.receipt_number,studentId:(db.students.find(s=>s._remoteId===f.student_id)||{}).id||'',month:String(f.fee_month).slice(0,7),discount:Number(f.discount||0),paid:Number(f.paid_amount||0),expected:Number((db.students.find(s=>s._remoteId===f.student_id)||{}).fee||0),previous:0,remaining:0,status:'',date:f.payment_date}));
+ db.expenses=(ee.data||[]).map(e=>({id:e.id,_remoteId:e.id,date:e.expense_date,category:e.category||'',description:e.title||'',amount:Number(e.amount||0)}));
+ db.account=db.account||{};
+ saveLocal();
+}
+async function saveDBAndRefresh(){await saveDB();refreshAll();}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function showAuth(type){document.getElementById('loginForm').classList.toggle('hidden',type!=='login');document.getElementById('signupForm').classList.toggle('hidden',type!=='signup');document.getElementById('loginTab').classList.toggle('active',type==='login');document.getElementById('signupTab').classList.toggle('active',type==='signup')}
+async function signup(){
+ if(!initSupabase()) return;
+ const name=document.getElementById('signupName').value.trim(),email=document.getElementById('signupEmail').value.trim(),pass=document.getElementById('signupPassword').value;
+ if(!name||!email||!pass)return toast('Please complete all fields.');
+ const {data,error}=await supabaseClient.auth.signUp({email,password:pass,options:{data:{name,school:'The Progress of Life School'}}});
+ if(error)return toast(error.message);
+ db.account={name,email};saveLocal();
+ if(data.session){remoteReady=true;await loadRemote();toast('Account created successfully.');openApp();}
+ else toast('Account created. Check your email to confirm, then sign in.');
+}
+async function login(){
+ if(!initSupabase()) return;
+ const e=document.getElementById('loginEmail').value.trim(),p=document.getElementById('loginPassword').value;
+ if(!e||!p)return toast('Enter email and password.');
+ const {data,error}=await supabaseClient.auth.signInWithPassword({email:e,password:p});
+ if(error)return toast(error.message);
+ remoteReady=true;db.account={name:data.user.user_metadata?.name||'School Administrator',email:data.user.email};saveLocal();
+ try{await loadRemote();openApp();toast('Signed in successfully.');}catch(err){console.error(err);toast('Signed in, but cloud data could not be loaded.');}
+}
+async function logout(){if(!initSupabase()) return; await supabaseClient.auth.signOut();remoteReady=false;sessionStorage.removeItem('pls_logged');document.getElementById('app').classList.add('hidden');document.getElementById('loginScreen').classList.remove('hidden')}
+function openApp(){document.getElementById('loginScreen').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('adminName').textContent=db.account?.name||'Administrator';document.getElementById('avatar').textContent=(db.account?.name||'A')[0].toUpperCase();refreshAll()}
+function go(page){
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(page).classList.add('active');
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));
+ document.getElementById('pageTitle').textContent=page[0].toUpperCase()+page.slice(1);
+ if(page==='dashboard')refreshDashboard();if(page==='students')renderStudents();if(page==='teachers')renderTeachers();if(page==='fees')renderFees();if(page==='expenses')renderExpenses();if(page==='receipts')renderReceipts();if(page==='reports')renderReports();
+}
+function refreshAll(){document.getElementById('feeMonthFilter').value=monthNow();document.getElementById('receiptMonthFilter').value=monthNow();if(document.getElementById('reportMonth'))document.getElementById('reportMonth').value=monthNow();if(document.getElementById('reportYear'))document.getElementById('reportYear').value=new Date().getFullYear();if(document.getElementById('reportDay'))document.getElementById('reportDay').value=today();refreshDashboard();renderStudents();renderTeachers();renderFees();renderExpenses();renderReceipts();renderReports();populateClassFilter()}
+function refreshDashboard(){
+ const m=monthNow(), ledger=monthlyLedger(m);
+ const students=ledger.map(x=>x.student), expected=ledger.reduce((a,x)=>a+x.expected,0), collected=ledger.reduce((a,x)=>a+x.paid,0);
+ const expenses=db.expenses.filter(e=>String(e.date).slice(0,7)===m).reduce((a,e)=>a+Number(e.amount||0),0);
+ const pending=ledger.reduce((a,x)=>a+x.pending,0);
+ document.getElementById('sTotal').textContent=students.length;document.getElementById('tTotal').textContent=db.teachers.filter(t=>t.status!=='Inactive').length;
+ document.getElementById('fCollected').textContent=money(collected);document.getElementById('fPending').textContent=money(pending);document.getElementById('fExpected').textContent=money(expected);document.getElementById('eTotal').textContent=money(expenses);document.getElementById('netBalance').textContent=money(collected-expenses);document.getElementById('rTotal').textContent=db.fees.length;
+ const recent=[...db.fees].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6);
+ document.getElementById('recentPayments').innerHTML=recent.length?recent.map(f=>`<tr><td>${esc(studentName(f.studentId))}</td><td>${esc(f.month)}</td><td>${money(f.paid)}</td><td>${esc(f.date)}</td></tr>`).join(''):`<tr><td colspan="4" class="empty">No payments recorded yet.</td></tr>`;
+ const paid=ledger.filter(x=>x.status==='Paid').length, partial=ledger.filter(x=>x.status==='Partial').length, pend=ledger.filter(x=>x.status==='Pending'||x.status==='Unpaid').length;
+ document.getElementById('statusBars').innerHTML=`${bar('Paid',paid,students.length)}${bar('Partial',partial,students.length)}${bar('Pending / Unpaid',pend,students.length)}`;
+}
+function bar(label,n,total){let pct=total?Math.round(n/total*100):0;return `<div style="margin:16px 0"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>${label}</span><strong>${n}</strong></div><div style="height:9px;background:#edf1f6;border-radius:10px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${label==='Pending'?'#dc3545':label==='Partial'?'#f2b51d':'#159957'};border-radius:10px"></div></div></div>`}
+function studentName(id){return db.students.find(s=>s.id===id)?.name||'Unknown'}
+function paymentForMonth(studentId, month){
+ const rows=db.fees.filter(f=>f.studentId===studentId && f.month===month);
+ return {
+   paid: rows.reduce((a,f)=>a+Number(f.paid||0),0),
+   discount: rows.reduce((a,f)=>a+Number(f.discount||0),0),
+   rows
+ };
+}
+function monthlyLedger(month){
+ return db.students.filter(s=>s.status!=='Inactive').map(s=>{
+   const expected=Number(s.fee||0);
+   const p=paymentForMonth(s.id,month);
+   const due=Math.max(0,expected-p.discount-p.paid);
+   let status='Unpaid';
+   if(due<=0 && expected>0) status='Paid';
+   else if(p.paid>0) status='Partial';
+   return {student:s,expected,paid:p.paid,discount:p.discount,pending:due,status,rows:p.rows};
+ });
+}
+function pendingForStudent(id, month=monthNow()){
+ return monthlyLedger(month).find(x=>x.student.id===id)?.pending||0;
+}
+function yearlyPendingForStudent(id){
+ return monthlyLedger(monthNow()).find(x=>x.student.id===id)?.pending||0;
+}
+function populateClassFilter(){const sel=document.getElementById('studentClass');const classes=[...new Set(db.students.map(s=>s.class).filter(Boolean))].sort();sel.innerHTML='<option value="">All Classes</option>'+classes.map(c=>`<option>${esc(c)}</option>`).join('')}
+function renderStudents(){
+ populateClassFilter();const q=(document.getElementById('studentSearch').value||'').toLowerCase(),cl=document.getElementById('studentClass').value;
+ const arr=db.students.filter(s=>(!q||`${s.name} ${s.id} ${s.phone}`.toLowerCase().includes(q))&&(!cl||s.class===cl));
+ document.getElementById('studentRows').innerHTML=arr.length?arr.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${s.photo||'assets/school-logo.jpg'}"><strong>${esc(s.name)}</strong></div></td><td>${esc(s.id)}</td><td>${esc(s.class)} ${s.section?'/ '+esc(s.section):''}</td><td>${esc(s.guardian)}</td><td>${esc(s.phone)}</td><td>${money(s.fee)}</td><td><span class="badge active-badge">${esc(s.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="editStudent('${s.id}')">Edit</button> <button class="btn btn-danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">No students found. Click “Add Student” to begin.</td></tr>`;
+}
+function openStudent(s=null){currentPhoto=s?.photo||'';document.getElementById('studentModalTitle').textContent=s?'Edit Student':'Add Student';document.getElementById('studentEditId').value=s?.id||'';['Name','Id','Guardian','Phone','Class','Section','Dob','Gender','Fee','Admission','Address'].forEach(k=>{let el=document.getElementById('st'+k);if(el)el.value=s?({Name:s.name,Id:s.id,Guardian:s.guardian,Phone:s.phone,Class:s.class,Section:s.section,Dob:s.dob,Gender:s.gender,Fee:s.fee,Admission:s.admission,Address:s.address}[k]??''):k==='Fee'?'2000':''});document.getElementById('photoPreview').src=currentPhoto||'assets/school-logo.jpg';document.getElementById('stPhoto').value='';document.getElementById('studentModal').classList.add('show')}
+function previewPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{currentPhoto=r.result;document.getElementById('photoPreview').src=currentPhoto};r.readAsDataURL(f)}
+async function saveStudent(){
+ const id=document.getElementById('studentEditId').value||document.getElementById('stId').value.trim();const s={id,name:document.getElementById('stName').value.trim(),guardian:document.getElementById('stGuardian').value.trim(),phone:document.getElementById('stPhone').value.trim(),class:document.getElementById('stClass').value.trim(),section:document.getElementById('stSection').value.trim(),dob:document.getElementById('stDob').value,gender:document.getElementById('stGender').value,fee:Number(document.getElementById('stFee').value||0),admission:document.getElementById('stAdmission').value,address:document.getElementById('stAddress').value.trim(),photo:currentPhoto,status:'Active'};
+ if(!s.name||!s.id||!s.class)return toast('Name, Student ID and Class are required.');
+ const idx=db.students.findIndex(x=>x.id===id);if(idx>=0)db.students[idx]=s;else{if(db.students.some(x=>x.id===id))return toast('Student ID already exists.');db.students.push(s)}await saveDB();closeModal('studentModal');renderStudents();refreshDashboard();toast('Student saved successfully.')}
+function editStudent(id){openStudent(db.students.find(s=>s.id===id))}
+function deleteStudent(id){if(confirm('Delete this student?')){db.students=db.students.filter(s=>s.id!==id);saveDB();refreshAll();toast('Student deleted.')}}
+const TEACHER_CLASSES=['Nursery','Prep','Kindergarten','1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'];
+const TEACHER_SUBJECTS=['Chemistry','Biology','Physics','English','Urdu','Ethics','Pakistan Studies','Social Studies','Math','Computer Science','General Science','Bible','Drawing','Islamiat','General Knowledge','Physical Education','Arabic','Other'];
+let teacherAssignments=[];
+function initTeacherSelectors(){
+ const c=document.getElementById('teClass'), s=document.getElementById('teSubjectSelect');
+ if(c)c.innerHTML=TEACHER_CLASSES.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+ if(s)s.innerHTML=TEACHER_SUBJECTS.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+}
+function renderTeacherAssignmentChips(){
+ const el=document.getElementById('teacherAssignmentChips'); if(!el)return;
+ el.innerHTML=teacherAssignments.length
+  ? teacherAssignments.map((a,i)=>`<span class="chip">${esc(a.className)} — ${esc(a.subject)} <button type="button" title="Remove" onclick="teacherAssignments.splice(${i},1);renderTeacherAssignmentChips()">×</button></span>`).join('')
+  : '<span class="hint">No class/subject assignments added.</span>';
+}
+function addTeacherAssignment(){
+ const className=document.getElementById('teClass').value, subject=document.getElementById('teSubjectSelect').value;
+ if(!teacherAssignments.some(a=>a.className===className&&a.subject===subject)){
+   teacherAssignments.push({className,subject});
+   renderTeacherAssignmentChips();
+ }
+}
+function renderTeachers(){
+ const q=(document.getElementById('teacherSearch').value||'').toLowerCase();
+ const arr=db.teachers.filter(t=>`${t.name||''} ${t.phone||''} ${t.email||''} ${t.subject||''} ${(t.assignments||[]).map(a=>a.className+' '+a.subject).join(' ')}`.toLowerCase().includes(q));
+ document.getElementById('teacherRows').innerHTML=arr.length?arr.map(t=>{
+   const a=t.assignments||[];
+   const assignmentText=a.length?a.map(x=>`${esc(x.className)} — ${esc(x.subject)}`).join('<br>'):(t.subject?esc(t.subject):'—');
+   return `<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${t.photo||'assets/school-logo.jpg'}"><div><strong>${esc(t.name||'')}</strong><div style="font-size:11px;color:var(--muted)">${esc(t.qualification||'')}</div></div></div></td><td>${esc(t.gender||'')}</td><td>${esc(t.phone||'')}</td><td>${assignmentText}</td><td><span class="badge ${String(t.status||'Active').toLowerCase()}">${esc(t.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="openTeacher('${esc(t.id)}')">Edit</button></td></tr>`;
+ }).join(''):`<tr><td colspan="6" class="empty">No teachers found.</td></tr>`;
+}
+function openTeacher(id=''){
+ initTeacherSelectors(); teacherAssignments=[];
+ const t=id?db.teachers.find(x=>x.id===id):null;
+ currentTeacherPhoto=t?.photo||'';
+ document.getElementById('teacherEditId').value=t?.id||'';
+ document.getElementById('teName').value=t?.name||'';
+ document.getElementById('teGender').value=t?.gender||'Male';
+ document.getElementById('tePhone').value=t?.phone||'';
+ document.getElementById('teEmail').value=t?.email||'';
+ document.getElementById('teQualification').value=t?.qualification||'';
+ document.getElementById('teJoining').value=t?.joining||'';
+ document.getElementById('teStatus').value=t?.status||'Active';
+ document.getElementById('tePhoto').value='';
+ document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto||'assets/school-logo.jpg';
+ teacherAssignments=(t?.assignments||[]).map(a=>({className:a.className,subject:a.subject}));
+ document.getElementById('teacherModalTitle').textContent=t?'Edit Teacher':'Add Teacher';
+ renderTeacherAssignmentChips();
+ document.getElementById('teacherModal').classList.add('show');
+}
+function previewTeacherPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{currentTeacherPhoto=r.result;document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto};r.readAsDataURL(f)}
+async function saveTeacher(){
+ const id=document.getElementById('teacherEditId').value||uid('T');
+ const existing=db.teachers.find(t=>t.id===id);
+ const t={id,name:document.getElementById('teName').value.trim(),gender:document.getElementById('teGender').value,phone:document.getElementById('tePhone').value.trim(),email:document.getElementById('teEmail').value.trim(),qualification:document.getElementById('teQualification').value.trim(),joining:document.getElementById('teJoining').value,status:document.getElementById('teStatus').value,photo:currentTeacherPhoto,photoPath:existing?.photoPath||'',assignments:teacherAssignments.map(a=>({...a}))};
+ if(!t.name)return toast('Teacher name is required.');
+ if(!t.assignments.length)return toast('Please add at least one class and subject assignment.');
+ if(!remoteReady)return toast('Please sign in to save teachers to the cloud.');
+ try{
+   if(t.photo && String(t.photo).startsWith('data:image/')){
+     t.photoPath=await uploadImageData('teacher-photos',t.id,t.photo);
+     t.photo=await signedImage('teacher-photos',t.photoPath);
+   }
+   const row={teacher_code:t.id,name:t.name,gender:t.gender||null,phone:t.phone||null,email:t.email||null,qualification:t.qualification||null,joining_date:t.joining||null,photo_path:t.photoPath||null,status:t.status||'Active'};
+   const {data,error}=await supabaseClient.from('teachers').upsert(row,{onConflict:'teacher_code'}).select('id,teacher_code').single();
+   if(error) throw error;
+   t._remoteId=data.id;
+   const del=await supabaseClient.from('teacher_assignments').delete().eq('teacher_id',t._remoteId);
+   if(del.error) throw del.error;
+   const assignments=t.assignments.map(x=>({teacher_id:t._remoteId,class_name:x.className,subject:x.subject}));
+   if(assignments.length){
+     const ins=await supabaseClient.from('teacher_assignments').insert(assignments);
+     if(ins.error) throw ins.error;
+   }
+   if(existing) Object.assign(existing,t); else db.teachers.push(t);
+   saveLocal();closeModal('teacherModal');renderTeachers();refreshDashboard();toast('Teacher saved to cloud successfully.');
+ }catch(err){
+   console.error(err);toast('Teacher could not be saved to cloud: '+(err.message||'Unknown error'));
+ }
+}
+async function deleteTeacher(id){
+ if(!confirm('Delete this teacher?'))return;
+ const t=db.teachers.find(x=>x.id===id);
+ if(remoteReady && t?._remoteId){
+   const {error}=await supabaseClient.from('teachers').delete().eq('id',t._remoteId);
+   if(error)return toast('Could not delete teacher from cloud: '+error.message);
+ }
+ db.teachers=db.teachers.filter(t=>t.id!==id);saveLocal();renderTeachers();refreshDashboard();toast('Teacher deleted.');
+}
+function openFee(){
+ const sel=document.getElementById('feeStudent');sel.innerHTML='<option value="">Select student...</option>'+db.students.map(s=>`<option value="${esc(s.id)}">${esc(s.name)} — ${esc(s.class)} — ${money(s.fee)}</option>`).join('');
+ document.getElementById('feeMonth').value=monthNow();document.getElementById('feeDate').value=today();document.getElementById('feePrevious').value=0;document.getElementById('feeDiscount').value=0;document.getElementById('feePaid').value='';document.getElementById('feeExpected').value=0;document.getElementById('feeRemaining').textContent=money(0);document.getElementById('feeModal').classList.add('show')
+}
+function updateFeeExpected(){const s=db.students.find(x=>x.id===document.getElementById('feeStudent').value);document.getElementById('feeExpected').value=s?.fee||0;const prev=0;document.getElementById('feePrevious').value=prev;calcRemaining()}
+['feePaid','feeDiscount','feePrevious'].forEach(id=>document.addEventListener('input',e=>{if(e.target.id===id)calcRemaining()}))
+function calcRemaining(){const ex=Number(document.getElementById('feeExpected').value||0),prev=Number(document.getElementById('feePrevious').value||0),disc=Number(document.getElementById('feeDiscount').value||0),paid=Number(document.getElementById('feePaid').value||0);document.getElementById('feeRemaining').textContent=money(Math.max(0,ex+prev-disc-paid))}
+function saveFee(){
+ const sid=document.getElementById('feeStudent').value;if(!sid)return toast('Please select a student.');const s=db.students.find(x=>x.id===sid),expected=Number(document.getElementById('feeExpected').value||0),prev=Number(document.getElementById('feePrevious').value||0),discount=Number(document.getElementById('feeDiscount').value||0),paid=Number(document.getElementById('feePaid').value||0);
+ if(paid<=0)return toast('Enter the amount paid.');const remaining=Math.max(0,expected+prev-discount-paid),status=remaining<=0?'Paid':paid>0?'Partial':'Pending';
+ const f={id:Date.now().toString(),receipt:'TPLS-2026-'+String(db.fees.length+1).padStart(5,'0'),studentId:sid,month:document.getElementById('feeMonth').value,expected,previous:prev,discount,paid,remaining,status,date:document.getElementById('feeDate').value};
+ db.fees.push(f);saveDB();closeModal('feeModal');refreshAll();showReceipt(f);toast('Payment saved and receipt generated.')}
+function renderFees(){
+ const q=(document.getElementById('feeSearch').value||'').toLowerCase();
+ const month=document.getElementById('feeMonthFilter').value||monthNow();
+ const st=document.getElementById('feeStatus').value;
+ const ledger=monthlyLedger(month).filter(x=>(!q||`${x.student.name} ${x.student.id} ${x.student.phone}`.toLowerCase().includes(q))&&(!st||(st==='Pending'&&x.status==='Pending')||(st==='Unpaid'&&x.status==='Unpaid')||x.status===st));
+ document.getElementById('feeRows').innerHTML=ledger.length?ledger.map(x=>{
+   const last=x.rows.length?[...x.rows].sort((a,b)=>b.date.localeCompare(a.date))[0]:null;
+   return `<tr><td>${last?esc(last.receipt):'—'}</td><td><strong>${esc(x.student.name)}</strong><div style="font-size:11px;color:var(--muted)">${esc(x.student.id)}</div></td><td>${esc(month)}</td><td>${money(x.expected)}</td><td>${money(x.paid)}</td><td>${money(x.pending)}</td><td><span class="badge ${x.status.toLowerCase()}">${esc(x.status)}</span></td><td>${last?esc(last.date):'—'}</td><td>${last?`<button class="btn btn-secondary" onclick="showReceiptById('${last.id}')">Receipt</button>`:`<button class="btn btn-primary" onclick="recordForStudent('${x.student.id}','${month}')">Collect</button>`}</td></tr>`;
+ }).join(''):`<tr><td colspan="9" class="empty">No students match this month/filter.</td></tr>`;
+}
+function renderReceipts(){
+ const q=(document.getElementById('receiptSearch').value||'').toLowerCase(), month=document.getElementById('receiptMonthFilter').value;
+ const arr=[...db.fees].sort((a,b)=>b.date.localeCompare(a.date)).filter(f=>(!month||f.month===month)&&`${f.receipt} ${studentName(f.studentId)}`.toLowerCase().includes(q));
+ document.getElementById('receiptRows').innerHTML=arr.length?arr.map(f=>`<tr><td>${esc(f.receipt)}</td><td>${esc(studentName(f.studentId))}</td><td>${esc(f.month)}</td><td>${money(f.paid)}</td><td>${esc(f.date)}</td><td><button class="btn btn-primary" onclick="showReceiptById('${f.id}')">Print</button></td></tr>`).join(''):`<tr><td colspan="6" class="empty">No saved receipts for the selected month.</td></tr>`;
+}
+function recordForStudent(studentId, month){
+ openFee();
+ document.getElementById('feeStudent').value=studentId;
+ document.getElementById('feeMonth').value=month;
+ updateFeeExpected();
+ document.getElementById('feePaid').focus();
+}
+
+function showReceiptById(id){showReceipt(db.fees.find(f=>f.id===id))}
+function showReceipt(f){if(!f)return;currentReceipt=f;const s=db.students.find(x=>x.id===f.studentId)||{};document.getElementById('receiptPrintArea').innerHTML=`<div class="receipt"><div class="receipt-head"><div class="receipt-school"><img class="receipt-logo" src="assets/school-logo.jpg"><div><h2>THE PROGRESS OF LIFE SCHOOL</h2><p>CHAK 8JB MEHBOOB TOWN, FAISALABAD</p><p style="font-size:11px">PROGRESS FOR CHRISTIAN CHILDREN</p></div></div><div class="receipt-no"><strong>FEE RECEIPT</strong><br>Receipt No: ${esc(f.receipt)}<br>Date: ${esc(f.date)}</div></div><div class="receipt-student"><img class="photo-lg" src="${s.photo||'assets/school-logo.jpg'}"><div><strong>${esc(s.name||'')}</strong><div>Student ID: ${esc(s.id||'')}</div><div>Class / Section: ${esc(s.class||'')} ${s.section?'/ '+esc(s.section):''}</div><div>Father / Guardian: ${esc(s.guardian||'')}</div></div></div><table class="receipt-table"><tr><th>Description</th><th>Amount (PKR)</th></tr><tr><td>Monthly Fee (${esc(f.month)})</td><td>${Number(f.expected).toLocaleString()}</td></tr><tr><td>Previous Balance</td><td>${Number(f.previous).toLocaleString()}</td></tr><tr><td>Discount</td><td>${Number(f.discount).toLocaleString()}</td></tr><tr><td><strong>Amount Paid</strong></td><td><strong>${Number(f.paid).toLocaleString()}</strong></td></tr><tr><td><strong>Remaining Balance</strong></td><td><strong>${Number(f.remaining).toLocaleString()}</strong></td></tr></table><p><strong>Amount in Words:</strong> ${amountWords(f.paid)}</p><div class="signs"><div class="sign">Received By</div><div class="sign">Principal</div></div></div>`;document.getElementById('receiptModal').classList.add('show')}
+function amountWords(n){n=Number(n||0);if(n===0)return'Zero Only';if(n<1000000)return n.toLocaleString('en-PK')+' Only';return n.toLocaleString('en-PK')+' Only'}
+function printReceipt(){window.print()}
+function openExpense(){document.getElementById('exDate').value=today();document.getElementById('exDescription').value='';document.getElementById('exAmount').value='';document.getElementById('expenseModal').classList.add('show')}
+function saveExpense(){const e={id:Date.now().toString(),date:document.getElementById('exDate').value,category:document.getElementById('exCategory').value,description:document.getElementById('exDescription').value.trim(),amount:Number(document.getElementById('exAmount').value||0)};if(!e.amount)return toast('Enter an expense amount.');db.expenses.push(e);saveDB();closeModal('expenseModal');renderExpenses();refreshDashboard();renderReports();toast('Expense saved.')}
+function renderExpenses(){const cat=document.getElementById('expenseCategory').value,arr=[...db.expenses].sort((a,b)=>b.date.localeCompare(a.date)).filter(e=>!cat||e.category===cat);document.getElementById('expenseRows').innerHTML=arr.length?arr.map(e=>`<tr><td>${esc(e.date)}</td><td>${esc(e.category)}</td><td>${esc(e.description)}</td><td>${money(e.amount)}</td><td><button class="btn btn-danger" onclick="deleteExpense('${e.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="5" class="empty">No expenses recorded yet.</td></tr>`}
+function deleteExpense(id){if(confirm('Delete this expense?')){db.expenses=db.expenses.filter(e=>e.id!==id);saveDB();renderExpenses();refreshDashboard();renderReports()}}
+function reportRange(){
+ const type=document.getElementById('reportType')?.value||'month';
+ const month=document.getElementById('reportMonth')?.value||monthNow();
+ const year=String(document.getElementById('reportYear')?.value||new Date().getFullYear());
+ const day=document.getElementById('reportDay')?.value||today();
+ let fees=[], expenses=[];
+ if(type==='month'){ fees=db.fees.filter(f=>f.month===month); expenses=db.expenses.filter(e=>String(e.date).slice(0,7)===month); }
+ else if(type==='year'){ fees=db.fees.filter(f=>String(f.month||'').startsWith(year)); expenses=db.expenses.filter(e=>String(e.date||'').startsWith(year)); }
+ else { fees=db.fees.filter(f=>String(f.date||'')===day); expenses=db.expenses.filter(e=>String(e.date||'')===day); }
+ return {type,month,year,day,fees,expenses};
+}
+function renderReports(){
+ const r=reportRange();
+ const collected=r.fees.reduce((a,f)=>a+Number(f.paid||0),0),expenses=r.expenses.reduce((a,e)=>a+Number(e.amount||0),0);
+ const label=r.type==='month'?r.month:r.type==='year'?r.year:r.day;
+ document.getElementById('repCollected').textContent=money(collected);
+ document.getElementById('repPending').textContent=money(r.type==='month'?monthlyLedger(r.month).reduce((a,x)=>a+x.pending,0):0);
+ document.getElementById('repExpenses').textContent=money(expenses);
+ document.getElementById('repNet').textContent=money(collected-expenses);
+ const grouped={};
+ r.fees.forEach(f=>{const key=r.type==='year'?f.month:(r.type==='day'?f.date:f.month); grouped[key]=(grouped[key]||0)+Number(f.paid||0)});
+ const vals=Object.values(grouped), max=Math.max(...vals,1);
+ document.getElementById('monthReport').innerHTML=`<div class="section-title">Financial Report — ${esc(label)}</div>`+
+   (Object.keys(grouped).sort().reverse().map(k=>`<div style="margin:12px 0"><div style="display:flex;justify-content:space-between"><span>${esc(k)}</span><strong>${money(grouped[k])}</strong></div><div style="height:9px;background:#edf1f6;border-radius:10px;margin-top:6px"><div style="height:100%;width:${Math.min(100,grouped[k]/max*100)}%;background:var(--blue);border-radius:10px"></div></div></div>`).join('')||'<div class="empty">No fee collection for this period.</div>');
+
+}
+function printFinancialReport(){
+ const r=reportRange(), collected=r.fees.reduce((a,f)=>a+Number(f.paid||0),0), expenses=r.expenses.reduce((a,e)=>a+Number(e.amount||0),0);
+ const label=r.type==='month'?r.month:r.type==='year'?r.year:r.day;
+ const rows=r.fees.map(f=>`<tr><td>${esc(f.receipt||'')}</td><td>${esc(studentName(f.studentId))}</td><td>${esc(f.month||'')}</td><td>${esc(f.date||'')}</td><td>${money(f.paid)}</td></tr>`).join('');
+ const expRows=r.expenses.map(e=>`<tr><td>${esc(e.date||'')}</td><td>${esc(e.title||e.category||'Expense')}</td><td>${money(e.amount)}</td></tr>`).join('');
+ const w=window.open('','_blank');
+ if(!w){toast('Please allow pop-ups to print the report');return;}
+ w.document.write(`<html><head><title>Financial Report - ${esc(label)}</title><style>body{font-family:Arial,sans-serif;padding:28px;color:#182335}h1{margin-bottom:4px}.meta{color:#667085;margin-bottom:18px}.cards{display:flex;gap:12px;margin:18px 0}.card{border:1px solid #ddd;padding:12px;flex:1}.num{font-size:20px;font-weight:bold}table{width:100%;border-collapse:collapse;margin:16px 0}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#f3f5f8}.right{text-align:right}.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chip{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:20px;background:#eef4ff;color:#164b8a;font-size:12px}.chip button{border:0;background:none;cursor:pointer;font-weight:bold}.hint{font-size:12px;color:var(--muted)}
+</style></head><body><h1>The Progress of Life School</h1><div class="meta">Financial Report: ${esc(label)}</div><div class="cards"><div class="card">Fees Collected<div class="num">${money(collected)}</div></div><div class="card">Expenses<div class="num">${money(expenses)}</div></div><div class="card">Net Balance<div class="num">${money(collected-expenses)}</div></div></div><h2>Fee Payments</h2><table><tr><th>Receipt</th><th>Student</th><th>Month</th><th>Date</th><th>Paid</th></tr>${rows||'<tr><td colspan="5">No payments</td></tr>'}</table><h2>Expenses</h2><table><tr><th>Date</th><th>Description</th><th>Amount</th></tr>${expRows||'<tr><td colspan="3">No expenses</td></tr>'}</table><script>window.onload=()=>window.print()<\/script></body></html>`);
+ w.document.close();
+}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function exportStudents(){const rows=[['Student ID','Name','Guardian','Phone','Class','Section','Monthly Fee','Admission Date'],...db.students.map(s=>[s.id,s.name,s.guardian,s.phone,s.class,s.section,s.fee,s.admission])];const csv=rows.map(r=>r.map(x=>`"${String(x??'').replaceAll('"','""')}"`).join(',')).join('\\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='students.csv';a.click()}
+window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show'))});
+(async()=>{
+ if(!initSupabase()) return;
+ const {data:{session}}=await supabaseClient.auth.getSession();
+ if(session){
+   remoteReady=true;
+   db.account={name:session.user.user_metadata?.name||'School Administrator',email:session.user.email};
+   try{await loadRemote();openApp();}catch(e){console.error(e);toast('Could not load cloud data.');}
+ }
+})();
+</script>
+</body>
+</html>
