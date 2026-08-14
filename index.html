@@ -45,7 +45,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 <div id="loginScreen" class="login">
   <div class="login-visual">
     <div class="login-copy">
-      <img class="school-mark" src="assets/school-logo.jpg" onerror="this.style.display='none'">
+      <img class="school-mark" src="school-logo.jpg" onerror="this.style.display='none'">
       <h1>The Progress of Life School</h1>
       <p>School Management System</p>
       <p>Manage students, teachers, fees and school finances in one simple, professional place.</p>
@@ -75,7 +75,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 
 <div id="app" class="app hidden">
 <aside class="sidebar">
-  <div class="brand"><img src="assets/school-logo.jpg"><div><strong>THE PROGRESS OF LIFE</strong><small>SCHOOL</small></div></div>
+  <div class="brand"><img src="school-logo.jpg"><div><strong>THE PROGRESS OF LIFE</strong><small>SCHOOL</small></div></div>
   <div class="nav">
     <button data-page="dashboard" class="active" onclick="go('dashboard')"><span class="ico">⌂</span><span>Dashboard</span></button>
     <button data-page="students" onclick="go('students')"><span class="ico">👨‍🎓</span><span>Students</span></button>
@@ -431,7 +431,7 @@ function renderTeachers(){
  document.getElementById('teacherRows').innerHTML=arr.length?arr.map(t=>{
    const a=t.assignments||[];
    const assignmentText=a.length?a.map(x=>`${esc(x.className)} — ${esc(x.subject)}`).join('<br>'):(t.subject?esc(t.subject):'—');
-   return `<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${t.photo||'assets/school-logo.jpg'}"><div><strong>${esc(t.name||'')}</strong><div style="font-size:11px;color:var(--muted)">${esc(t.qualification||'')}</div></div></div></td><td>${esc(t.gender||'')}</td><td>${esc(t.phone||'')}</td><td>${assignmentText}</td><td><span class="badge ${String(t.status||'Active').toLowerCase()}">${esc(t.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="openTeacher('${esc(t.id)}')">Edit</button></td></tr>`;
+   return `<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${t.photo||'school-logo.jpg'}"><div><strong>${esc(t.name||'')}</strong><div style="font-size:11px;color:var(--muted)">${esc(t.qualification||'')}</div></div></div></td><td>${esc(t.gender||'')}</td><td>${esc(t.phone||'')}</td><td>${assignmentText}</td><td><span class="badge ${String(t.status||'Active').toLowerCase()}">${esc(t.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="openTeacher('${esc(t.id)}')">Edit</button></td></tr>`;
  }).join(''):`<tr><td colspan="6" class="empty">No teachers found.</td></tr>`;
 }
 function openTeacher(id=''){
@@ -447,7 +447,7 @@ function openTeacher(id=''){
  document.getElementById('teJoining').value=t?.joining||'';
  document.getElementById('teStatus').value=t?.status||'Active';
  document.getElementById('tePhoto').value='';
- document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto||'assets/school-logo.jpg';
+ document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto||'school-logo.jpg';
  teacherAssignments=(t?.assignments||[]).map(a=>({className:a.className,subject:a.subject}));
  document.getElementById('teacherModalTitle').textContent=t?'Edit Teacher':'Add Teacher';
  renderTeacherAssignmentChips();
