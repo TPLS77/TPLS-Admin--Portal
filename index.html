@@ -24,8 +24,8 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 .field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:12px 13px;border:1px solid #d7e0eb;border-radius:10px;outline:0;background:#fff}.field input:focus,.field select:focus,.field textarea:focus{border-color:#6ba5e8;box-shadow:0 0 0 3px #e8f2ff}
 .btn{border:0;border-radius:10px;padding:11px 15px;font-weight:700;transition:.2s}.btn:hover{transform:translateY(-1px)}.btn-primary{background:var(--blue);color:#fff}.btn-secondary{background:#edf3fa;color:var(--navy)}.btn-danger{background:#fff0f1;color:var(--danger)}.btn-success{background:#eaf8f1;color:var(--success)}
 .full{width:100%}.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:15px}
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:linear-gradient(180deg,#063a7d,#0b4f9e);color:#fff;padding:20px 14px;z-index:20}.brand{display:flex;align-items:center;gap:11px;padding:8px 8px 20px}.brand img{width:48px;height:48px;border-radius:50%;background:#fff;padding:3px}.brand strong{font-size:14px;line-height:1.15}.brand small{opacity:.75}
-.unpaid{background:#f0f2f5;color:#657184}.nav{display:grid;gap:5px;margin-top:10px}.nav button{border:0;color:#eaf3ff;background:transparent;text-align:left;padding:12px 13px;border-radius:10px;display:flex;gap:11px;align-items:center}.nav button.active,.nav button:hover{background:rgba(255,255,255,.13)}.nav .ico{width:22px;text-align:center}.logout{position:absolute;left:14px;right:14px;bottom:18px}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:linear-gradient(180deg,#063a7d,#0b4f9e);color:#fff;padding:20px 14px;z-index:20;display:flex;flex-direction:column;overflow:hidden}.brand{display:flex;align-items:center;gap:11px;padding:8px 8px 20px}.brand img{width:48px;height:48px;border-radius:50%;background:#fff;padding:3px}.brand strong{font-size:14px;line-height:1.15}.brand small{opacity:.75}
+.unpaid{background:#f0f2f5;color:#657184}.nav{display:grid;gap:5px;margin-top:10px;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding-right:2px;padding-bottom:8px;scrollbar-width:thin}.nav-label{font-size:10px;font-weight:800;letter-spacing:.08em;color:rgba(255,255,255,.55);padding:13px 13px 5px}.nav-badge{margin-left:auto}.result-table th,.result-table td{vertical-align:top}.result-cell{min-width:105px}.result-cell .pct{font-weight:800}.result-cell .gr{font-size:11px;color:var(--muted)}.result-cell.waiting{color:#a16b00;background:#fffaf0}.result-name{font-weight:800}.result-total{font-weight:800;background:#f3f8ff}.result-complete{color:var(--success);font-weight:800}.result-pending{color:#a16b00;font-weight:800}.nav button{border:0;color:#eaf3ff;background:transparent;text-align:left;padding:12px 13px;border-radius:10px;display:flex;gap:11px;align-items:center}.nav button.active,.nav button:hover{background:rgba(255,255,255,.13)}.nav .ico{width:22px;text-align:center}.logout{position:static;flex:0 0 auto;width:100%;margin:10px 0 0}
 .main{margin-left:245px;min-height:100vh}.topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10}.topbar h2{font-size:20px;margin:0}.user{display:flex;align-items:center;gap:10px}.avatar{width:38px;height:38px;border-radius:50%;background:#e6f0fd;color:var(--blue);display:grid;place-items:center;font-weight:800}
 .content{padding:28px}.page{display:none;animation:fade .3s ease}.page.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);padding:18px}.stat{display:flex;justify-content:space-between;align-items:flex-start}.stat .icon{width:44px;height:44px;border-radius:12px;background:#eaf3ff;display:grid;place-items:center;font-size:20px}.stat h3{font-size:27px;margin:12px 0 3px}.stat p{margin:0;color:var(--muted);font-size:13px}.positive{color:var(--success)}.negative{color:var(--danger)}
@@ -35,17 +35,80 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.form-grid .fullrow{grid-column:1/-1}.modal{position:fixed;inset:0;background:rgba(4,23,49,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal.show{display:flex}.modal-box{background:#fff;border-radius:18px;width:min(760px,100%);max-height:90vh;overflow:auto;box-shadow:0 25px 70px rgba(0,0,0,.25);animation:pop .2s ease}@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}.modal-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-body{padding:20px}.close{border:0;background:#eef3f8;width:34px;height:34px;border-radius:50%}
 .receipt{width:800px;max-width:100%;margin:auto;background:#fff;padding:28px;border:1px solid #ddd}.receipt-head{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--blue);padding-bottom:16px}.receipt-logo{width:65px;height:65px;object-fit:contain}.receipt-school{display:flex;gap:12px;align-items:center}.receipt-school h2{margin:0;color:var(--navy);font-size:19px}.receipt-school p{margin:3px 0 0;color:#667}.receipt-no{text-align:right;font-size:12px}.receipt-student{display:flex;gap:18px;margin:20px 0;align-items:center}.receipt-table{width:100%;border-collapse:collapse}.receipt-table th,.receipt-table td{padding:11px;border:1px solid #d8e0ea}.receipt-table th{background:#edf5ff;color:var(--navy);text-align:left}.receipt-total{font-size:18px;font-weight:800}.signs{display:flex;justify-content:space-between;margin-top:45px}.sign{width:180px;border-top:1px solid #555;text-align:center;padding-top:7px;font-size:12px}
 .empty{padding:35px;text-align:center;color:var(--muted)}.toast{position:fixed;right:22px;bottom:22px;background:#102b4e;color:#fff;padding:13px 17px;border-radius:10px;box-shadow:var(--shadow);opacity:0;transform:translateY(15px);transition:.25s;z-index:100}.toast.show{opacity:1;transform:none}
-@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.sidebar{width:75px}.sidebar .brand div,.sidebar .nav span:not(.ico),.logout span{display:none}.main{margin-left:75px}.brand{justify-content:center}.nav button{justify-content:center}.logout{left:14px;right:14px}.login{grid-template-columns:1fr}.login-visual{display:none}}
+@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.sidebar{width:75px}.sidebar .brand div,.sidebar .nav span:not(.ico),.logout span{display:none}.main{margin-left:75px}.brand{justify-content:center}.nav button{justify-content:center}.logout{left:auto;right:auto}.login{grid-template-columns:1fr}.login-visual{display:none}}
 @media(max-width:650px){.cards{grid-template-columns:1fr}.content{padding:16px}.topbar{padding:0 16px}.form-grid{grid-template-columns:1fr}.sidebar{display:none}.main{margin-left:0}.table th,.table td{font-size:12px}.login-panel{padding:22px}}
 @media print{body *{visibility:hidden!important}.print-area,.print-area *{visibility:visible!important}.print-area{position:absolute;left:0;top:0;width:100%}}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chip{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:20px;background:#eef4ff;color:#164b8a;font-size:12px}.chip button{border:0;background:none;cursor:pointer;font-weight:bold}.hint{font-size:12px;color:var(--muted)}
+
+/* TPLS responsive layout fix */
+html,body{max-width:100%;overflow-x:hidden}
+.app{width:100%;min-width:0}
+.main{width:calc(100% - 245px);min-width:0;max-width:calc(100% - 245px)}
+.content,.page,.card,.cards,.grid2,.section-title,.toolbar{min-width:0;max-width:100%}
+.table-wrap{width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden}
+.table{min-width:0}
+.result-table{width:max-content;min-width:100%}
+.result-controls .toolbar{align-items:center}
+.result-controls .toolbar input,.result-controls .toolbar select{max-width:240px}
+.card{overflow:hidden}
+@media(max-width:1000px){
+  .main{width:calc(100% - 75px);max-width:calc(100% - 75px)}
+  .content{padding:20px}
+  .result-controls .toolbar input,.result-controls .toolbar select{max-width:none}
+}
+@media(max-width:650px){
+  .main{width:100%;max-width:100%}
+  .content{padding:16px}
+  .section-title{gap:10px;align-items:flex-start}
+  .section-title>div{min-width:0}
+  .section-title .btn{flex:0 0 auto}
+  .toolbar input,.toolbar select{min-width:0;width:100%;max-width:none}
+  .toolbar .spacer{display:none}
+  .cards{grid-template-columns:1fr}
+}
+
+
+/* FINAL RESPONSIVE LAYOUT FIX */
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+.app{width:100%;max-width:100%;min-width:0}
+.sidebar{width:245px;min-width:0}
+.main{margin-left:245px;width:calc(100% - 245px);max-width:calc(100% - 245px);min-width:0;overflow-x:hidden}
+.content{width:100%;max-width:100%;min-width:0;overflow-x:hidden}
+.page{width:100%;max-width:100%;min-width:0;overflow-x:hidden}
+.section-title{min-width:0}
+.section-title>div{min-width:0}
+.section-title h3{overflow-wrap:anywhere}
+.card{min-width:0;max-width:100%}
+.cards{width:100%;max-width:100%;min-width:0}
+.toolbar{width:100%;max-width:100%;min-width:0}
+.toolbar input,.toolbar select{min-width:0;max-width:100%}
+.result-controls .toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.result-controls .toolbar .spacer{min-width:10px}
+.table-wrap{width:100%;max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden}
+.table{min-width:700px}
+.result-table{min-width:max-content}
+@media(max-width:1000px){
+  .main{margin-left:75px;width:calc(100% - 75px);max-width:calc(100% - 75px)}
+  .sidebar{width:75px}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:650px){
+  .main{margin-left:0;width:100%;max-width:100%}
+  .sidebar{display:none}
+  .cards{grid-template-columns:1fr}
+  .section-title{flex-wrap:wrap}
+  .section-title .btn{max-width:100%}
+  .result-controls .toolbar{display:grid;grid-template-columns:1fr}
+  .result-controls .toolbar .spacer{display:none}
+}
+
 </style>
 </head>
 <body>
 <div id="loginScreen" class="login">
   <div class="login-visual">
     <div class="login-copy">
-      <img class="school-mark" src="school-logo.jpg" onerror="this.style.display='none'">
+      <img class="school-mark" src="assets/school-logo.jpg" onerror="this.style.display='none'">
       <h1>The Progress of Life School</h1>
       <p>School Management System</p>
       <p>Manage students, teachers, fees and school finances in one simple, professional place.</p>
@@ -75,7 +138,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 
 <div id="app" class="app hidden">
 <aside class="sidebar">
-  <div class="brand"><img src="school-logo.jpg"><div><strong>THE PROGRESS OF LIFE</strong><small>SCHOOL</small></div></div>
+  <div class="brand"><img src="assets/school-logo.jpg"><div><strong>THE PROGRESS OF LIFE</strong><small>SCHOOL</small></div></div>
   <div class="nav">
     <button data-page="dashboard" class="active" onclick="go('dashboard')"><span class="ico">⌂</span><span>Dashboard</span></button>
     <button data-page="students" onclick="go('students')"><span class="ico">👨‍🎓</span><span>Students</span></button>
@@ -84,6 +147,12 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
     <button data-page="expenses" onclick="go('expenses')"><span class="ico">💰</span><span>Expenses</span></button>
     <button data-page="receipts" onclick="go('receipts')"><span class="ico">🧾</span><span>Receipts</span></button>
     <button data-page="reports" onclick="go('reports')"><span class="ico">📊</span><span>Reports</span></button>
+    <div class="nav-label">TEACHER MANAGEMENT</div>
+    <button data-page="leave-applications" onclick="go('leave-applications')"><span class="ico">📝</span><span>Leave Applications</span><span id="leaveBadge" class="badge pending nav-badge" style="display:none">0</span></button>
+    <button data-page="suggestions" onclick="go('suggestions')"><span class="ico">💡</span><span>Suggestions</span><span id="suggestionBadge" class="badge pending nav-badge" style="display:none">0</span></button>
+    <button data-page="lesson-plans" onclick="go('lesson-plans')"><span class="ico">📚</span><span>Lesson Plans</span><span id="lessonBadge" class="badge pending nav-badge" style="display:none">0</span></button>
+    <button data-page="student-results" onclick="go('student-results')"><span class="ico">📊</span><span>Student Results</span><span id="resultBadge" class="badge pending nav-badge" style="display:none">0</span></button>
+    <button data-page="teacher-notifications" onclick="go('teacher-notifications')"><span class="ico">🔔</span><span>Notifications</span></button>
   </div>
   <button class="btn logout" onclick="logout()">↪ <span>Sign Out</span></button>
 </aside>
@@ -119,7 +188,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 
 <div id="teachers" class="page">
   <div class="section-title"><div><h3>Teachers</h3><div style="color:var(--muted);font-size:13px">Keep teacher contact and employment details.</div></div><button class="btn btn-primary" onclick="openTeacher()">+ Add Teacher</button></div>
-  <div class="card"><div class="toolbar"><input id="teacherSearch" placeholder="Search teacher or subject..." oninput="renderTeachers()"></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Gender</th><th>Phone</th><th>Class & Subject Assignments</th><th>Status</th><th></th></tr></thead><tbody id="teacherRows"></tbody></table></div></div>
+  <div class="card"><div class="toolbar"><input id="teacherSearch" placeholder="Search teacher or subject..." oninput="renderTeachers()"></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Designation</th><th>Gender</th><th>Phone</th><th>Class & Subject Assignments</th><th>Status</th><th></th></tr></thead><tbody id="teacherRows"></tbody></table></div></div>
 </div>
 
 <div id="fees" class="page">
@@ -138,7 +207,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 </div>
 
 <div id="reports" class="page">
-  <div class="section-title"><div><h3>Financial Reports</h3><div style="color:var(--muted);font-size:13px">Clear statistics for school management.</div></div><button class="btn btn-secondary" </div>
+  <div class="section-title"><div><h3>Financial Reports</h3><div style="color:var(--muted);font-size:13px">Clear statistics for school management.</div></div></div>
   <div class="cards">
     <div class="card"><p style="color:var(--muted)">Total collected</p><h2 id="repCollected">PKR 0</h2></div>
     <div class="card"><p style="color:var(--muted)">Total pending</p><h2 id="repPending" class="negative">PKR 0</h2></div>
@@ -153,6 +222,52 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 <div class="spacer"></div><button class="btn btn-primary" onclick="printFinancialReport()">Print Financial Report</button>
 </div>
 <div id="monthReport"></div></div></div>
+</div>
+
+<div id="leave-applications" class="page">
+  <div class="section-title"><div><h3>Leave Applications</h3><div style="color:var(--muted);font-size:13px">Review every leave request separately and send the teacher a decision.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-secondary" onclick="printTeacherRequests('leave')">🖨 Print Applications</button><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh</button></div></div>
+  <div class="cards">
+    <div class="card stat"><div><p>Pending</p><h3 id="leavePendingStat">0</h3><p>Need decision</p></div><div class="icon">📝</div></div>
+    <div class="card stat"><div><p>Approved</p><h3 id="leaveApprovedStat">0</h3><p>Approved requests</p></div><div class="icon">✅</div></div>
+    <div class="card stat"><div><p>Not Approved</p><h3 id="leaveRejectedStat">0</h3><p>Rejected requests</p></div><div class="icon">❌</div></div>
+    <div class="card stat"><div><p>Total</p><h3 id="leaveTotalStat">0</h3><p>All leave requests</p></div><div class="icon">📋</div></div>
+  </div>
+  <div class="card" style="margin-top:18px"><div class="toolbar"><input id="leaveSearch" placeholder="Search teacher, reason or subject..." oninput="renderLeaveApplications()"><select id="leaveStatusFilter" onchange="renderLeaveApplications()"><option value="">All Status</option><option>Pending</option><option>Approved</option><option>Rejected</option><option>Reviewed</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Leave Type</th><th>From</th><th>To</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead><tbody id="leaveRows"></tbody></table></div></div>
+</div>
+
+<div id="suggestions" class="page">
+  <div class="section-title"><div><h3>Teacher Suggestions</h3><div style="color:var(--muted);font-size:13px">Ideas and concerns sent by teachers to the school administration.</div></div><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh</button></div>
+  <div class="card"><div class="toolbar"><input id="suggestionSearch" placeholder="Search teacher, subject or suggestion..." oninput="renderSuggestions()"><select id="suggestionStatusFilter" onchange="renderSuggestions()"><option value="">All Status</option><option>Pending</option><option>Reviewed</option><option>Approved</option><option>Rejected</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Subject</th><th>Suggestion</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="suggestionRows"></tbody></table></div></div>
+</div>
+
+<div id="lesson-plans" class="page">
+  <div class="section-title"><div><h3>Lesson Plans</h3><div style="color:var(--muted);font-size:13px">All lesson plans submitted by teachers, organized separately from requests.</div></div><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh</button></div>
+  <div class="card"><div class="toolbar"><input id="lessonSearch" placeholder="Search teacher, class, subject or topic..." oninput="renderLessonPlans()"><select id="lessonClassFilter" onchange="renderLessonPlans()"><option value="">All Classes</option></select><select id="lessonSubjectFilter" onchange="renderLessonPlans()"><option value="">All Subjects</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Class</th><th>Subject</th><th>Topic</th><th>Date</th><th>Action</th></tr></thead><tbody id="lessonRows"></tbody></table></div></div>
+</div>
+
+<div id="student-results" class="page">
+  <div class="section-title"><div><h3>Student Results</h3><div style="color:var(--muted);font-size:13px">See every student's subject-wise results, missing subjects, total percentage and total grade.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" onclick="printStudentResults()">🖨 Print Results</button><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh Results</button></div></div>
+  <div class="card result-controls"><div class="toolbar">
+    <select id="resultClassFilter" onchange="renderStudentResults()"><option value="">All Classes</option></select>
+    <select id="resultTermFilter" onchange="renderStudentResults()"><option value="">All Terms</option></select>
+    <select id="resultAssessmentFilter" onchange="renderStudentResults()"><option value="">Latest / All Assessments</option></select>
+    <input id="resultSearch" placeholder="Search student..." oninput="renderStudentResults()">
+    <div class="spacer"></div><button class="btn btn-primary" onclick="renderStudentResults()">Show Results</button>
+  </div></div>
+  <div class="cards" style="margin-top:18px">
+    <div class="card stat"><div><p>Students</p><h3 id="resultStudentCount">0</h3><p>Students in view</p></div><div class="icon">👨‍🎓</div></div>
+    <div class="card stat"><div><p>Complete Results</p><h3 id="resultCompleteCount">0</h3><p>All assigned subjects uploaded</p></div><div class="icon">✅</div></div>
+    <div class="card stat"><div><p>Waiting</p><h3 id="resultWaitingCount">0</h3><p>One or more subjects missing</p></div><div class="icon">⏳</div></div>
+    <div class="card stat"><div><p>Subjects Expected</p><h3 id="resultSubjectCount">0</h3><p>Based on teacher assignments</p></div><div class="icon">📚</div></div>
+  </div>
+  <div class="card" style="margin-top:18px"><div class="table-wrap"><table class="table result-table"><thead id="resultHead"></thead><tbody id="resultRows"></tbody></table></div></div>
+  <div class="hint" style="margin-top:10px">A student's total is calculated from the combined obtained marks ÷ combined total marks for the uploaded subjects. If any assigned subject is missing, the overall result is marked <strong>Waiting</strong>.</div>
+</div>
+
+<div id="teacher-notifications" class="page">
+  <div class="section-title"><div><h3>Teacher Notifications</h3><div style="color:var(--muted);font-size:13px">Send announcements directly to teacher portals and review sent notifications.</div></div><div style="display:flex;gap:8px"><button class="btn btn-primary" onclick="openNotificationComposer()">🔔 New Notification</button><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh</button></div></div>
+  <div class="cards"><div class="card stat"><div><p>Active Teachers</p><h3 id="notificationTeacherCount">0</h3><p>Available recipients</p></div><div class="icon">👩‍🏫</div></div><div class="card stat"><div><p>Sent Notifications</p><h3 id="notificationSentCount">0</h3><p>Saved in the system</p></div><div class="icon">🔔</div></div></div>
+  <div class="card" style="margin-top:18px"><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Title</th><th>Message</th><th>Sent</th><th>Read</th></tr></thead><tbody id="notificationRows"></tbody></table></div></div>
 </div>
 
 </section></main>
@@ -173,7 +288,10 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 <div id="teacherModal" class="modal"><div class="modal-box"><div class="modal-head"><strong id="teacherModalTitle">Add Teacher</strong><button class="close" onclick="closeModal('teacherModal')">×</button></div><div class="modal-body">
 <input id="teacherEditId" type="hidden">
 <div class="form-grid">
-<div class="field"><label>Teacher Name *</label><input id="teName"></div>
+<div class="field"><label>Name *</label><input id="teName"></div>
+<div class="field"><label>Designation</label><select id="teDesignation">
+<option>Teacher</option><option>Principal</option><option>Vice Principal</option><option>Head Teacher</option><option>General Secretary</option><option>Coordinator of Higher Section</option><option>Coordinator of Lower Section</option><option>Academic Coordinator</option><option>Examination Coordinator</option><option>Discipline Coordinator</option><option>Financial Secretary</option><option>Accountant</option><option>Administrator</option><option>HR / Staff Coordinator</option><option>IT Coordinator</option><option>Student Affairs Coordinator</option><option>Librarian</option><option>Lab Assistant</option><option>Sports Coordinator</option><option>Office Assistant</option><option>Receptionist</option><option>Support Staff</option><option>Other</option>
+</select></div>
 <div class="field"><label>Gender</label><select id="teGender"><option>Male</option><option>Female</option></select></div>
 <div class="field"><label>Phone</label><input id="tePhone"></div>
 <div class="field"><label>Email</label><input id="teEmail" type="email"></div>
@@ -182,8 +300,8 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 <div class="field"><label>Status</label><select id="teStatus"><option>Active</option><option>Inactive</option></select></div>
 <div class="field fullrow"><label>Teacher Photo</label><input id="tePhoto" type="file" accept="image/*" onchange="previewTeacherPhoto(event)"><div style="margin-top:8px"><img id="teacherPhotoPreview" class="photo-lg" alt="Teacher photo preview"></div></div>
 </div>
-<div class="section-title" style="margin-top:18px"><h3>Teaching Assignments</h3></div>
-<div class="hint" style="margin-bottom:10px">Select the class and subject for this teacher. You can add as many different class/subject combinations as needed.</div>
+<div id="teacherAssignmentsSection"><div class="section-title" style="margin-top:18px"><h3>Teaching Assignments</h3></div>
+<div class="hint" style="margin-bottom:10px">For teachers, select each class and subject they teach. Staff members can be saved without teaching assignments.</div>
 <div class="form-grid">
 <div class="field"><label>Class</label><select id="teClass"></select></div>
 <div class="field"><label>Subject</label><select id="teSubjectSelect"></select></div>
@@ -191,7 +309,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:8px">
 <button type="button" class="btn btn-secondary" onclick="addTeacherAssignment()">+ Add Class & Subject</button>
 <div id="teacherAssignmentChips" class="chips"></div>
-</div>
+</div></div>
 <div style="display:flex;justify-content:flex-end;gap:9px;margin-top:18px"><button class="btn btn-secondary" onclick="closeModal('teacherModal')">Cancel</button><button class="btn btn-primary" onclick="saveTeacher()">Save Teacher</button></div>
 </div></div></div>
 
@@ -211,6 +329,10 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 
 <!-- Receipt Modal -->
 <div id="receiptModal" class="modal"><div class="modal-box" style="width:min(900px,100%)"><div class="modal-head"><strong>Fee Receipt</strong><div><button class="btn btn-primary" onclick="printReceipt()">🖨 Print Receipt</button> <button class="close" onclick="closeModal('receiptModal')">×</button></div></div><div class="modal-body"><div id="receiptPrintArea" class="print-area"></div></div></div></div>
+
+<!-- Teacher Management Modals -->
+<div id="notificationModal" class="modal"><div class="modal-box"><div class="modal-head"><strong>🔔 Send Teacher Notification</strong><button class="close" onclick="closeModal('notificationModal')">×</button></div><div class="modal-body"><div class="field"><label>Send to</label><select id="notificationTarget"></select></div><div class="field"><label>Title</label><input id="notificationTitle" placeholder="Important school notice"></div><div class="field"><label>Message</label><textarea id="notificationMessage" rows="5" placeholder="Write your message..."></textarea></div><button class="btn btn-primary full" onclick="sendTeacherNotification()">Send Notification</button></div></div></div>
+<div id="teacherDetailModal" class="modal"><div class="modal-box"><div class="modal-head"><strong id="teacherDetailTitle">Teacher Submission</strong><button class="close" onclick="closeModal('teacherDetailModal')">×</button></div><div class="modal-body" id="teacherDetailBody"></div></div></div>
 
 <div id="toast" class="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -263,7 +385,7 @@ async function saveDB(){
        t.photoPath=await uploadImageData('teacher-photos',t.id,t.photo);
        t.photo=await signedImage('teacher-photos',t.photoPath);
      }
-     const row={teacher_code:t.id,name:t.name,gender:t.gender||null,phone:t.phone||null,email:t.email||null,qualification:t.qualification||null,joining_date:t.joining||null,photo_path:t.photoPath||null,status:t.status||'Active'};
+     const row={teacher_code:t.id,name:t.name,staff_type:'Teacher',designation:t.designation||'Teacher',gender:t.gender||null,phone:t.phone||null,email:t.email||null,qualification:t.qualification||null,joining_date:t.joining||null,photo_path:t.photoPath||null,status:t.status||'Active'};
      const {data,error}=await supabaseClient.from('teachers').upsert(row,{onConflict:'teacher_code'}).select('id,teacher_code').single();
      if(error) throw error; t._remoteId=data.id;
      await supabaseClient.from('teacher_assignments').delete().eq('teacher_id',t._remoteId);
@@ -312,7 +434,7 @@ async function loadRemote(){
      if(!signed.error) s.photo=signed.data.signedUrl;
    }
  }
- db.teachers=(tt.data||[]).map(t=>({id:t.teacher_code,_remoteId:t.id,name:t.name,gender:t.gender||'Male',phone:t.phone||'',email:t.email||'',qualification:t.qualification||'',joining:t.joining_date||'',photo:'',photoPath:t.photo_path||'',status:t.status||'Active',assignments:assignmentsByTeacher[t.id]||[]}));
+ db.teachers=(tt.data||[]).map(t=>({id:t.teacher_code,_remoteId:t.id,name:t.name,staffType:t.staff_type||'Teacher',designation:t.designation||'Teacher',gender:t.gender||'Male',phone:t.phone||'',email:t.email||'',qualification:t.qualification||'',joining:t.joining_date||'',photo:'',photoPath:t.photo_path||'',status:t.status||'Active',assignments:assignmentsByTeacher[t.id]||[]}));
  for(const t of db.teachers){ if(t.photoPath) t.photo=await signedImage('teacher-photos',t.photoPath); }
  db.fees=(ff.data||[]).map(f=>({id:f.id,receipt:f.receipt_number,studentId:(db.students.find(s=>s._remoteId===f.student_id)||{}).id||'',month:String(f.fee_month).slice(0,7),discount:Number(f.discount||0),paid:Number(f.paid_amount||0),expected:Number((db.students.find(s=>s._remoteId===f.student_id)||{}).fee||0),previous:0,remaining:0,status:'',date:f.payment_date}));
  db.expenses=(ee.data||[]).map(e=>({id:e.id,_remoteId:e.id,date:e.expense_date,category:e.category||'',description:e.title||'',amount:Number(e.amount||0)}));
@@ -342,15 +464,20 @@ async function login(){
  remoteReady=true;db.account={name:data.user.user_metadata?.name||'School Administrator',email:data.user.email};saveLocal();
  try{await loadRemote();openApp();toast('Signed in successfully.');}catch(err){console.error(err);toast('Signed in, but cloud data could not be loaded.');}
 }
+window.login=login;
+document.getElementById('loginEmail')?.addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+document.getElementById('loginPassword')?.addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+window.addEventListener('error',e=>{console.error('TPLS Admin Portal error:',e.error||e.message);});
 async function logout(){if(!initSupabase()) return; await supabaseClient.auth.signOut();remoteReady=false;sessionStorage.removeItem('pls_logged');document.getElementById('app').classList.add('hidden');document.getElementById('loginScreen').classList.remove('hidden')}
 function openApp(){document.getElementById('loginScreen').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('adminName').textContent=db.account?.name||'Administrator';document.getElementById('avatar').textContent=(db.account?.name||'A')[0].toUpperCase();refreshAll()}
 function go(page){
- document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(page).classList.add('active');
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));const target=document.getElementById(page);if(!target)return;target.classList.add('active');
  document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));
- document.getElementById('pageTitle').textContent=page[0].toUpperCase()+page.slice(1);
- if(page==='dashboard')refreshDashboard();if(page==='students')renderStudents();if(page==='teachers')renderTeachers();if(page==='fees')renderFees();if(page==='expenses')renderExpenses();if(page==='receipts')renderReceipts();if(page==='reports')renderReports();
+ const titles={dashboard:'Dashboard',students:'Students',teachers:'Teachers',fees:'Fees',expenses:'Expenses',receipts:'Receipts',reports:'Financial Reports','leave-applications':'Leave Applications',suggestions:'Teacher Suggestions','lesson-plans':'Lesson Plans','student-results':'Student Results','teacher-notifications':'Teacher Notifications'};
+ document.getElementById('pageTitle').textContent=titles[page]||page;
+ if(page==='dashboard')refreshDashboard();if(page==='students')renderStudents();if(page==='teachers')renderTeachers();if(page==='fees')renderFees();if(page==='expenses')renderExpenses();if(page==='receipts')renderReceipts();if(page==='reports')renderReports();if(['leave-applications','suggestions','lesson-plans','student-results','teacher-notifications'].includes(page))refreshTeacherData();
 }
-function refreshAll(){document.getElementById('feeMonthFilter').value=monthNow();document.getElementById('receiptMonthFilter').value=monthNow();if(document.getElementById('reportMonth'))document.getElementById('reportMonth').value=monthNow();if(document.getElementById('reportYear'))document.getElementById('reportYear').value=new Date().getFullYear();if(document.getElementById('reportDay'))document.getElementById('reportDay').value=today();refreshDashboard();renderStudents();renderTeachers();renderFees();renderExpenses();renderReceipts();renderReports();populateClassFilter()}
+function refreshAll(){document.getElementById('feeMonthFilter').value=monthNow();document.getElementById('receiptMonthFilter').value=monthNow();if(document.getElementById('reportMonth'))document.getElementById('reportMonth').value=monthNow();if(document.getElementById('reportYear'))document.getElementById('reportYear').value=new Date().getFullYear();if(document.getElementById('reportDay'))document.getElementById('reportDay').value=today();refreshDashboard();renderStudents();renderTeachers();renderFees();renderExpenses();renderReceipts();renderReports();populateClassFilter();refreshTeacherData();}
 function refreshDashboard(){
  const m=monthNow(), ledger=monthlyLedger(m);
  const students=ledger.map(x=>x.student), expected=ledger.reduce((a,x)=>a+x.expected,0), collected=ledger.reduce((a,x)=>a+x.paid,0);
@@ -394,9 +521,9 @@ function populateClassFilter(){const sel=document.getElementById('studentClass')
 function renderStudents(){
  populateClassFilter();const q=(document.getElementById('studentSearch').value||'').toLowerCase(),cl=document.getElementById('studentClass').value;
  const arr=db.students.filter(s=>(!q||`${s.name} ${s.id} ${s.phone}`.toLowerCase().includes(q))&&(!cl||s.class===cl));
- document.getElementById('studentRows').innerHTML=arr.length?arr.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${s.photo||'school-logo.jpg'}"><strong>${esc(s.name)}</strong></div></td><td>${esc(s.id)}</td><td>${esc(s.class)} ${s.section?'/ '+esc(s.section):''}</td><td>${esc(s.guardian)}</td><td>${esc(s.phone)}</td><td>${money(s.fee)}</td><td><span class="badge active-badge">${esc(s.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="editStudent('${s.id}')">Edit</button> <button class="btn btn-danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">No students found. Click “Add Student” to begin.</td></tr>`;
+ document.getElementById('studentRows').innerHTML=arr.length?arr.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${s.photo||'assets/school-logo.jpg'}"><strong>${esc(s.name)}</strong></div></td><td>${esc(s.id)}</td><td>${esc(s.class)} ${s.section?'/ '+esc(s.section):''}</td><td>${esc(s.guardian)}</td><td>${esc(s.phone)}</td><td>${money(s.fee)}</td><td><span class="badge active-badge">${esc(s.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="editStudent('${s.id}')">Edit</button> <button class="btn btn-danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">No students found. Click “Add Student” to begin.</td></tr>`;
 }
-function openStudent(s=null){currentPhoto=s?.photo||'';document.getElementById('studentModalTitle').textContent=s?'Edit Student':'Add Student';document.getElementById('studentEditId').value=s?.id||'';['Name','Id','Guardian','Phone','Class','Section','Dob','Gender','Fee','Admission','Address'].forEach(k=>{let el=document.getElementById('st'+k);if(el)el.value=s?({Name:s.name,Id:s.id,Guardian:s.guardian,Phone:s.phone,Class:s.class,Section:s.section,Dob:s.dob,Gender:s.gender,Fee:s.fee,Admission:s.admission,Address:s.address}[k]??''):k==='Fee'?'2000':''});document.getElementById('photoPreview').src=currentPhoto||'school-logo.jpg';document.getElementById('stPhoto').value='';document.getElementById('studentModal').classList.add('show')}
+function openStudent(s=null){currentPhoto=s?.photo||'';document.getElementById('studentModalTitle').textContent=s?'Edit Student':'Add Student';document.getElementById('studentEditId').value=s?.id||'';['Name','Id','Guardian','Phone','Class','Section','Dob','Gender','Fee','Admission','Address'].forEach(k=>{let el=document.getElementById('st'+k);if(el)el.value=s?({Name:s.name,Id:s.id,Guardian:s.guardian,Phone:s.phone,Class:s.class,Section:s.section,Dob:s.dob,Gender:s.gender,Fee:s.fee,Admission:s.admission,Address:s.address}[k]??''):k==='Fee'?'2000':''});document.getElementById('photoPreview').src=currentPhoto||'assets/school-logo.jpg';document.getElementById('stPhoto').value='';document.getElementById('studentModal').classList.add('show')}
 function previewPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{currentPhoto=r.result;document.getElementById('photoPreview').src=currentPhoto};r.readAsDataURL(f)}
 async function saveStudent(){
  const id=document.getElementById('studentEditId').value||document.getElementById('stId').value.trim();const s={id,name:document.getElementById('stName').value.trim(),guardian:document.getElementById('stGuardian').value.trim(),phone:document.getElementById('stPhone').value.trim(),class:document.getElementById('stClass').value.trim(),section:document.getElementById('stSection').value.trim(),dob:document.getElementById('stDob').value,gender:document.getElementById('stGender').value,fee:Number(document.getElementById('stFee').value||0),admission:document.getElementById('stAdmission').value,address:document.getElementById('stAddress').value.trim(),photo:currentPhoto,status:'Active'};
@@ -427,12 +554,12 @@ function addTeacherAssignment(){
 }
 function renderTeachers(){
  const q=(document.getElementById('teacherSearch').value||'').toLowerCase();
- const arr=db.teachers.filter(t=>`${t.name||''} ${t.phone||''} ${t.email||''} ${t.subject||''} ${(t.assignments||[]).map(a=>a.className+' '+a.subject).join(' ')}`.toLowerCase().includes(q));
+ const arr=db.teachers.filter(t=>`${t.name||''} ${t.phone||''} ${t.email||''} ${t.designation||''} ${t.staffType||''} ${t.subject||''} ${(t.assignments||[]).map(a=>a.className+' '+a.subject).join(' ')}`.toLowerCase().includes(q));
  document.getElementById('teacherRows').innerHTML=arr.length?arr.map(t=>{
    const a=t.assignments||[];
-   const assignmentText=a.length?a.map(x=>`${esc(x.className)} — ${esc(x.subject)}`).join('<br>'):(t.subject?esc(t.subject):'—');
-   return `<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${t.photo||'school-logo.jpg'}"><div><strong>${esc(t.name||'')}</strong><div style="font-size:11px;color:var(--muted)">${esc(t.qualification||'')}</div></div></div></td><td>${esc(t.gender||'')}</td><td>${esc(t.phone||'')}</td><td>${assignmentText}</td><td><span class="badge ${String(t.status||'Active').toLowerCase()}">${esc(t.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="openTeacher('${esc(t.id)}')">Edit</button></td></tr>`;
- }).join(''):`<tr><td colspan="6" class="empty">No teachers found.</td></tr>`;
+   const assignmentText=a.length?a.map(x=>`${esc(x.className)} — ${esc(x.subject)}`).join('<br>'):'—';
+   return `<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${t.photo||'assets/school-logo.jpg'}"><div><strong>${esc(t.name||'')}</strong><div style="font-size:11px;color:var(--muted)">${esc('Teacher')} · ${esc(t.qualification||'')}</div></div></div></td><td><strong>${esc(t.designation||'Teacher')}</strong></td><td>${esc(t.gender||'')}</td><td>${esc(t.phone||'')}</td><td>${assignmentText}</td><td><span class="badge ${String(t.status||'Active').toLowerCase()}">${esc(t.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="openTeacher('${esc(t.id)}')">Edit</button></td></tr>`;
+ }).join(''):`<tr><td colspan="7" class="empty">No teachers or staff found.</td></tr>`;
 }
 function openTeacher(id=''){
  initTeacherSelectors(); teacherAssignments=[];
@@ -440,6 +567,7 @@ function openTeacher(id=''){
  currentTeacherPhoto=t?.photo||'';
  document.getElementById('teacherEditId').value=t?.id||'';
  document.getElementById('teName').value=t?.name||'';
+ document.getElementById('teDesignation').value=t?.designation||'Teacher';
  document.getElementById('teGender').value=t?.gender||'Male';
  document.getElementById('tePhone').value=t?.phone||'';
  document.getElementById('teEmail').value=t?.email||'';
@@ -447,17 +575,21 @@ function openTeacher(id=''){
  document.getElementById('teJoining').value=t?.joining||'';
  document.getElementById('teStatus').value=t?.status||'Active';
  document.getElementById('tePhoto').value='';
- document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto||'school-logo.jpg';
+ document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto||'assets/school-logo.jpg';
  teacherAssignments=(t?.assignments||[]).map(a=>({className:a.className,subject:a.subject}));
  document.getElementById('teacherModalTitle').textContent=t?'Edit Teacher':'Add Teacher';
  renderTeacherAssignmentChips();
  document.getElementById('teacherModal').classList.add('show');
 }
+function toggleTeacherAssignments(){
+ const box=document.getElementById('teacherAssignmentsSection');
+ if(box) box.style.display='block';
+}
 function previewTeacherPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{currentTeacherPhoto=r.result;document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto};r.readAsDataURL(f)}
 async function saveTeacher(){
  const id=document.getElementById('teacherEditId').value||uid('T');
  const existing=db.teachers.find(t=>t.id===id);
- const t={id,name:document.getElementById('teName').value.trim(),gender:document.getElementById('teGender').value,phone:document.getElementById('tePhone').value.trim(),email:document.getElementById('teEmail').value.trim(),qualification:document.getElementById('teQualification').value.trim(),joining:document.getElementById('teJoining').value,status:document.getElementById('teStatus').value,photo:currentTeacherPhoto,photoPath:existing?.photoPath||'',assignments:teacherAssignments.map(a=>({...a}))};
+ const t={id,name:document.getElementById('teName').value.trim(),staffType:'Teacher',designation:document.getElementById('teDesignation').value,gender:document.getElementById('teGender').value,phone:document.getElementById('tePhone').value.trim(),email:document.getElementById('teEmail').value.trim(),qualification:document.getElementById('teQualification').value.trim(),joining:document.getElementById('teJoining').value,status:document.getElementById('teStatus').value,photo:currentTeacherPhoto,photoPath:existing?.photoPath||'',assignments:teacherAssignments.map(a=>({...a}))};
  if(!t.name)return toast('Teacher name is required.');
  if(!t.assignments.length)return toast('Please add at least one class and subject assignment.');
  if(!remoteReady)return toast('Please sign in to save teachers to the cloud.');
@@ -466,7 +598,7 @@ async function saveTeacher(){
      t.photoPath=await uploadImageData('teacher-photos',t.id,t.photo);
      t.photo=await signedImage('teacher-photos',t.photoPath);
    }
-   const row={teacher_code:t.id,name:t.name,gender:t.gender||null,phone:t.phone||null,email:t.email||null,qualification:t.qualification||null,joining_date:t.joining||null,photo_path:t.photoPath||null,status:t.status||'Active'};
+   const row={teacher_code:t.id,name:t.name,staff_type:'Teacher',designation:t.designation||'Teacher',gender:t.gender||null,phone:t.phone||null,email:t.email||null,qualification:t.qualification||null,joining_date:t.joining||null,photo_path:t.photoPath||null,status:t.status||'Active'};
    const {data,error}=await supabaseClient.from('teachers').upsert(row,{onConflict:'teacher_code'}).select('id,teacher_code').single();
    if(error) throw error;
    t._remoteId=data.id;
@@ -528,7 +660,7 @@ function recordForStudent(studentId, month){
 }
 
 function showReceiptById(id){showReceipt(db.fees.find(f=>f.id===id))}
-function showReceipt(f){if(!f)return;currentReceipt=f;const s=db.students.find(x=>x.id===f.studentId)||{};document.getElementById('receiptPrintArea').innerHTML=`<div class="receipt"><div class="receipt-head"><div class="receipt-school"><img class="receipt-logo" src="school-logo.jpg"><div><h2>THE PROGRESS OF LIFE SCHOOL</h2><p>CHAK 8JB MEHBOOB TOWN, FAISALABAD</p><p style="font-size:11px">PROGRESS FOR CHRISTIAN CHILDREN</p></div></div><div class="receipt-no"><strong>FEE RECEIPT</strong><br>Receipt No: ${esc(f.receipt)}<br>Date: ${esc(f.date)}</div></div><div class="receipt-student"><img class="photo-lg" src="${s.photo||'school-logo.jpg'}"><div><strong>${esc(s.name||'')}</strong><div>Student ID: ${esc(s.id||'')}</div><div>Class / Section: ${esc(s.class||'')} ${s.section?'/ '+esc(s.section):''}</div><div>Father / Guardian: ${esc(s.guardian||'')}</div></div></div><table class="receipt-table"><tr><th>Description</th><th>Amount (PKR)</th></tr><tr><td>Monthly Fee (${esc(f.month)})</td><td>${Number(f.expected).toLocaleString()}</td></tr><tr><td>Previous Balance</td><td>${Number(f.previous).toLocaleString()}</td></tr><tr><td>Discount</td><td>${Number(f.discount).toLocaleString()}</td></tr><tr><td><strong>Amount Paid</strong></td><td><strong>${Number(f.paid).toLocaleString()}</strong></td></tr><tr><td><strong>Remaining Balance</strong></td><td><strong>${Number(f.remaining).toLocaleString()}</strong></td></tr></table><p><strong>Amount in Words:</strong> ${amountWords(f.paid)}</p><div class="signs"><div class="sign">Received By</div><div class="sign">Principal</div></div></div>`;document.getElementById('receiptModal').classList.add('show')}
+function showReceipt(f){if(!f)return;currentReceipt=f;const s=db.students.find(x=>x.id===f.studentId)||{};document.getElementById('receiptPrintArea').innerHTML=`<div class="receipt"><div class="receipt-head"><div class="receipt-school"><img class="receipt-logo" src="assets/school-logo.jpg"><div><h2>THE PROGRESS OF LIFE SCHOOL</h2><p>CHAK 8JB MEHBOOB TOWN, FAISALABAD</p><p style="font-size:11px">PROGRESS FOR CHRISTIAN CHILDREN</p></div></div><div class="receipt-no"><strong>FEE RECEIPT</strong><br>Receipt No: ${esc(f.receipt)}<br>Date: ${esc(f.date)}</div></div><div class="receipt-student"><img class="photo-lg" src="${s.photo||'assets/school-logo.jpg'}"><div><strong>${esc(s.name||'')}</strong><div>Student ID: ${esc(s.id||'')}</div><div>Class / Section: ${esc(s.class||'')} ${s.section?'/ '+esc(s.section):''}</div><div>Father / Guardian: ${esc(s.guardian||'')}</div></div></div><table class="receipt-table"><tr><th>Description</th><th>Amount (PKR)</th></tr><tr><td>Monthly Fee (${esc(f.month)})</td><td>${Number(f.expected).toLocaleString()}</td></tr><tr><td>Previous Balance</td><td>${Number(f.previous).toLocaleString()}</td></tr><tr><td>Discount</td><td>${Number(f.discount).toLocaleString()}</td></tr><tr><td><strong>Amount Paid</strong></td><td><strong>${Number(f.paid).toLocaleString()}</strong></td></tr><tr><td><strong>Remaining Balance</strong></td><td><strong>${Number(f.remaining).toLocaleString()}</strong></td></tr></table><p><strong>Amount in Words:</strong> ${amountWords(f.paid)}</p><div class="signs"><div class="sign">Received By</div><div class="sign">Principal</div></div></div>`;document.getElementById('receiptModal').classList.add('show')}
 function amountWords(n){n=Number(n||0);if(n===0)return'Zero Only';if(n<1000000)return n.toLocaleString('en-PK')+' Only';return n.toLocaleString('en-PK')+' Only'}
 function printReceipt(){window.print()}
 function openExpense(){document.getElementById('exDate').value=today();document.getElementById('exDescription').value='';document.getElementById('exAmount').value='';document.getElementById('expenseModal').classList.add('show')}
@@ -572,7 +704,254 @@ function printFinancialReport(){
 </style></head><body><h1>The Progress of Life School</h1><div class="meta">Financial Report: ${esc(label)}</div><div class="cards"><div class="card">Fees Collected<div class="num">${money(collected)}</div></div><div class="card">Expenses<div class="num">${money(expenses)}</div></div><div class="card">Net Balance<div class="num">${money(collected-expenses)}</div></div></div><h2>Fee Payments</h2><table><tr><th>Receipt</th><th>Student</th><th>Month</th><th>Date</th><th>Paid</th></tr>${rows||'<tr><td colspan="5">No payments</td></tr>'}</table><h2>Expenses</h2><table><tr><th>Date</th><th>Description</th><th>Amount</th></tr>${expRows||'<tr><td colspan="3">No expenses</td></tr>'}</table><script>window.onload=()=>window.print()<\/script></body></html>`);
  w.document.close();
 }
+
+function openPrintWindow(title,body,landscape){
+ const w=window.open('','_blank');
+ if(!w){toast('Please allow pop-ups to print');return;}
+ w.document.write(`<html><head><title>${esc(title)}</title><style>
+ body{font-family:Arial,Segoe UI,sans-serif;padding:28px;color:#182335}
+ h1{font-size:22px;margin:0 0 4px;color:#082e63}
+ h2{font-size:17px;margin:22px 0 10px;color:#082e63}
+ .meta{color:#667085;margin-bottom:18px}
+ table{width:100%;border-collapse:collapse;margin-top:12px}
+ th,td{border:1px solid #d7dee8;padding:8px;text-align:left;vertical-align:top}
+ th{background:#f1f5f9;color:#334155}
+ .status{font-weight:700}
+ .waiting{color:#a16b00;font-weight:700}
+ @media print{@page{size:${landscape?'landscape':'auto'};margin:12mm}body{padding:0}}
+ </style></head><body>${body}<script>window.onload=()=>setTimeout(()=>window.print(),250)<\/script></body></html>`);
+ w.document.close();
+}
+function printTeacherRequest(type,id){
+ const r=(teacherInboxData.requests||[]).find(x=>String(x.id)===String(id));
+ if(!r)return toast('Application or suggestion not found');
+ const isLeave=type==='leave';
+ const title=isLeave?'Teacher Leave Application':'Teacher Suggestion';
+ const body=isLeave
+  ? `<h1>The Progress of Life School</h1><div class="meta">${title}</div><table>
+     <tr><th>Teacher</th><td>${esc(teacherName(r.teacher_id))}</td></tr>
+     <tr><th>Leave Type</th><td>${esc(r.leave_type||'Leave')}</td></tr>
+     <tr><th>From</th><td>${esc(formatDate(r.leave_from))}</td></tr>
+     <tr><th>To</th><td>${esc(formatDate(r.leave_to))}</td></tr>
+     <tr><th>Reason</th><td>${esc(r.message||'')}</td></tr>
+     <tr><th>Status</th><td class="status">${esc(r.status||'Pending')}</td></tr>
+     <tr><th>Submitted</th><td>${esc(formatDate(r.created_at))}</td></tr>
+     ${r.admin_response?`<tr><th>Admin Response</th><td>${esc(r.admin_response)}</td></tr>`:''}
+     </table>`
+  : `<h1>The Progress of Life School</h1><div class="meta">${title}</div><table>
+     <tr><th>Teacher</th><td>${esc(teacherName(r.teacher_id))}</td></tr>
+     <tr><th>Subject / Topic</th><td>${esc(r.subject||'')}</td></tr>
+     <tr><th>Suggestion</th><td>${esc(r.message||'')}</td></tr>
+     <tr><th>Status</th><td class="status">${esc(r.status||'Pending')}</td></tr>
+     <tr><th>Submitted</th><td>${esc(formatDate(r.created_at))}</td></tr>
+     ${r.admin_response?`<tr><th>Admin Response</th><td>${esc(r.admin_response)}</td></tr>`:''}
+     </table>`;
+ openPrintWindow(title,body,false);
+}
+function printTeacherRequests(type){
+ const isLeave=type==='leave';
+ const q=(document.getElementById(isLeave?'leaveSearch':'suggestionSearch')?.value||'').trim();
+ const st=document.getElementById(isLeave?'leaveStatusFilter':'suggestionStatusFilter')?.value||'';
+ const rows=(teacherInboxData.requests||[]).filter(r=>r.request_type===type)
+   .filter(r=>(!st||r.status===st)&&requestSearchMatch(r,q));
+ const title=isLeave?'Teacher Leave Applications':'Teacher Suggestions';
+ const head=isLeave
+   ? '<tr><th>Teacher</th><th>Leave Type</th><th>From</th><th>To</th><th>Reason</th><th>Status</th><th>Submitted</th></tr>'
+   : '<tr><th>Teacher</th><th>Subject</th><th>Suggestion</th><th>Submitted</th><th>Status</th></tr>';
+ const bodyRows=rows.length?rows.map(r=>isLeave
+   ? `<tr><td>${esc(teacherName(r.teacher_id))}</td><td>${esc(r.leave_type||'Leave')}</td><td>${esc(formatDate(r.leave_from))}</td><td>${esc(formatDate(r.leave_to))}</td><td>${esc(r.message||'')}</td><td>${esc(r.status||'Pending')}</td><td>${esc(formatDate(r.created_at))}</td></tr>`
+   : `<tr><td>${esc(teacherName(r.teacher_id))}</td><td>${esc(r.subject||'')}</td><td>${esc(r.message||'')}</td><td>${esc(formatDate(r.created_at))}</td><td>${esc(r.status||'Pending')}</td></tr>`
+ ).join('') : `<tr><td colspan="${isLeave?7:5}">No records found.</td></tr>`;
+ openPrintWindow(title,`<h1>The Progress of Life School</h1><div class="meta">${title} — ${rows.length} record(s)</div><table>${head}${bodyRows}</table>`,true);
+}
+function printStudentResults(){
+ const table=document.querySelector('#student-results .result-table');
+ if(!table)return toast('Results table is not available');
+ const className=document.getElementById('resultClassFilter')?.value||'All Classes';
+ const term=document.getElementById('resultTermFilter')?.value||'All Terms';
+ const assessment=document.getElementById('resultAssessmentFilter')?.value||'All Assessments';
+ const tableHtml=table.outerHTML;
+ openPrintWindow('Student Results',`<h1>The Progress of Life School</h1><div class="meta">Student Results — Class: ${esc(className)} | Term: ${esc(term)} | Assessment: ${esc(assessment)}</div>${tableHtml}`,true);
+}
+
 function closeModal(id){document.getElementById(id).classList.remove('show')}
+let teacherInboxData={requests:[],results:[],plans:[],notifications:[]};
+function isAdminSession(){return !!remoteReady;}
+function teacherByRemoteId(id){return db.teachers.find(t=>t._remoteId===id)||null}
+function studentByRemoteId(id){return db.students.find(s=>s._remoteId===id)||null}
+function typeLabel(t){return t==='leave'?'📝 Leave':t==='suggestion'?'💡 Suggestion':t==='result'?'📊 Result':'📚 Lesson Plan'}
+function gradeFromPercentage(p){p=Number(p);if(!Number.isFinite(p))return '—';if(p>=90)return 'A+';if(p>=80)return 'A';if(p>=70)return 'B';if(p>=60)return 'C';if(p>=50)return 'D';return 'F'}
+function formatDate(v){return v?String(v).slice(0,10):'—'}
+function teacherName(id){return teacherByRemoteId(id)?.name||'Teacher'}
+function resultRows(){return teacherInboxData.results||[]}
+
+async function runAutomaticTeacherReminders(){
+  if(!remoteReady || !supabaseClient || !db.teachers?.length) return;
+  const activeStudents=db.students.filter(s=>s.status!=='Inactive'&&s._remoteId);
+  const now=new Date();
+  const dayKey=now.toISOString().slice(0,10);
+  const weekAgo=new Date(now.getTime()-7*24*60*60*1000);
+  const existing=teacherInboxData.notifications||[];
+  const newRows=[];
+  const assignmentKeys=new Set();
+
+  for(const teacher of db.teachers.filter(t=>t.status!=='Inactive'&&t._remoteId)){
+    for(const assignment of (teacher.assignments||[])){
+      const className=String(assignment.className||'').trim();
+      const subject=String(assignment.subject||'').trim();
+      if(!className||!subject) continue;
+      const key=`${teacher._remoteId}|${className}|${subject}`;
+      if(assignmentKeys.has(key)) continue;
+      assignmentKeys.add(key);
+
+      // Result reminder: notify when one or more active students in this
+      // teacher's assigned class/subject have no uploaded result.
+      const classStudents=activeStudents.filter(s=>s.class===className);
+      const missingResults=classStudents.filter(s=>!teacherInboxData.results.some(r=>
+        String(r.teacher_id||'')===String(teacher._remoteId) &&
+        String(r.student_id||'')===String(s._remoteId) &&
+        String(r.class_name||'')===className &&
+        String(r.subject||'')===subject
+      ));
+      if(missingResults.length){
+        const title=`Action Required: Result Upload — ${className} / ${subject}`;
+        const message=`Please upload results for ${missingResults.length} of ${classStudents.length} student${classStudents.length===1?'':'s'} in ${className} — ${subject}. Students still waiting: ${missingResults.slice(0,6).map(s=>s.name).join(', ')}${missingResults.length>6?' and others':''}.`;
+        const sentToday=existing.some(n=>String(n.teacher_id)===String(teacher._remoteId)&&n.title===title&&String(n.created_at||'').slice(0,10)===dayKey);
+        if(!sentToday) newRows.push({teacher_id:teacher._remoteId,title,message});
+      }
+
+      // Lesson-plan reminder: require at least one plan for this assignment
+      // within the last 7 days.
+      const hasRecentPlan=teacherInboxData.plans.some(p=>{
+        if(String(p.teacher_id||'')!==String(teacher._remoteId)) return false;
+        if(String(p.class_name||'')!==className || String(p.subject||'')!==subject) return false;
+        const d=new Date(p.lesson_date||p.created_at||'');
+        return !Number.isNaN(d.getTime()) && d>=weekAgo;
+      });
+      if(!hasRecentPlan){
+        const title=`Action Required: Lesson Plan — ${className} / ${subject}`;
+        const message=`No lesson plan has been uploaded for ${className} — ${subject} during the last 7 days. Please upload the current lesson plan through the Teacher Portal.`;
+        const sentRecently=existing.some(n=>String(n.teacher_id)===String(teacher._remoteId)&&n.title===title&&new Date(n.created_at||0)>=weekAgo);
+        if(!sentRecently) newRows.push({teacher_id:teacher._remoteId,title,message});
+      }
+    }
+  }
+
+  if(!newRows.length) return;
+  const {data,error}=await supabaseClient.from('teacher_notifications').insert(newRows).select('*');
+  if(error){
+    console.error('Automatic teacher reminders failed:',error);
+    return;
+  }
+  teacherInboxData.notifications=[...(teacherInboxData.notifications||[]),...(data||[])];
+  renderNotifications();
+}
+
+async function refreshTeacherData(){
+ if(!initSupabase()||!remoteReady)return;
+ const [rq,rs,lp,nt]=await Promise.all([
+   supabaseClient.from('teacher_requests').select('*').order('created_at',{ascending:false}),
+   supabaseClient.from('teacher_student_results').select('*').order('created_at',{ascending:false}),
+   supabaseClient.from('teacher_lesson_plans').select('*').order('created_at',{ascending:false}),
+   supabaseClient.from('teacher_notifications').select('*').order('created_at',{ascending:false})
+ ]);
+ const first=[rq,rs,lp,nt].find(x=>x.error);
+ if(first){console.error(first.error);toast('Could not load teacher data: '+first.error.message);return;}
+ teacherInboxData={requests:rq.data||[],results:rs.data||[],plans:lp.data||[],notifications:nt.data||[]};
+ renderTeacherBadges();renderLeaveApplications();renderSuggestions();renderLessonPlans();prepareResultFilters();renderStudentResults();renderNotifications();
+ await runAutomaticTeacherReminders();
+}
+function renderTeacherBadges(){
+ const leave=teacherInboxData.requests.filter(r=>r.request_type==='leave'&&r.status==='Pending').length;
+ const sug=teacherInboxData.requests.filter(r=>r.request_type==='suggestion'&&r.status==='Pending').length;
+ const plans=teacherInboxData.plans.length;const results=teacherInboxData.results.length;
+ [['leaveBadge',leave],['suggestionBadge',sug],['lessonBadge',plans],['resultBadge',results]].forEach(([id,n])=>{const e=document.getElementById(id);if(e){e.textContent=n;e.style.display=n?'inline-block':'none'}});
+}
+function requestSearchMatch(r,q){const t=teacherName(r.teacher_id);return !q||[t,r.subject,r.message,r.leave_type,r.leave_from,r.leave_to].join(' ').toLowerCase().includes(q.toLowerCase())}
+function renderLeaveApplications(){
+ const rows=teacherInboxData.requests.filter(r=>r.request_type==='leave');const q=(document.getElementById('leaveSearch')?.value||'').trim();const st=document.getElementById('leaveStatusFilter')?.value||'';
+ const filtered=rows.filter(r=>(!st||r.status===st)&&requestSearchMatch(r,q));
+ document.getElementById('leavePendingStat').textContent=rows.filter(r=>r.status==='Pending').length;document.getElementById('leaveApprovedStat').textContent=rows.filter(r=>r.status==='Approved').length;document.getElementById('leaveRejectedStat').textContent=rows.filter(r=>r.status==='Rejected').length;document.getElementById('leaveTotalStat').textContent=rows.length;
+ document.getElementById('leaveRows').innerHTML=filtered.length?filtered.map(r=>`<tr><td><strong>${esc(teacherName(r.teacher_id))}</strong></td><td>${esc(r.leave_type||'Leave')}</td><td>${esc(formatDate(r.leave_from))}</td><td>${esc(formatDate(r.leave_to))}</td><td style="max-width:260px;white-space:normal">${esc(r.message||'')}</td><td><span class="badge ${r.status==='Approved'?'paid':r.status==='Rejected'?'pending':'partial'}">${esc(r.status)}</span></td><td><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-secondary" onclick="openTeacherSubmission('leave','${r.id}')">Review</button><button class="btn btn-secondary" onclick="printTeacherRequest('leave','${r.id}')">🖨 Print</button></div></td></tr>`).join(''):`<tr><td colspan="7" class="empty">No leave applications found.</td></tr>`;
+}
+function renderSuggestions(){
+ const rows=teacherInboxData.requests.filter(r=>r.request_type==='suggestion');const q=(document.getElementById('suggestionSearch')?.value||'').trim();const st=document.getElementById('suggestionStatusFilter')?.value||'';
+ const filtered=rows.filter(r=>(!st||r.status===st)&&requestSearchMatch(r,q));
+ document.getElementById('suggestionRows').innerHTML=filtered.length?filtered.map(r=>`<tr><td>${esc(teacherName(r.teacher_id))}</td><td>${esc(r.subject||'')}</td><td style="max-width:430px;white-space:normal">${esc(r.message||'')}</td><td>${esc(formatDate(r.created_at))}</td><td><span class="badge ${r.status==='Approved'?'paid':r.status==='Rejected'?'pending':'partial'}">${esc(r.status)}</span></td><td><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-secondary" onclick="openTeacherSubmission('suggestion','${r.id}')">Review</button><button class="btn btn-secondary" onclick="printTeacherRequest('suggestion','${r.id}')">🖨 Print</button></div></td></tr>`).join(''):`<tr><td colspan="6" class="empty">No teacher suggestions found.</td></tr>`;
+}
+function fillUniqueSelect(id,values,placeholder){const el=document.getElementById(id);if(!el)return;const current=el.value;const vals=[...new Set(values.filter(Boolean).map(String))].sort((a,b)=>a.localeCompare(b));el.innerHTML=`<option value="">${placeholder}</option>`+vals.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');if(vals.includes(current))el.value=current;}
+function renderLessonPlans(){
+ const q=(document.getElementById('lessonSearch')?.value||'').toLowerCase();const cf=document.getElementById('lessonClassFilter')?.value||'';const sf=document.getElementById('lessonSubjectFilter')?.value||'';
+ const rows=teacherInboxData.plans.filter(r=>(!cf||r.class_name===cf)&&(!sf||r.subject===sf)&&(!q||[teacherName(r.teacher_id),r.class_name,r.subject,r.topic,r.objectives].join(' ').toLowerCase().includes(q)));
+ fillUniqueSelect('lessonClassFilter',teacherInboxData.plans.map(r=>r.class_name),'All Classes');fillUniqueSelect('lessonSubjectFilter',teacherInboxData.plans.map(r=>r.subject),'All Subjects');
+ document.getElementById('lessonRows').innerHTML=rows.length?rows.map(r=>`<tr><td>${esc(teacherName(r.teacher_id))}</td><td>${esc(r.class_name)}</td><td>${esc(r.subject)}</td><td style="max-width:300px;white-space:normal"><strong>${esc(r.topic)}</strong></td><td>${esc(formatDate(r.lesson_date))}</td><td><button class="btn btn-secondary" onclick="openTeacherSubmission('lesson','${r.id}')">View Plan</button></td></tr>`).join(''):`<tr><td colspan="6" class="empty">No lesson plans found.</td></tr>`;
+}
+function prepareResultFilters(){
+ const results=teacherInboxData.results;const students=db.students;
+ fillUniqueSelect('resultClassFilter',[...new Set(students.map(s=>s.class).filter(Boolean))],'All Classes');
+ fillUniqueSelect('resultTermFilter',results.map(r=>r.term),'All Terms');
+ fillUniqueSelect('resultAssessmentFilter',results.map(r=>r.assessment_name),'Latest / All Assessments');
+}
+function expectedSubjectsForClass(className){
+ const set=new Set();db.teachers.forEach(t=>(t.assignments||[]).forEach(a=>{if(a.className===className&&a.subject)set.add(a.subject)}));
+ if(!set.size)teacherInboxData.results.filter(r=>r.class_name===className).forEach(r=>set.add(r.subject));
+ return [...set].sort((a,b)=>a.localeCompare(b));
+}
+function latestResultFor(studentId,subject,className,term,assessment){
+ let rows=teacherInboxData.results.filter(r=>r.student_id===studentId&&r.class_name===className&&r.subject===subject);
+ if(term)rows=rows.filter(r=>String(r.term||'')===term);if(assessment)rows=rows.filter(r=>String(r.assessment_name||'')===assessment);
+ rows.sort((a,b)=>String(b.created_at||b.exam_date||'').localeCompare(String(a.created_at||a.exam_date||'')));
+ return rows[0]||null;
+}
+function renderStudentResults(){
+ const cf=document.getElementById('resultClassFilter')?.value||'';const term=document.getElementById('resultTermFilter')?.value||'';const assessment=document.getElementById('resultAssessmentFilter')?.value||'';const q=(document.getElementById('resultSearch')?.value||'').toLowerCase();
+ let students=db.students.filter(s=>s.status!=='Inactive'&&(!cf||s.class===cf)&&(!q||[s.name,s.id,s.class,s.guardian].join(' ').toLowerCase().includes(q)));
+ const classes=[...new Set(students.map(s=>s.class).filter(Boolean))];const allSubjects=[...new Set(classes.flatMap(c=>expectedSubjectsForClass(c)))].sort((a,b)=>a.localeCompare(b));
+ const visibleSubjects=allSubjects.length?allSubjects:[];
+ document.getElementById('resultSubjectCount').textContent=visibleSubjects.length;
+ document.getElementById('resultStudentCount').textContent=students.length;
+ const head=document.getElementById('resultHead');head.innerHTML=`<tr><th>Student</th><th>Class</th>${visibleSubjects.map(x=>`<th>${esc(x)}</th>`).join('')}<th>Total Result</th></tr>`;
+ let complete=0,waiting=0;
+ const rows=students.map(s=>{
+   const subjects=expectedSubjectsForClass(s.class);let uploaded=0,totalObt=0,totalMarks=0;const cells=visibleSubjects.map(subject=>{
+     if(!subjects.includes(subject))return `<td class="result-cell"><span class="hint">—</span></td>`;
+     const r=latestResultFor(s._remoteId,subject,s.class,term,assessment);if(!r)return `<td class="result-cell waiting"><strong>Waiting</strong><div class="gr">Not uploaded</div></td>`;
+     uploaded++;totalObt+=Number(r.obtained_marks||0);totalMarks+=Number(r.total_marks||0);const pct=Number(r.percentage??(Number(r.obtained_marks||0)/Number(r.total_marks||1)*100));const grade=r.grade||gradeFromPercentage(pct);
+     return `<td class="result-cell"><div class="pct">${pct.toFixed(1)}%</div><div class="gr">Grade ${esc(grade)}</div><div class="gr">${esc(teacherName(r.teacher_id))}</div></td>`;
+   });
+   const expected=subjects.length;const isComplete=expected>0&&uploaded>=expected;if(isComplete)complete++;else waiting++;
+   const totalPct=totalMarks?totalObt/totalMarks*100:0;const totalCell=isComplete?`<td class="result-total"><div class="pct">${totalPct.toFixed(1)}%</div><div class="gr">Grade ${gradeFromPercentage(totalPct)}</div><div class="result-complete">Complete</div></td>`:`<td class="result-total"><div class="result-pending">Waiting</div><div class="gr">${uploaded}/${expected} subjects uploaded</div>${totalMarks?`<div class="gr">Current: ${totalPct.toFixed(1)}%</div>`:''}</td>`;
+   return `<tr><td><div class="result-name">${esc(s.name)}</div><div class="hint">${esc(s.id)}</div></td><td>${esc(s.class)}${s.section?' / '+esc(s.section):''}</td>${cells.join('')}${totalCell}</tr>`;
+ }).join('');
+ document.getElementById('resultRows').innerHTML=rows||`<tr><td colspan="${visibleSubjects.length+3}" class="empty">No students found for the selected filters.</td></tr>`;
+ document.getElementById('resultCompleteCount').textContent=complete;document.getElementById('resultWaitingCount').textContent=waiting;
+}
+function renderNotifications(){
+ const active=db.teachers.filter(t=>t.status!=='Inactive'&&t._remoteId).length;document.getElementById('notificationTeacherCount').textContent=active;document.getElementById('notificationSentCount').textContent=teacherInboxData.notifications.length;
+ const rows=teacherInboxData.notifications||[];document.getElementById('notificationRows').innerHTML=rows.length?rows.map(n=>`<tr><td>${esc(teacherName(n.teacher_id))}</td><td><strong>${esc(n.title)}</strong></td><td style="max-width:430px;white-space:normal">${esc(n.message)}</td><td>${esc(String(n.created_at||'').replace('T',' ').slice(0,16))}</td><td>${n.is_read?'<span class="badge paid">Read</span>':'<span class="badge partial">Unread</span>'}</td></tr>`).join(''):`<tr><td colspan="5" class="empty">No notifications have been sent yet.</td></tr>`;
+}
+
+async function refreshTeacherInbox(){return refreshTeacherData();}
+function openTeacherSubmission(kind,id){
+ const body=document.getElementById('teacherDetailBody');let title='';let html='';
+ if(kind==='leave'||kind==='suggestion'){
+  const r=teacherInboxData.requests.find(x=>x.id===id);const t=teacherByRemoteId(r?.teacher_id);if(!r)return;
+  title=typeLabel(kind)+' — '+(t?.name||'Teacher');
+  html=`<div class="form-grid"><div><strong>Teacher</strong><div>${esc(t?.name||'')}</div></div><div><strong>Submitted</strong><div>${esc(String(r.created_at||'').replace('T',' ').slice(0,16))}</div></div><div><strong>Subject</strong><div>${esc(r.subject||'')}</div></div><div><strong>Current status</strong><div><span class="badge ${r.status==='Approved'?'paid':r.status==='Rejected'?'pending':'partial'}">${esc(r.status)}</span></div></div>${kind==='leave'?`<div><strong>Leave type</strong><div>${esc(r.leave_type||'')}</div></div><div><strong>From</strong><div>${esc(r.leave_from||'')}</div></div><div><strong>To</strong><div>${esc(r.leave_to||'')}</div></div>`:''}<div class="fullrow"><strong>Message</strong><div style="white-space:pre-wrap;margin-top:7px">${esc(r.message||'')}</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><div class="field"><label>Admin response</label><textarea id="adminRequestNote" rows="4" placeholder="Write your response to the teacher...">${esc(r.admin_note||'')}</textarea></div><div class="toolbar"><button class="btn btn-success" onclick="respondTeacherRequest('${r.id}','Approved')">✅ Approve</button><button class="btn btn-danger" onclick="respondTeacherRequest('${r.id}','Rejected')">❌ Not Approved</button><button class="btn btn-secondary" onclick="respondTeacherRequest('${r.id}','Reviewed')">Mark Reviewed</button></div>`;
+ } else if(kind==='result'){
+  const r=teacherInboxData.results.find(x=>x.id===id);const t=teacherByRemoteId(r?.teacher_id);const st=studentByRemoteId(r?.student_id);if(!r)return;title='📊 Student Result — '+(st?.name||'Student');html=`<div class="form-grid"><div><strong>Teacher</strong><div>${esc(t?.name||'')}</div></div><div><strong>Student</strong><div>${esc(st?.name||'Student')}</div></div><div><strong>Class</strong><div>${esc(r.class_name)}</div></div><div><strong>Subject</strong><div>${esc(r.subject)}</div></div><div><strong>Assessment</strong><div>${esc(r.assessment_name)} (${esc(r.assessment_type)})</div></div><div><strong>Term</strong><div>${esc(r.term||'—')}</div></div><div><strong>Marks</strong><div>${esc(r.obtained_marks)} / ${esc(r.total_marks)} (${esc(r.percentage)}%)</div></div><div><strong>Grade</strong><div>${esc(r.grade||'—')}</div></div><div class="fullrow"><strong>Remarks</strong><div style="white-space:pre-wrap;margin-top:7px">${esc(r.remarks||'')}</div></div></div>`;
+ } else {const r=teacherInboxData.plans.find(x=>x.id===id);const t=teacherByRemoteId(r?.teacher_id);if(!r)return;title='📚 Lesson Plan — '+(t?.name||'Teacher');html=`<div class="form-grid"><div><strong>Teacher</strong><div>${esc(t?.name||'')}</div></div><div><strong>Date</strong><div>${esc(r.lesson_date)}</div></div><div><strong>Class</strong><div>${esc(r.class_name)}</div></div><div><strong>Subject</strong><div>${esc(r.subject)}</div></div><div class="fullrow"><strong>Topic</strong><div>${esc(r.topic)}</div></div><div class="fullrow"><strong>Objectives</strong><div style="white-space:pre-wrap">${esc(r.objectives)}</div></div><div class="fullrow"><strong>Activities</strong><div style="white-space:pre-wrap">${esc(r.activities||'')}</div></div><div class="fullrow"><strong>Homework</strong><div style="white-space:pre-wrap">${esc(r.homework||'')}</div></div><div class="fullrow"><strong>Notes</strong><div style="white-space:pre-wrap">${esc(r.notes||'')}</div></div></div>`;}
+ document.getElementById('teacherDetailTitle').textContent=title;body.innerHTML=html;document.getElementById('teacherDetailModal').classList.add('show');
+}
+async function respondTeacherRequest(id,status){const note=document.getElementById('adminRequestNote')?.value||'';if(!confirm(`Set this request to ${status}?`))return;const {error}=await supabaseClient.from('teacher_requests').update({status,admin_note:note}).eq('id',id);if(error)return toast('Could not update request: '+error.message);toast('Teacher request updated.');closeModal('teacherDetailModal');await refreshTeacherData();}
+async function sendTeacherNotification(){
+ const title=document.getElementById('notificationTitle').value.trim(),message=document.getElementById('notificationMessage').value.trim(),target=document.getElementById('notificationTarget').value;
+ if(!title||!message)return toast('Enter a notification title and message.');
+ let teachers=db.teachers.filter(t=>t.status!=='Inactive'&&t._remoteId);
+ if(target!=='all')teachers=teachers.filter(t=>t._remoteId===target);
+ if(!teachers.length)return toast('No matching teacher found.');
+ const rows=teachers.map(t=>({teacher_id:t._remoteId,title,message}));const {error}=await supabaseClient.from('teacher_notifications').insert(rows);if(error)return toast('Could not send notification: '+error.message);toast(`Notification sent to ${teachers.length} teacher${teachers.length===1?'':'s'}.`);document.getElementById('notificationTitle').value='';document.getElementById('notificationMessage').value='';closeModal('notificationModal');await refreshTeacherData();}
+function openNotificationComposer(){document.getElementById('notificationTarget').innerHTML='<option value="all">All active teachers</option>'+db.teachers.filter(t=>t.status!=='Inactive'&&t._remoteId).map(t=>`<option value="${esc(t._remoteId)}">${esc(t.name)}</option>`).join('');document.getElementById('notificationTitle').value='';document.getElementById('notificationMessage').value='';document.getElementById('notificationModal').classList.add('show');}
 function exportStudents(){const rows=[['Student ID','Name','Guardian','Phone','Class','Section','Monthly Fee','Admission Date'],...db.students.map(s=>[s.id,s.name,s.guardian,s.phone,s.class,s.section,s.fee,s.admission])];const csv=rows.map(r=>r.map(x=>`"${String(x??'').replaceAll('"','""')}"`).join(',')).join('\\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='students.csv';a.click()}
 window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show'))});
 (async()=>{
