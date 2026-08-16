@@ -1,50 +1,56 @@
-# TPLS Teacher Portal — Public Web Version
+TPLS ADMIN PORTAL — TEACHER MANAGEMENT UPDATE
 
-This is a standalone teacher portal. It uses the same Supabase project as the existing admin software.
+This version keeps the working Admin login and adds separate teacher-management pages:
 
-## What it does
-- Public teacher sign-in page with The Progress of Life School branding.
-- Teacher authentication with Supabase email/password.
-- Loads the teacher profile by the authenticated email.
-- Loads assigned classes and subjects.
-- Automatically shows students belonging to the teacher's assigned classes.
-- Loads teacher/student photos from private Supabase Storage buckets.
-- Responsive on phone and desktop.
-- Includes SEO title/description and robots/sitemap files for the public login page.
+1. Leave Applications
+   - Separate page for teacher leave requests
+   - Pending / Approved / Rejected counts
+   - Review request and approve or not approve
+   - Admin response is saved for the teacher
 
-## Important
-This package does NOT modify the existing admin application or run any database changes.
+2. Teacher Suggestions
+   - Separate page for teacher suggestions
+   - Search and status filters
+   - Review and respond
 
-Before giving this portal to real teachers, the Supabase Row Level Security policies must be hardened so an authenticated teacher can only query their own teacher profile, their assignments, and students in their assigned classes. The existing admin project currently has broad authenticated-user policies, so the front-end filtering alone must not be treated as the final security boundary.
+3. Lesson Plans
+   - Separate page for all submitted lesson plans
+   - Filter by class and subject
+   - Open full plan
 
-## Deployment
-For a static deployment, upload this folder to a static host. Vercel Drop can deploy a ZIP and gives the deployment a public URL. For ongoing updates with the same URL, connect the project to a Git repository.
+4. Student Results
+   - Separate page for student academic results
+   - Groups results by student
+   - Shows subject-wise percentage and grade
+   - Shows WAITING when an assigned subject has no uploaded result
+   - Combines uploaded marks for the total percentage and overall grade
+   - Supports class, term and assessment filters
 
-After deployment, add the deployed URL in Supabase Authentication URL/Redirect settings if password reset or email-link flows are later enabled.
+5. Teacher Notifications
+   - Separate page for sending notifications to all or one teacher
+   - Shows sent notification history
 
-
-## Added in v4
-- Read-only monthly fee status for assigned students.
-- Leave application form.
-- Suggestion-to-admin form.
-- Initial teacher rules/expectations section.
-- More polished dashboard cards and responsive layout.
-
-Run TPLS_TEACHER_REQUESTS_SETUP.sql once in Supabase SQL Editor before using the leave/suggestion forms. This creates only the new teacher_requests table and RLS policies.
-
-
-NEW FEATURES IN THIS VERSION
-- Lesson Plans for assigned class/subject
-- Tests & Student Results with automatic percentage and grade
-- Teacher Notifications (Admin sending will be added in the Admin Portal)
-
-IMPORTANT DATABASE STEP
-1. Open Supabase SQL Editor.
-2. Run TPLS_TEACHER_PORTAL_NEW_FEATURES_SETUP.sql once.
-3. Do not run the old SQL again unless needed.
-4. Then upload the portal files to the existing GitHub repository.
-
-The SQL adds only three new tables and does not alter the existing students, teachers, fees, receipts or authentication tables.
+IMPORTANT
+- Do not upload this version to GitHub until you have tested it locally.
+- Run TPLS_ADMIN_TEACHER_INBOX_SETUP.sql in the same Supabase project. If you already ran the previous version, run this updated SQL again; it is safe because policies are dropped/recreated.
+- Keep assets/school-logo.jpg in the same folder.
 
 
-Notification attachments: this version displays files attached by the school admin. Run the updated admin SQL once to create the notification-attachments storage bucket.
+AUTOMATIC TEACHER REMINDERS
+- When the Admin Portal loads or refreshes teacher-management data, it checks active teacher assignments.
+- Result reminders: a teacher receives one daily reminder for an assigned class/subject when one or more active students still have no result uploaded by that teacher.
+- Lesson-plan reminders: a teacher receives a reminder when no lesson plan exists for an assigned class/subject within the previous 7 days.
+- Reminders are saved in teacher_notifications and appear in the Teacher Portal notification area.
+- The system prevents duplicate reminders for the same assignment during the same day (results) or 7-day reminder window (lesson plans).
+- Automatic reminders use the existing admin notification INSERT policy in TPLS_ADMIN_TEACHER_INBOX_SETUP.sql.
+
+LAYOUT FIX
+- Main content now stays within the available screen width.
+- New Teacher Management pages use responsive layouts and horizontal scrolling only inside wide tables.
+- Sidebar and Sign Out remain separated.
+
+
+Notification attachments: run the updated TPLS_ADMIN_TEACHER_INBOX_SETUP.sql once in Supabase to create the secure notification-attachments bucket and attachment columns. Admin can attach one file up to 10 MB; teachers can open it from Notifications.
+
+
+Updated behavior: All personnel are added through the same Add Teacher form. There is no separate Staff category. Designation is optional and may be an administrative leadership role while the person remains a Teacher with class/subject assignments.
