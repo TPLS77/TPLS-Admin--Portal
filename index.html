@@ -40,6 +40,16 @@ button,input,select,textarea{font:inherit} button{cursor:pointer}
 @media print{body *{visibility:hidden!important}.print-area,.print-area *{visibility:visible!important}.print-area{position:absolute;left:0;top:0;width:100%}}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chip{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:20px;background:#eef4ff;color:#164b8a;font-size:12px}.chip button{border:0;background:none;cursor:pointer;font-weight:bold}.hint{font-size:12px;color:var(--muted)}
 
+ .quote-banner{margin:0 0 22px;padding:20px 24px;border-radius:22px;background:linear-gradient(135deg,#0b4f9e,#1767c8 58%,#f0b323);color:#fff;box-shadow:0 18px 45px rgba(23,103,200,.18);position:relative;overflow:hidden}
+.quote-banner:after{content:"";position:absolute;width:180px;height:180px;border:35px solid rgba(255,255,255,.14);border-radius:50%;right:-80px;top:-95px}
+.quote-banner .quote{position:relative;z-index:1;font-size:20px;font-weight:800;line-height:1.5}
+.quote-banner .source{position:relative;z-index:1;margin-top:6px;font-size:12px;color:#eef6ff}
+.forgot-link{display:block;text-align:right;margin-top:10px;color:#1767c8;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer}
+.recovery-card{margin-top:18px;padding:18px;border-radius:16px;background:#f8fbff;border:1px solid #dbe7ff}
+.role-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
+.role-check{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid #dbe5f1;border-radius:11px;background:#fbfdff;font-size:12px;font-weight:700}
+.role-check input{width:auto}
+@media(max-width:700px){.role-checks{grid-template-columns:1fr}.quote-banner .quote{font-size:17px}}
 /* TPLS responsive layout fix */
 html,body{max-width:100%;overflow-x:hidden}
 .app{width:100%;min-width:0}
@@ -102,17 +112,37 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
   .result-controls .toolbar .spacer{display:none}
 }
 
+
+.principal-card{margin-top:22px;padding:16px;border-radius:18px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);backdrop-filter:blur(8px);display:flex;gap:14px;align-items:center;position:relative;z-index:2;max-width:620px}.principal-card img{width:82px;height:96px;border-radius:16px;object-fit:cover;object-position:center top;border:3px solid rgba(255,255,255,.75);box-shadow:0 8px 24px rgba(0,0,0,.18)}.principal-card .ptitle{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#fff}.principal-card .pmsg{margin-top:5px;font-size:13px;line-height:1.55;color:#f4f8ff}.principal-card .psign{margin-top:6px;font-size:11px;color:#e4efff;font-weight:700}
+.cloud-retry{margin-top:12px;padding:12px 14px;border-radius:12px;background:#fff8e6;border:1px solid #f0d58a;color:#725600;font-size:12px;line-height:1.5}.cloud-retry button{margin-top:8px}
+
+/* TPLS ADMIN PREMIUM VISUAL REFRESH — design only */
+body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 25%),radial-gradient(circle at 95% 0%,rgba(124,58,237,.08),transparent 24%),#f4f7fc}
+.topbar{background:rgba(255,255,255,.90)!important;backdrop-filter:blur(16px);box-shadow:0 8px 28px rgba(15,23,42,.06)}
+.sidebar{background:linear-gradient(180deg,#071f45 0%,#0c3b7a 48%,#312e81 100%)!important;box-shadow:10px 0 35px rgba(15,23,42,.10)}
+.sidebar .brand{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border-radius:18px;margin:10px;padding:12px}
+.nav button{border-radius:12px!important;transition:.2s}.nav button:hover{background:rgba(255,255,255,.10)!important;transform:translateX(2px)}.nav button.active{background:linear-gradient(135deg,#2563eb,#7c3aed)!important;box-shadow:0 10px 24px rgba(37,99,235,.22)}
+.topbar .title{font-weight:800}.card{border-color:rgba(148,163,184,.22)!important;box-shadow:0 12px 34px rgba(15,23,42,.06)!important;border-radius:20px!important}
+.cards .card{background:linear-gradient(145deg,#fff,#f7faff)}.card h3{color:#14284b}
+.btn-primary{background:linear-gradient(135deg,#2563eb,#4f46e5)!important;box-shadow:0 10px 24px rgba(37,99,235,.18)!important}.btn-primary:hover{filter:brightness(1.04);transform:translateY(-1px)}
+.section-title{margin-bottom:18px}.table th{background:linear-gradient(180deg,#f8fbff,#eef4ff)!important;color:#38516f!important}.badge{box-shadow:inset 0 0 0 1px rgba(0,0,0,.04)}
+.quote-banner{box-shadow:0 20px 45px rgba(37,99,235,.20)!important}
 </style>
 </head>
 <body>
 <div id="loginScreen" class="login">
   <div class="login-visual">
     <div class="login-copy">
-      <img class="school-mark" src="school-logo.jpg" onerror="this.style.display='none'">
+      <img class="school-mark" src="assets/school-logo.jpg" onerror="this.style.display='none'">
       <h1>The Progress of Life School</h1>
       <p>School Management System</p>
       <p>Manage students, teachers, fees and school finances in one simple, professional place.</p>
       <div class="pills"><span class="pill">Student Records</span><span class="pill">Fee Receipts</span><span class="pill">Pending Fees</span><span class="pill">Financial Reports</span></div>
+      <div class="quote-banner">
+        <div class="quote">“Train up a child in the way he should go; even when he is old he will not depart from it.”</div>
+        <div class="source">— Proverbs 22:6</div>
+      </div>
+      <div class="principal-card"><img src="principal.jpg" alt="Principal"><div><div class="ptitle">A Message from the Principal</div><div class="pmsg">“Every child entrusted to us is a precious life to guide, encourage and prepare for a meaningful future. Let us work together with patience, excellence and compassion so that every child can truly progress in life.”</div><div class="psign">— Principal, The Progress of Life School</div></div></div>
     </div>
   </div>
   <div class="login-panel">
@@ -123,7 +153,15 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
         <div class="field"><label>Email</label><input id="loginEmail" type="email" placeholder="admin@school.com"></div>
         <div class="field"><label>Password</label><input id="loginPassword" type="password" placeholder="••••••••"></div>
         <button class="btn btn-primary full" onclick="login()">Sign In</button>
-        <div class="note">This first version stores your account and school data in this browser. No server or paid service is required.</div>
+        <a class="forgot-link" onclick="sendAdminReset()">Forgot password?</a>
+        <div id="adminLoginMessage" class="note"></div>
+        <div id="adminRecoveryCard" class="recovery-card hidden">
+          <strong>Set a new password</strong>
+          <div style="font-size:12px;color:#667085;margin-top:5px">Choose a new password for your school account.</div>
+          <div class="field"><label>New Password</label><input id="adminNewPassword" type="password" autocomplete="new-password" placeholder="At least 6 characters"></div>
+          <button class="btn btn-primary full" onclick="completeAdminReset()">Update Password</button>
+        </div>
+        <div class="note">Cloud data is shared through Supabase. Reports and print views are generated on demand and are not stored as report files.</div>
       </div>
       <div id="signupForm" class="hidden">
         <h2>Create School Account</h2><div class="sub">Set up your administrator account to begin.</div>
@@ -138,7 +176,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 
 <div id="app" class="app hidden">
 <aside class="sidebar">
-  <div class="brand"><img src="school-logo.jpg"><div><strong>THE PROGRESS OF LIFE</strong><small>SCHOOL</small></div></div>
+  <div class="brand"><img src="assets/school-logo.jpg"><div><strong>THE PROGRESS OF LIFE</strong><small>SCHOOL</small></div></div>
   <div class="nav">
     <button data-page="dashboard" class="active" onclick="go('dashboard')"><span class="ico">⌂</span><span>Dashboard</span></button>
     <button data-page="students" onclick="go('students')"><span class="ico">👨‍🎓</span><span>Students</span></button>
@@ -165,7 +203,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
   <div class="section-title"><div><h3>School Overview</h3><div style="color:var(--muted);font-size:13px">Your financial and student snapshot</div></div><button class="btn btn-secondary" onclick="refreshDashboard()">↻ Refresh</button></div>
   <div class="cards">
     <div class="card stat"><div><p>Total Students</p><h3 id="sTotal">0</h3><p>Active students</p></div><div class="icon">👨‍🎓</div></div>
-    <div class="card stat"><div><p>Total Teachers</p><h3 id="tTotal">0</h3><p>Teaching staff</p></div><div class="icon">👩‍🏫</div></div>
+    <div class="card stat"><div><p>Teaching Staff</p><h3 id="tTotal">0</h3><p>All active staff who may also teach</p></div><div class="icon">👩‍🏫</div></div>
     <div class="card stat"><div><p>Fees Collected</p><h3 id="fCollected">PKR 0</h3><p>This month</p></div><div class="icon">💳</div></div>
     <div class="card stat"><div><p>Pending Fees</p><h3 id="fPending" class="negative">PKR 0</h3><p>Outstanding</p></div><div class="icon">⏳</div></div>
   </div>
@@ -289,19 +327,33 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
 <input id="teacherEditId" type="hidden">
 <div class="form-grid">
 <div class="field"><label>Name *</label><input id="teName"></div>
-<div class="field"><label>Designation</label><select id="teDesignation">
+<div class="field"><label>Primary Designation</label><select id="teDesignation">
 <option>Teacher</option><option>Principal</option><option>Vice Principal</option><option>Head Teacher</option><option>General Secretary</option><option>Coordinator of Higher Section</option><option>Coordinator of Lower Section</option><option>Academic Coordinator</option><option>Examination Coordinator</option><option>Discipline Coordinator</option><option>Financial Secretary</option><option>Accountant</option><option>Administrator</option><option>HR / Staff Coordinator</option><option>IT Coordinator</option><option>Student Affairs Coordinator</option><option>Librarian</option><option>Lab Assistant</option><option>Sports Coordinator</option><option>Office Assistant</option><option>Receptionist</option><option>Support Staff</option><option>Other</option>
 </select></div>
+<div class="field fullrow">
+  <label>Additional Responsibilities</label>
+  <div class="hint">A person can be a teacher and hold one or more additional responsibilities. These responsibilities appear together in the same login.</div>
+  <div class="role-checks">
+    <label class="role-check"><input type="checkbox" class="extraRole" value="Financial Secretary"> Financial Secretary</label>
+    <label class="role-check"><input type="checkbox" class="extraRole" value="Accountant"> Accountant</label>
+    <label class="role-check"><input type="checkbox" class="extraRole" value="Administrator"> Administrator</label>
+    <label class="role-check"><input type="checkbox" class="extraRole" value="Coordinator of Higher Section"> High Section Coordinator</label>
+    <label class="role-check"><input type="checkbox" class="extraRole" value="Coordinator of Lower Section"> Low Section Coordinator</label>
+    <label class="role-check"><input type="checkbox" class="extraRole" value="Academic Coordinator"> Academic Coordinator</label>
+    <label class="role-check"><input type="checkbox" class="extraRole" value="Examination Coordinator"> Examination Coordinator</label>
+    <label class="role-check"><input type="checkbox" class="extraRole" value="Discipline Coordinator"> Discipline Coordinator</label>
+  </div>
+</div>
 <div class="field"><label>Gender</label><select id="teGender"><option>Male</option><option>Female</option></select></div>
 <div class="field"><label>Phone</label><input id="tePhone"></div>
 <div class="field"><label>Email</label><input id="teEmail" type="email"></div>
 <div class="field"><label>Qualification</label><input id="teQualification" placeholder="e.g. BS Chemistry, MA English"></div>
 <div class="field"><label>Joining Date</label><input id="teJoining" type="date"></div>
 <div class="field"><label>Status</label><select id="teStatus"><option>Active</option><option>Inactive</option></select></div>
-<div class="field fullrow"><label>Teacher Photo</label><input id="tePhoto" type="file" accept="image/*" onchange="previewTeacherPhoto(event)"><div style="margin-top:8px"><img id="teacherPhotoPreview" class="photo-lg" alt="Teacher photo preview"></div></div>
+<div class="notice fullrow" style="margin-bottom:10px"><strong>Teaching Staff Access</strong><br>Every designated staff member may teach. Their designation does not remove teaching features; add their teaching assignments below whenever applicable.</div><div class="field fullrow"><label>Teacher Photo</label><input id="tePhoto" type="file" accept="image/*" onchange="previewTeacherPhoto(event)"><div style="margin-top:8px"><img id="teacherPhotoPreview" class="photo-lg" alt="Teacher photo preview"></div></div>
 </div>
 <div id="teacherAssignmentsSection"><div class="section-title" style="margin-top:18px"><h3>Teaching Assignments</h3></div>
-<div class="hint" style="margin-bottom:10px">For teachers, select each class and subject they teach. Staff members can be saved without teaching assignments.</div>
+<div class="hint" style="margin-bottom:10px"><strong>Teaching access is additive:</strong> every staff designation can also be a teaching staff member. Select each class and subject this person teaches, whether their designation is Teacher, Financial Secretary, Accountant, Coordinator, Administrator, or another role.</div>
 <div class="form-grid">
 <div class="field"><label>Class</label><select id="teClass"></select></div>
 <div class="field"><label>Subject</label><select id="teSubjectSelect"></select></div>
@@ -341,6 +393,11 @@ const SUPABASE_URL="https://znjtsykmpuhprikbscut.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_H0crIBF0FeRnPiZQa6i43A_KrZEyxbZ";
 let supabaseClient=null;
 function initSupabase(){ if(!window.supabase){toast('Supabase library did not load. Check your internet connection.');return false;} if(!supabaseClient) supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY); return true; }
+function watchPasswordRecovery(){
+ if(!supabaseClient) return;
+ supabaseClient.auth.onAuthStateChange((event)=>{if(event==='PASSWORD_RECOVERY') document.getElementById('adminRecoveryCard')?.classList.remove('hidden');});
+}
+
 let remoteReady=false;
 const KEY='pls_school_v1';
 let db=JSON.parse(localStorage.getItem(KEY)||'null')||{account:null,students:[],teachers:[],fees:[],expenses:[]};
@@ -445,8 +502,32 @@ async function saveDBAndRefresh(){await saveDB();refreshAll();}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 function showAuth(type){document.getElementById('loginForm').classList.toggle('hidden',type!=='login');document.getElementById('signupForm').classList.toggle('hidden',type!=='signup');document.getElementById('loginTab').classList.toggle('active',type==='login');document.getElementById('signupTab').classList.toggle('active',type==='signup')}
+async function sendAdminReset(){
+ if(!initSupabase()) return;
+ const email=document.getElementById('loginEmail').value.trim(),msg=document.getElementById('adminLoginMessage');
+ if(!email){msg.textContent='Enter your email first, then click Forgot password.';return;}
+ try{
+   const redirectTo=window.location.origin+window.location.pathname;
+   const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo});
+   if(error) throw error;
+   msg.textContent='Password reset link sent. Check your email and open the link on this portal.';
+ }catch(err){msg.textContent=err.message||'Could not send the password reset email.';}
+}
+async function completeAdminReset(){
+ if(!initSupabase()) return;
+ const pass=document.getElementById('adminNewPassword').value;
+ if(!pass || pass.length<6){document.getElementById('adminLoginMessage').textContent='Password must be at least 6 characters.';return;}
+ try{
+   const {error}=await supabaseClient.auth.updateUser({password:pass});
+   if(error) throw error;
+   document.getElementById('adminRecoveryCard').classList.add('hidden');
+   document.getElementById('adminLoginMessage').textContent='Password updated successfully. Please sign in with the new password.';
+   await supabaseClient.auth.signOut();
+ }catch(err){document.getElementById('adminLoginMessage').textContent=err.message||'Could not update your password.';}
+}
 async function signup(){
  if(!initSupabase()) return;
+ watchPasswordRecovery();
  const name=document.getElementById('signupName').value.trim(),email=document.getElementById('signupEmail').value.trim(),pass=document.getElementById('signupPassword').value;
  if(!name||!email||!pass)return toast('Please complete all fields.');
  const {data,error}=await supabaseClient.auth.signUp({email,password:pass,options:{data:{name,school:'The Progress of Life School'}}});
@@ -457,12 +538,38 @@ async function signup(){
 }
 async function login(){
  if(!initSupabase()) return;
+ watchPasswordRecovery();
  const e=document.getElementById('loginEmail').value.trim(),p=document.getElementById('loginPassword').value;
  if(!e||!p)return toast('Enter email and password.');
  const {data,error}=await supabaseClient.auth.signInWithPassword({email:e,password:p});
  if(error)return toast(error.message);
  remoteReady=true;db.account={name:data.user.user_metadata?.name||'School Administrator',email:data.user.email};saveLocal();
- try{await loadRemote();openApp();toast('Signed in successfully.');}catch(err){console.error(err);toast('Signed in, but cloud data could not be loaded.');}
+ try{
+   await loadRemote();
+   openApp();
+   toast('Signed in successfully.');
+ }catch(err){
+   console.error('TPLS cloud load failed after sign-in:',err);
+   const msg=String(err?.message||err||'Cloud data could not be loaded.');
+   const box=document.getElementById('adminLoginMessage');
+   if(box) box.innerHTML=`Cloud connection needs attention: ${esc(msg)}<div class="cloud-retry">Your login was accepted by Supabase, but the database request was rejected. This can happen during a Supabase JWT/API clock synchronization problem. Please wait a few seconds and retry.<br><button class="btn btn-secondary" onclick="retryCloudAfterLogin()">Retry Cloud Connection</button></div>`;
+ }
+}
+async function retryCloudAfterLogin(){
+ const box=document.getElementById('adminLoginMessage');
+ if(box) box.textContent='Retrying the cloud connection…';
+ try{
+   const {data,error}=await supabaseClient.auth.refreshSession();
+   if(error) throw error;
+   remoteReady=true;
+   await new Promise(r=>setTimeout(r,1500));
+   await loadRemote();
+   openApp();
+   toast('Cloud connection restored.');
+ }catch(err){
+   console.error('TPLS cloud retry failed:',err);
+   if(box) box.innerHTML=`Cloud retry failed: ${esc(err?.message||err)}<div class="cloud-retry">If the error is <b>PGRST303: JWT issued at future</b>, the problem is on the Supabase Auth/Data API side rather than your school tables. Please retry later or contact Supabase support with project ref <b>znjtsykmpuhprikbscut</b>.</div>`;
+ }
 }
 window.login=login;
 document.getElementById('loginEmail')?.addEventListener('keydown',e=>{if(e.key==='Enter')login();});
@@ -521,9 +628,9 @@ function populateClassFilter(){const sel=document.getElementById('studentClass')
 function renderStudents(){
  populateClassFilter();const q=(document.getElementById('studentSearch').value||'').toLowerCase(),cl=document.getElementById('studentClass').value;
  const arr=db.students.filter(s=>(!q||`${s.name} ${s.id} ${s.phone}`.toLowerCase().includes(q))&&(!cl||s.class===cl));
- document.getElementById('studentRows').innerHTML=arr.length?arr.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${s.photo||'school-logo.jpg'}"><strong>${esc(s.name)}</strong></div></td><td>${esc(s.id)}</td><td>${esc(s.class)} ${s.section?'/ '+esc(s.section):''}</td><td>${esc(s.guardian)}</td><td>${esc(s.phone)}</td><td>${money(s.fee)}</td><td><span class="badge active-badge">${esc(s.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="editStudent('${s.id}')">Edit</button> <button class="btn btn-danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">No students found. Click “Add Student” to begin.</td></tr>`;
+ document.getElementById('studentRows').innerHTML=arr.length?arr.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${s.photo||'assets/school-logo.jpg'}"><strong>${esc(s.name)}</strong></div></td><td>${esc(s.id)}</td><td>${esc(s.class)} ${s.section?'/ '+esc(s.section):''}</td><td>${esc(s.guardian)}</td><td>${esc(s.phone)}</td><td>${money(s.fee)}</td><td><span class="badge active-badge">${esc(s.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="editStudent('${s.id}')">Edit</button> <button class="btn btn-danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">No students found. Click “Add Student” to begin.</td></tr>`;
 }
-function openStudent(s=null){currentPhoto=s?.photo||'';document.getElementById('studentModalTitle').textContent=s?'Edit Student':'Add Student';document.getElementById('studentEditId').value=s?.id||'';['Name','Id','Guardian','Phone','Class','Section','Dob','Gender','Fee','Admission','Address'].forEach(k=>{let el=document.getElementById('st'+k);if(el)el.value=s?({Name:s.name,Id:s.id,Guardian:s.guardian,Phone:s.phone,Class:s.class,Section:s.section,Dob:s.dob,Gender:s.gender,Fee:s.fee,Admission:s.admission,Address:s.address}[k]??''):k==='Fee'?'2000':''});document.getElementById('photoPreview').src=currentPhoto||'school-logo.jpg';document.getElementById('stPhoto').value='';document.getElementById('studentModal').classList.add('show')}
+function openStudent(s=null){currentPhoto=s?.photo||'';document.getElementById('studentModalTitle').textContent=s?'Edit Student':'Add Student';document.getElementById('studentEditId').value=s?.id||'';['Name','Id','Guardian','Phone','Class','Section','Dob','Gender','Fee','Admission','Address'].forEach(k=>{let el=document.getElementById('st'+k);if(el)el.value=s?({Name:s.name,Id:s.id,Guardian:s.guardian,Phone:s.phone,Class:s.class,Section:s.section,Dob:s.dob,Gender:s.gender,Fee:s.fee,Admission:s.admission,Address:s.address}[k]??''):k==='Fee'?'2000':''});document.getElementById('photoPreview').src=currentPhoto||'assets/school-logo.jpg';document.getElementById('stPhoto').value='';document.getElementById('studentModal').classList.add('show')}
 function previewPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{currentPhoto=r.result;document.getElementById('photoPreview').src=currentPhoto};r.readAsDataURL(f)}
 async function saveStudent(){
  const id=document.getElementById('studentEditId').value||document.getElementById('stId').value.trim();const s={id,name:document.getElementById('stName').value.trim(),guardian:document.getElementById('stGuardian').value.trim(),phone:document.getElementById('stPhone').value.trim(),class:document.getElementById('stClass').value.trim(),section:document.getElementById('stSection').value.trim(),dob:document.getElementById('stDob').value,gender:document.getElementById('stGender').value,fee:Number(document.getElementById('stFee').value||0),admission:document.getElementById('stAdmission').value,address:document.getElementById('stAddress').value.trim(),photo:currentPhoto,status:'Active'};
@@ -558,7 +665,7 @@ function renderTeachers(){
  document.getElementById('teacherRows').innerHTML=arr.length?arr.map(t=>{
    const a=t.assignments||[];
    const assignmentText=a.length?a.map(x=>`${esc(x.className)} — ${esc(x.subject)}`).join('<br>'):'—';
-   return `<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${t.photo||'school-logo.jpg'}"><div><strong>${esc(t.name||'')}</strong><div style="font-size:11px;color:var(--muted)">${esc('Teacher')} · ${esc(t.qualification||'')}</div></div></div></td><td><strong>${esc(t.designation||'Teacher')}</strong></td><td>${esc(t.gender||'')}</td><td>${esc(t.phone||'')}</td><td>${assignmentText}</td><td><span class="badge ${String(t.status||'Active').toLowerCase()}">${esc(t.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="openTeacher('${esc(t.id)}')">Edit</button></td></tr>`;
+   return `<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${t.photo||'assets/school-logo.jpg'}"><div><strong>${esc(t.name||'')}</strong><div style="font-size:11px;color:var(--muted)">${esc('Teacher')} · ${esc(t.qualification||'')}</div></div></div></td><td><strong>${esc(t.designation||'Teacher')}</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">Teaching access: ${((t.assignments||[]).length)?'Assigned':'Available'}</div></td><td>${esc(t.gender||'')}</td><td>${esc(t.phone||'')}</td><td>${assignmentText}</td><td><span class="badge ${String(t.status||'Active').toLowerCase()}">${esc(t.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="openTeacher('${esc(t.id)}')">Edit</button></td></tr>`;
  }).join(''):`<tr><td colspan="7" class="empty">No teachers or staff found.</td></tr>`;
 }
 function openTeacher(id=''){
@@ -567,7 +674,9 @@ function openTeacher(id=''){
  currentTeacherPhoto=t?.photo||'';
  document.getElementById('teacherEditId').value=t?.id||'';
  document.getElementById('teName').value=t?.name||'';
- document.getElementById('teDesignation').value=t?.designation||'Teacher';
+ const designationText=t?.designation||'Teacher';
+document.getElementById('teDesignation').value=(designationText.split(/\s*\+\s*/)[0]||'Teacher');
+document.querySelectorAll('.extraRole').forEach(cb=>cb.checked=designationText.toLowerCase().includes(cb.value.toLowerCase()));
  document.getElementById('teGender').value=t?.gender||'Male';
  document.getElementById('tePhone').value=t?.phone||'';
  document.getElementById('teEmail').value=t?.email||'';
@@ -575,7 +684,7 @@ function openTeacher(id=''){
  document.getElementById('teJoining').value=t?.joining||'';
  document.getElementById('teStatus').value=t?.status||'Active';
  document.getElementById('tePhoto').value='';
- document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto||'school-logo.jpg';
+ document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto||'assets/school-logo.jpg';
  teacherAssignments=(t?.assignments||[]).map(a=>({className:a.className,subject:a.subject}));
  document.getElementById('teacherModalTitle').textContent=t?'Edit Teacher':'Add Teacher';
  renderTeacherAssignmentChips();
@@ -589,7 +698,10 @@ function previewTeacherPhoto(e){const f=e.target.files[0];if(!f)return;const r=n
 async function saveTeacher(){
  const id=document.getElementById('teacherEditId').value||uid('T');
  const existing=db.teachers.find(t=>t.id===id);
- const t={id,name:document.getElementById('teName').value.trim(),staffType:'Teacher',designation:document.getElementById('teDesignation').value,gender:document.getElementById('teGender').value,phone:document.getElementById('tePhone').value.trim(),email:document.getElementById('teEmail').value.trim(),qualification:document.getElementById('teQualification').value.trim(),joining:document.getElementById('teJoining').value,status:document.getElementById('teStatus').value,photo:currentTeacherPhoto,photoPath:existing?.photoPath||'',assignments:teacherAssignments.map(a=>({...a}))};
+ const primary=document.getElementById('teDesignation').value;
+const extras=[...document.querySelectorAll('.extraRole:checked')].map(cb=>cb.value);
+const designation=[primary,...extras.filter(x=>x.toLowerCase()!==primary.toLowerCase())].join(' + ');
+const t={id,name:document.getElementById('teName').value.trim(),staffType:'Teacher',designation,gender:document.getElementById('teGender').value,phone:document.getElementById('tePhone').value.trim(),email:document.getElementById('teEmail').value.trim(),qualification:document.getElementById('teQualification').value.trim(),joining:document.getElementById('teJoining').value,status:document.getElementById('teStatus').value,photo:currentTeacherPhoto,photoPath:existing?.photoPath||'',assignments:teacherAssignments.map(a=>({...a}))};
  if(!t.name)return toast('Teacher name is required.');
  if(!t.assignments.length)return toast('Please add at least one class and subject assignment.');
  if(!remoteReady)return toast('Please sign in to save teachers to the cloud.');
@@ -660,7 +772,7 @@ function recordForStudent(studentId, month){
 }
 
 function showReceiptById(id){showReceipt(db.fees.find(f=>f.id===id))}
-function showReceipt(f){if(!f)return;currentReceipt=f;const s=db.students.find(x=>x.id===f.studentId)||{};document.getElementById('receiptPrintArea').innerHTML=`<div class="receipt"><div class="receipt-head"><div class="receipt-school"><img class="receipt-logo" src="school-logo.jpg"><div><h2>THE PROGRESS OF LIFE SCHOOL</h2><p>CHAK 8JB MEHBOOB TOWN, FAISALABAD</p><p style="font-size:11px">PROGRESS FOR CHRISTIAN CHILDREN</p></div></div><div class="receipt-no"><strong>FEE RECEIPT</strong><br>Receipt No: ${esc(f.receipt)}<br>Date: ${esc(f.date)}</div></div><div class="receipt-student"><img class="photo-lg" src="${s.photo||'school-logo.jpg'}"><div><strong>${esc(s.name||'')}</strong><div>Student ID: ${esc(s.id||'')}</div><div>Class / Section: ${esc(s.class||'')} ${s.section?'/ '+esc(s.section):''}</div><div>Father / Guardian: ${esc(s.guardian||'')}</div></div></div><table class="receipt-table"><tr><th>Description</th><th>Amount (PKR)</th></tr><tr><td>Monthly Fee (${esc(f.month)})</td><td>${Number(f.expected).toLocaleString()}</td></tr><tr><td>Previous Balance</td><td>${Number(f.previous).toLocaleString()}</td></tr><tr><td>Discount</td><td>${Number(f.discount).toLocaleString()}</td></tr><tr><td><strong>Amount Paid</strong></td><td><strong>${Number(f.paid).toLocaleString()}</strong></td></tr><tr><td><strong>Remaining Balance</strong></td><td><strong>${Number(f.remaining).toLocaleString()}</strong></td></tr></table><p><strong>Amount in Words:</strong> ${amountWords(f.paid)}</p><div class="signs"><div class="sign">Received By</div><div class="sign">Principal</div></div></div>`;document.getElementById('receiptModal').classList.add('show')}
+function showReceipt(f){if(!f)return;currentReceipt=f;const s=db.students.find(x=>x.id===f.studentId)||{};document.getElementById('receiptPrintArea').innerHTML=`<div class="receipt"><div class="receipt-head"><div class="receipt-school"><img class="receipt-logo" src="assets/school-logo.jpg"><div><h2>THE PROGRESS OF LIFE SCHOOL</h2><p>CHAK 8JB MEHBOOB TOWN, FAISALABAD</p><p style="font-size:11px">PROGRESS FOR CHRISTIAN CHILDREN</p></div></div><div class="receipt-no"><strong>FEE RECEIPT</strong><br>Receipt No: ${esc(f.receipt)}<br>Date: ${esc(f.date)}</div></div><div class="receipt-student"><img class="photo-lg" src="${s.photo||'assets/school-logo.jpg'}"><div><strong>${esc(s.name||'')}</strong><div>Student ID: ${esc(s.id||'')}</div><div>Class / Section: ${esc(s.class||'')} ${s.section?'/ '+esc(s.section):''}</div><div>Father / Guardian: ${esc(s.guardian||'')}</div></div></div><table class="receipt-table"><tr><th>Description</th><th>Amount (PKR)</th></tr><tr><td>Monthly Fee (${esc(f.month)})</td><td>${Number(f.expected).toLocaleString()}</td></tr><tr><td>Previous Balance</td><td>${Number(f.previous).toLocaleString()}</td></tr><tr><td>Discount</td><td>${Number(f.discount).toLocaleString()}</td></tr><tr><td><strong>Amount Paid</strong></td><td><strong>${Number(f.paid).toLocaleString()}</strong></td></tr><tr><td><strong>Remaining Balance</strong></td><td><strong>${Number(f.remaining).toLocaleString()}</strong></td></tr></table><p><strong>Amount in Words:</strong> ${amountWords(f.paid)}</p><div class="signs"><div class="sign">Received By</div><div class="sign">Principal</div></div></div>`;document.getElementById('receiptModal').classList.add('show')}
 function amountWords(n){n=Number(n||0);if(n===0)return'Zero Only';if(n<1000000)return n.toLocaleString('en-PK')+' Only';return n.toLocaleString('en-PK')+' Only'}
 function printReceipt(){window.print()}
 function openExpense(){document.getElementById('exDate').value=today();document.getElementById('exDescription').value='';document.getElementById('exAmount').value='';document.getElementById('expenseModal').classList.add('show')}
