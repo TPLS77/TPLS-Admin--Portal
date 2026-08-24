@@ -221,11 +221,11 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 
 <div id="students" class="page">
   <div class="section-title"><div><h3>Students</h3><div style="color:var(--muted);font-size:13px">Save complete student information and photos.</div></div><button class="btn btn-primary" onclick="openStudent()">+ Add Student</button></div>
-  <div class="card"><div class="toolbar"><input id="studentSearch" placeholder="Search name, ID or phone..." oninput="renderStudents()"><select id="studentClass" onchange="renderStudents()"><option value="">All Classes</option></select><div class="spacer"></div><button class="btn btn-secondary" onclick="exportStudents()">Export CSV</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Student</th><th>ID</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Monthly Fee</th><th>Status</th><th></th></tr></thead><tbody id="studentRows"></tbody></table></div></div>
+  <div class="card"><div class="toolbar"><input id="studentSearch" placeholder="Search name, ID or phone..." oninput="renderStudents()"><select id="studentClass" onchange="renderStudents()"><option value="">All Classes</option></select><div class="spacer"></div><button class="btn btn-secondary filter-btn" onclick="exportStudents()">CSV</button><button class="btn btn-primary filter-btn" onclick="downloadStudentsPDF()">⬇ Student PDF</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Student</th><th>ID</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Monthly Fee</th><th>Status</th><th></th></tr></thead><tbody id="studentRows"></tbody></table></div></div>
 </div>
 
 <div id="teachers" class="page">
-  <div class="section-title"><div><h3>Teachers</h3><div style="color:var(--muted);font-size:13px">Keep teacher contact and employment details.</div></div><button class="btn btn-primary" onclick="openTeacher()">+ Add Teacher</button></div>
+  <div class="section-title"><div><h3>Teachers</h3><div style="color:var(--muted);font-size:13px">Keep teacher contact and employment details.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" onclick="openTeacher()">+ Add Teacher</button><button class="btn btn-secondary" onclick="downloadTeachersPDF()">⬇ PDF</button></div></div>
   <div class="card"><div class="toolbar"><input id="teacherSearch" placeholder="Search teacher or subject..." oninput="renderTeachers()"></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Designation</th><th>Gender</th><th>Phone</th><th>Class & Subject Assignments</th><th>Status</th><th></th></tr></thead><tbody id="teacherRows"></tbody></table></div></div>
 </div>
 
@@ -235,13 +235,13 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 </div>
 
 <div id="expenses" class="page">
-  <div class="section-title"><div><h3>Expenses</h3><div style="color:var(--muted);font-size:13px">Track school expenses for accurate financial statistics.</div></div><button class="btn btn-primary" onclick="openExpense()">+ Add Expense</button></div>
+  <div class="section-title"><div><h3>Expenses</h3><div style="color:var(--muted);font-size:13px">Track school expenses for accurate financial statistics.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" onclick="openExpense()">+ Add Expense</button><button class="btn btn-secondary" onclick="downloadExpensesPDF()">⬇ PDF</button></div></div>
   <div class="card"><div class="toolbar"><select id="expenseCategory" onchange="renderExpenses()"><option value="">All Categories</option><option>Utilities</option><option>Salaries</option><option>Supplies</option><option>Maintenance</option><option>Transport</option><option>Other</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr></thead><tbody id="expenseRows"></tbody></table></div></div>
 </div>
 
 <div id="receipts" class="page">
   <div class="section-title"><div><h3>Receipts</h3><div style="color:var(--muted);font-size:13px">Print any saved fee receipt with the student's photo.</div></div></div>
-  <div class="card"><div class="toolbar"><input id="receiptSearch" placeholder="Search receipt or student..." oninput="renderReceipts()"><input id="receiptMonthFilter" type="month" onchange="renderReceipts()"><div class="spacer"></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Receipt No.</th><th>Student</th><th>Month</th><th>Amount</th><th>Date</th><th></th></tr></thead><tbody id="receiptRows"></tbody></table></div></div>
+  <div class="card"><div class="toolbar"><input id="receiptSearch" placeholder="Search receipt or student..." oninput="renderReceipts()"><input id="receiptMonthFilter" type="month" onchange="renderReceipts()"><div class="spacer"></div><span class="filter-label">FILTERS</span></div><div class="table-wrap"><table class="table"><thead><tr><th>Receipt No.</th><th>Student</th><th>Month</th><th>Amount</th><th>Date</th><th></th></tr></thead><tbody id="receiptRows"></tbody></table></div></div>
 </div>
 
 <div id="reports" class="page">
@@ -257,13 +257,13 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 <label id="reportMonthWrap" style="min-width:150px">Month<input id="reportMonth" type="month" onchange="renderReports()"></label>
 <label id="reportYearWrap" style="min-width:150px;display:none">Year<input id="reportYear" type="number" min="2000" max="2100" onchange="renderReports()"></label>
 <label id="reportDayWrap" style="min-width:150px;display:none">Day<input id="reportDay" type="date" onchange="renderReports()"></label>
-<div class="spacer"></div><button class="btn btn-primary" onclick="printFinancialReport()">Print Financial Report</button>
+<div class="spacer"></div><button class="btn btn-secondary" onclick="printFinancialReport()">🖨 Print</button><button class="btn btn-primary" onclick="downloadFinancialReportPDF()">⬇ Download PDF</button>
 </div>
 <div id="monthReport"></div></div></div>
 </div>
 
 <div id="leave-applications" class="page">
-  <div class="section-title"><div><h3>Leave Applications</h3><div style="color:var(--muted);font-size:13px">Review every leave request separately and send the teacher a decision.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-secondary" onclick="printTeacherRequests('leave')">🖨 Print Applications</button><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh</button></div></div>
+  <div class="section-title"><div><h3>Leave Applications</h3><div style="color:var(--muted);font-size:13px">Review every leave request separately and send the teacher a decision.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-secondary" onclick="printTeacherRequests('leave')">🖨 Print</button><button class="btn btn-primary" onclick="downloadLeaveApplicationsPDF()">⬇ Download PDF</button><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh</button></div></div>
   <div class="cards">
     <div class="card stat"><div><p>Pending</p><h3 id="leavePendingStat">0</h3><p>Need decision</p></div><div class="icon">📝</div></div>
     <div class="card stat"><div><p>Approved</p><h3 id="leaveApprovedStat">0</h3><p>Approved requests</p></div><div class="icon">✅</div></div>
@@ -274,17 +274,17 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 </div>
 
 <div id="suggestions" class="page">
-  <div class="section-title"><div><h3>Teacher Suggestions</h3><div style="color:var(--muted);font-size:13px">Ideas and concerns sent by teachers to the school administration.</div></div><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh</button></div>
+  <div class="section-title"><div><h3>Teacher Suggestions</h3><div style="color:var(--muted);font-size:13px">Ideas and concerns sent by teachers to the school administration.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" onclick="downloadSuggestionsPDF()">⬇ Download PDF</button><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh</button></div></div>
   <div class="card"><div class="toolbar"><input id="suggestionSearch" placeholder="Search teacher, subject or suggestion..." oninput="renderSuggestions()"><select id="suggestionStatusFilter" onchange="renderSuggestions()"><option value="">All Status</option><option>Pending</option><option>Reviewed</option><option>Approved</option><option>Rejected</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Subject</th><th>Suggestion</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="suggestionRows"></tbody></table></div></div>
 </div>
 
 <div id="lesson-plans" class="page">
-  <div class="section-title"><div><h3>Lesson Plans</h3><div style="color:var(--muted);font-size:13px">All lesson plans submitted by teachers, organized separately from requests.</div></div><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh</button></div>
+  <div class="section-title"><div><h3>Lesson Plans</h3><div style="color:var(--muted);font-size:13px">All lesson plans submitted by teachers, organized separately from requests.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" onclick="downloadLessonPlansPDF()">⬇ Download PDF</button><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh</button></div></div>
   <div class="card"><div class="toolbar"><input id="lessonSearch" placeholder="Search teacher, class, subject or topic..." oninput="renderLessonPlans()"><select id="lessonClassFilter" onchange="renderLessonPlans()"><option value="">All Classes</option></select><select id="lessonSubjectFilter" onchange="renderLessonPlans()"><option value="">All Subjects</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Class</th><th>Subject</th><th>Topic</th><th>Date</th><th>Action</th></tr></thead><tbody id="lessonRows"></tbody></table></div></div>
 </div>
 
 <div id="student-results" class="page">
-  <div class="section-title"><div><h3>Student Results</h3><div style="color:var(--muted);font-size:13px">See every student's subject-wise results, missing subjects, total percentage and total grade.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" onclick="printStudentResults()">🖨 Print Results</button><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh Results</button></div></div>
+  <div class="section-title"><div><h3>Student Results</h3><div style="color:var(--muted);font-size:13px">See every student's subject-wise results, missing subjects, total percentage and total grade.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-secondary" onclick="printStudentResults()">🖨 Print</button><button class="btn btn-primary" onclick="downloadStudentResultsPDF()">⬇ Download PDF</button><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh Results</button></div></div>
   <div class="card result-controls"><div class="toolbar">
     <select id="resultClassFilter" onchange="renderStudentResults()"><option value="">All Classes</option></select>
     <select id="resultTermFilter" onchange="renderStudentResults()"><option value="">All Terms</option></select>
@@ -334,7 +334,7 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
   <label>Additional Responsibilities</label>
   <div class="hint">A person can be a teacher and hold one or more additional responsibilities. These responsibilities appear together in the same login.</div>
   <div class="role-checks">
-    <label class="role-check"><input type="checkbox" class="extraRole" value="Financial Secretary"> Financial Secretary</label>
+    <label class="role-check"><input type="checkbox" class="extraRole" value="Principal"> Principal</label> <label class="role-check"><input type="checkbox" class="extraRole" value="Financial Secretary"> Financial Secretary</label>
     <label class="role-check"><input type="checkbox" class="extraRole" value="Accountant"> Accountant</label>
     <label class="role-check"><input type="checkbox" class="extraRole" value="Administrator"> Administrator</label>
     <label class="role-check"><input type="checkbox" class="extraRole" value="Coordinator of Higher Section"> High Section Coordinator</label>
@@ -350,6 +350,7 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 <div class="field"><label>Qualification</label><input id="teQualification" placeholder="e.g. BS Chemistry, MA English"></div>
 <div class="field"><label>Joining Date</label><input id="teJoining" type="date"></div>
 <div class="field"><label>Status</label><select id="teStatus"><option>Active</option><option>Inactive</option></select></div>
+<div id="designationDutyGuide" class="designation-duty-guide"><strong>Designation Duties</strong><div class="ddg-grid"><div><b>Teacher</b><span>Teaching, lesson plans, attendance, assessment, results, student progress and reports.</span></div><div><b>Financial Secretary</b><span>Fees, receipts, expenses, outstanding fees, salary/payment records and financial reports.</span></div><div><b>Accountant</b><span>Financial records, verification, reconciliation, statements, balances and audit support.</span></div><div><b>High Section Coordinator</b><span>High-section coordination, lesson progress, schedules, attendance/results and reporting to Admin.</span></div><div><b>Low Section Coordinator</b><span>Low-section coordination, lesson progress, schedules, attendance/results and reporting to Admin.</span></div><div><b>Principal</b><span>School leadership, staff/academic oversight, welfare, administration, finances, reports, approvals and communication.</span></div><div><b>Admin</b><span>Students, teachers, classes, fees, expenses, reports, requests, notifications and school records.</span></div><div><b>Super Admin</b><span>Full school system, users, settings, records, financial and administrative control.</span></div></div></div>
 <div class="notice fullrow" style="margin-bottom:10px"><strong>Teaching Staff Access</strong><br>Every designated staff member may teach. Their designation does not remove teaching features; add their teaching assignments below whenever applicable.</div><div class="field fullrow"><label>Teacher Photo</label><input id="tePhoto" type="file" accept="image/*" onchange="previewTeacherPhoto(event)"><div style="margin-top:8px"><img id="teacherPhotoPreview" class="photo-lg" alt="Teacher photo preview"></div></div>
 </div>
 <div id="teacherAssignmentsSection"><div class="section-title" style="margin-top:18px"><h3>Teaching Assignments</h3></div>
@@ -380,7 +381,7 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 </div><div style="display:flex;justify-content:flex-end;gap:9px;margin-top:18px"><button class="btn btn-secondary" onclick="closeModal('expenseModal')">Cancel</button><button class="btn btn-primary" onclick="saveExpense()">Save Expense</button></div></div></div></div>
 
 <!-- Receipt Modal -->
-<div id="receiptModal" class="modal"><div class="modal-box" style="width:min(900px,100%)"><div class="modal-head"><strong>Fee Receipt</strong><div><button class="btn btn-primary" onclick="printReceipt()">🖨 Print Receipt</button> <button class="close" onclick="closeModal('receiptModal')">×</button></div></div><div class="modal-body"><div id="receiptPrintArea" class="print-area"></div></div></div></div>
+<div id="receiptModal" class="modal"><div class="modal-box" style="width:min(900px,100%)"><div class="modal-head"><strong>Fee Receipt</strong><div><button class="btn btn-secondary" onclick="downloadReceiptPDF(currentReceipt?.id)">⬇ PDF</button> <button class="btn btn-primary" onclick="printReceipt()">🖨 Print Receipt</button> <button class="close" onclick="closeModal('receiptModal')">×</button></div></div><div class="modal-body"><div id="receiptPrintArea" class="print-area"></div></div></div></div>
 
 <!-- Teacher Management Modals -->
 <div id="notificationModal" class="modal"><div class="modal-box"><div class="modal-head"><strong>🔔 Send Teacher Notification</strong><button class="close" onclick="closeModal('notificationModal')">×</button></div><div class="modal-body"><div class="field"><label>Send to</label><select id="notificationTarget"></select></div><div class="field"><label>Title</label><input id="notificationTitle" placeholder="Important school notice"></div><div class="field"><label>Message</label><textarea id="notificationMessage" rows="5" placeholder="Write your message..."></textarea></div><button class="btn btn-primary full" onclick="sendTeacherNotification()">Send Notification</button></div></div></div>
@@ -388,6 +389,7 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 
 <div id="toast" class="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script>
 const SUPABASE_URL="https://znjtsykmpuhprikbscut.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_H0crIBF0FeRnPiZQa6i43A_KrZEyxbZ";
@@ -637,7 +639,19 @@ async function saveStudent(){
  if(!s.name||!s.id||!s.class)return toast('Name, Student ID and Class are required.');
  const idx=db.students.findIndex(x=>x.id===id);if(idx>=0)db.students[idx]=s;else{if(db.students.some(x=>x.id===id))return toast('Student ID already exists.');db.students.push(s)}await saveDB();closeModal('studentModal');renderStudents();refreshDashboard();toast('Student saved successfully.')}
 function editStudent(id){openStudent(db.students.find(s=>s.id===id))}
-function deleteStudent(id){if(confirm('Delete this student?')){db.students=db.students.filter(s=>s.id!==id);saveDB();refreshAll();toast('Student deleted.')}}
+async function deleteStudent(id){
+ const s=db.students.find(x=>x.id===id); if(!s)return;
+ if(!confirm(`Delete ${s.name||'this student'}? This will remove the student record from the cloud.`))return;
+ try{
+   if(remoteReady && s._remoteId){
+     const {error}=await supabaseClient.from('students').delete().eq('id',s._remoteId);
+     if(error)throw error;
+   }
+   db.students=db.students.filter(x=>x.id!==id);
+   db.fees=db.fees.filter(f=>f.studentId!==id);
+   saveLocal(); refreshAll(); toast('Student deleted from the portal and cloud.');
+ }catch(err){console.error(err);toast('Student was not deleted: '+(err.message||'Cloud error'));}
+}
 const TEACHER_CLASSES=['Nursery','Prep','Kindergarten','1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'];
 const TEACHER_SUBJECTS=['Chemistry','Biology','Physics','English','Urdu','Ethics','Pakistan Studies','Social Studies','Math','Computer Science','General Science','Bible','Drawing','Islamiat','General Knowledge','Physical Education','Arabic','Other'];
 let teacherAssignments=[];
@@ -761,7 +775,7 @@ function renderFees(){
 function renderReceipts(){
  const q=(document.getElementById('receiptSearch').value||'').toLowerCase(), month=document.getElementById('receiptMonthFilter').value;
  const arr=[...db.fees].sort((a,b)=>b.date.localeCompare(a.date)).filter(f=>(!month||f.month===month)&&`${f.receipt} ${studentName(f.studentId)}`.toLowerCase().includes(q));
- document.getElementById('receiptRows').innerHTML=arr.length?arr.map(f=>`<tr><td>${esc(f.receipt)}</td><td>${esc(studentName(f.studentId))}</td><td>${esc(f.month)}</td><td>${money(f.paid)}</td><td>${esc(f.date)}</td><td><button class="btn btn-primary" onclick="showReceiptById('${f.id}')">Print</button></td></tr>`).join(''):`<tr><td colspan="6" class="empty">No saved receipts for the selected month.</td></tr>`;
+ document.getElementById('receiptRows').innerHTML=arr.length?arr.map(f=>`<tr><td>${esc(f.receipt)}</td><td>${esc(studentName(f.studentId))}</td><td>${esc(f.month)}</td><td>${money(f.paid)}</td><td>${esc(f.date)}</td><td><button class="btn btn-primary filter-btn" onclick="showReceiptById('${f.id}')">View</button> <button class="btn btn-secondary filter-btn" onclick="downloadReceiptPDF('${f.id}')">PDF</button> <button class="btn btn-danger filter-btn" onclick="deleteReceipt('${f.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="6" class="empty">No saved receipts for the selected month.</td></tr>`;
 }
 function recordForStudent(studentId, month){
  openFee();
@@ -771,6 +785,213 @@ function recordForStudent(studentId, month){
  document.getElementById('feePaid').focus();
 }
 
+async function deleteReceipt(id){
+ const f=db.fees.find(x=>x.id===id); if(!f)return;
+ if(!confirm(`Delete receipt ${f.receipt}? This will remove the payment from the cloud.`))return;
+ try{
+   if(remoteReady){
+     const {error}=await supabaseClient.from('fee_payments').delete().eq('receipt_number',f.receipt);
+     if(error)throw error;
+   }
+   db.fees=db.fees.filter(x=>x.id!==id);saveLocal();renderReceipts();renderFees();refreshDashboard();renderReports();
+   toast('Receipt deleted from the portal and cloud.');
+ }catch(err){console.error(err);toast('Receipt was not deleted: '+(err.message||'Cloud error'));}
+}
+async function imageToDataURL(src){
+ try{
+   if(!src)return null;
+   if(String(src).startsWith('data:image/'))return src;
+   const res=await fetch(src,{cache:'no-store'}); if(!res.ok)throw new Error('image fetch failed');
+   const blob=await res.blob();
+   return await new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(fr.result);fr.onerror=reject;fr.readAsDataURL(blob);});
+ }catch(e){return null;}
+}
+async function ensureJsPDF(){
+ if(window.jspdf?.jsPDF)return window.jspdf.jsPDF;
+ await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js';s.onload=resolve;s.onerror=reject;document.head.appendChild(s);});
+ return window.jspdf.jsPDF;
+}
+function pdfHeader(doc,title,logoData){
+ if(logoData){try{doc.addImage(logoData,'JPEG',18,12,22,22);}catch(e){}}
+ doc.setFont('helvetica','bold');doc.setFontSize(15);doc.text('THE PROGRESS OF LIFE SCHOOL',46,19);
+ doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text('CHAK 8JB MEHBOOB TOWN, FAISALABAD',46,25);doc.text('PROGRESS FOR CHRISTIAN CHILDREN',46,30);
+ doc.setDrawColor(37,99,235);doc.setLineWidth(0.8);doc.line(18,37,192,37);
+ doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text(title,18,47);
+ doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text('Generated on demand • '+new Date().toLocaleString('en-PK'),18,53);
+}
+
+async function downloadRowsPDF(title,columns,rows,landscape,filename){
+  try{
+    const jsPDF=await ensureJsPDF();
+    const doc=new jsPDF(landscape?'l':'p','mm','a4');
+    const logo=await imageToDataURL('assets/school-logo.jpg');
+    const pageW=doc.internal.pageSize.getWidth(), pageH=doc.internal.pageSize.getHeight();
+    const margin=12, tableW=pageW-margin*2, widths=columns.map((c,i)=>c.width||tableW/columns.length);
+    const headerH=58;
+    const drawHeader=()=>pdfHeader(doc,title,logo);
+    drawHeader();
+    let y=headerH;
+    doc.setFontSize(7.5);
+    const drawRow=(cells,isHead)=>{
+      const lines=cells.map((v,i)=>{
+        const txt=String(v??'—');
+        return doc.splitTextToSize(txt,Math.max(12,widths[i]-4));
+      });
+      const rowH=Math.max(8,...lines.map(x=>x.length*3.6+4));
+      if(y+rowH>pageH-14){
+        doc.addPage(); drawHeader(); y=headerH;
+      }
+      let x=margin;
+      doc.setFillColor(isHead?235:255,isHead?241:255,isHead?249:255);
+      doc.rect(x,y,tableW,rowH,isHead?'F':'S');
+      for(let i=0;i<cells.length;i++){
+        if(i>0) doc.line(x,y,x,y+rowH);
+        doc.setFont('helvetica',isHead?'bold':'normal');
+        doc.setFontSize(isHead?7.2:7);
+        doc.text(lines[i],x+2,y+4,{baseline:'top'});
+        x+=widths[i];
+      }
+      doc.line(margin,y+rowH,margin+tableW,y+rowH);
+      y+=rowH;
+    };
+    drawRow(columns.map(c=>c.label),true);
+    if(!rows.length) drawRow(['No records found.'].concat(new Array(Math.max(0,columns.length-1)).fill('')),false);
+    else rows.forEach(r=>drawRow(columns.map(c=>r[c.key]),false));
+    doc.save(filename||('TPLS_'+title.replace(/[^A-Za-z0-9]+/g,'_')+'.pdf'));
+    toast(title+' PDF downloaded.');
+  }catch(err){console.error('PDF generation failed:',err);toast('Could not generate PDF: '+(err.message||'PDF error'));}
+}
+
+async function downloadFinancialReportPDF(){
+  try{
+    const jsPDF=await ensureJsPDF(),doc=new jsPDF('l','mm','a4'),logo=await imageToDataURL('assets/school-logo.jpg');
+    const r=reportRange(), collected=r.fees.reduce((a,f)=>a+Number(f.paid||0),0), expenses=r.expenses.reduce((a,e)=>a+Number(e.amount||0),0);
+    const label=r.type==='month'?r.month:r.type==='year'?r.year:r.day;
+    pdfHeader(doc,'FINANCIAL REPORT • '+label,logo);
+    doc.setFontSize(10);doc.setFont('helvetica','bold');
+    doc.text('Fees Collected: '+money(collected),18,62);
+    doc.text('Expenses: '+money(expenses),88,62);
+    doc.text('Net Balance: '+money(collected-expenses),158,62);
+    doc.setFont('helvetica','normal');doc.setFontSize(8);
+    let y=70;
+    const pageW=doc.internal.pageSize.getWidth(), margin=12, tableW=pageW-24;
+    const feeCols=[['Receipt',28],['Student',60],['Month',30],['Date',28],['Paid',28]];
+    const expCols=[['Date',32],['Description',110],['Amount',32]];
+    const drawTable=(title,cols,rows)=>{
+      if(y>180){doc.addPage();pdfHeader(doc,'FINANCIAL REPORT • '+label,logo);y=62;}
+      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text(title,margin,y);y+=6;
+      const widths=cols.map(c=>c[1]), total=widths.reduce((a,b)=>a+b,0);
+      const scale=tableW/total, ws=widths.map(w=>w*scale);
+      const draw=(vals,head)=>{
+        const lines=vals.map((v,i)=>doc.splitTextToSize(String(v??'—'),ws[i]-4));
+        const rh=Math.max(7,...lines.map(x=>x.length*3.5+3));
+        if(y+rh>195){doc.addPage();pdfHeader(doc,'FINANCIAL REPORT • '+label,logo);y=62;}
+        let x=margin;doc.setFillColor(head?235:255,head?241:255,head?249:255);doc.rect(x,y,tableW,rh,head?'F':'S');
+        for(let i=0;i<vals.length;i++){if(i)doc.line(x,y,x,y+rh);doc.setFont('helvetica',head?'bold':'normal');doc.setFontSize(head?7.5:7);doc.text(lines[i],x+2,y+3,{baseline:'top'});x+=ws[i];}
+        doc.line(margin,y+rh,margin+tableW,y+rh);y+=rh;
+      };
+      draw(cols.map(c=>c[0]),true);
+      rows.forEach(rw=>draw(rw,false));
+      y+=8;
+    };
+    drawTable('Fee Payments',feeCols,r.fees.map(f=>[f.receipt||'',studentName(f.studentId),f.month||'',f.date||'',money(f.paid)]));
+    drawTable('Expenses',expCols,r.expenses.map(e=>[e.date||'',e.title||e.category||'Expense',money(e.amount)]));
+    doc.save('TPLS_Financial_Report_'+String(label).replace(/[^A-Za-z0-9_-]/g,'_')+'.pdf');
+    toast('Financial report PDF downloaded.');
+  }catch(err){console.error(err);toast('Could not generate Financial PDF: '+(err.message||'PDF error'));}
+}
+
+async function downloadLeaveApplicationsPDF(){
+  const q=(document.getElementById('leaveSearch')?.value||'').trim(),st=document.getElementById('leaveStatusFilter')?.value||'';
+  const rows=(teacherInboxData.requests||[]).filter(r=>r.request_type==='leave').filter(r=>(!st||r.status===st)&&requestSearchMatch(r,q));
+  await downloadRowsPDF('TEACHER LEAVE APPLICATIONS',
+    [{label:'Teacher',key:'teacher'},{label:'Leave Type',key:'type'},{label:'From',key:'from'},{label:'To',key:'to'},{label:'Reason',key:'reason'},{label:'Status',key:'status'},{label:'Submitted',key:'submitted'}],
+    rows.map(r=>({teacher:teacherName(r.teacher_id),type:r.leave_type||'Leave',from:formatDate(r.leave_from),to:formatDate(r.leave_to),reason:r.message||'',status:r.status||'Pending',submitted:formatDate(r.created_at)})),
+    true,'TPLS_Teacher_Leave_Applications.pdf');
+}
+async function downloadSuggestionsPDF(){
+  const q=(document.getElementById('suggestionSearch')?.value||'').trim(),st=document.getElementById('suggestionStatusFilter')?.value||'';
+  const rows=(teacherInboxData.requests||[]).filter(r=>r.request_type==='suggestion').filter(r=>(!st||r.status===st)&&requestSearchMatch(r,q));
+  await downloadRowsPDF('TEACHER SUGGESTIONS',
+    [{label:'Teacher',key:'teacher'},{label:'Subject',key:'subject'},{label:'Suggestion',key:'message'},{label:'Submitted',key:'submitted'},{label:'Status',key:'status'}],
+    rows.map(r=>({teacher:teacherName(r.teacher_id),subject:r.subject||'',message:r.message||'',submitted:formatDate(r.created_at),status:r.status||'Pending'})),
+    true,'TPLS_Teacher_Suggestions.pdf');
+}
+async function downloadLessonPlansPDF(){
+  const q=(document.getElementById('lessonSearch')?.value||'').toLowerCase(),cf=document.getElementById('lessonClassFilter')?.value||'',sf=document.getElementById('lessonSubjectFilter')?.value||'';
+  const rows=teacherInboxData.plans.filter(r=>(!cf||r.class_name===cf)&&(!sf||r.subject===sf)&&(!q||[teacherName(r.teacher_id),r.class_name,r.subject,r.topic,r.objectives].join(' ').toLowerCase().includes(q)));
+  await downloadRowsPDF('TEACHER LESSON PLANS',
+    [{label:'Teacher',key:'teacher'},{label:'Class',key:'class'},{label:'Subject',key:'subject'},{label:'Topic',key:'topic'},{label:'Date',key:'date'}],
+    rows.map(r=>({teacher:teacherName(r.teacher_id),class:r.class_name||'',subject:r.subject||'',topic:r.topic||'',date:formatDate(r.lesson_date)})),
+    true,'TPLS_Teacher_Lesson_Plans.pdf');
+}
+async function downloadStudentResultsPDF(){
+  const table=document.querySelector('#student-results .result-table');
+  if(!table)return toast('Results table is not available');
+  const rows=[...table.querySelectorAll('tbody tr')].map(tr=>[...tr.children].map(td=>td.innerText.replace(/\s+/g,' ').trim()));
+  const heads=[...table.querySelectorAll('thead th')].map(th=>th.innerText.trim());
+  const cols=heads.map((h,i)=>({label:h,key:'c'+i}));
+  await downloadRowsPDF('STUDENT RESULTS',cols,rows.map(a=>Object.fromEntries(a.map((v,i)=>['c'+i,v]))),true,'TPLS_Student_Results.pdf');
+}
+async function downloadTeachersPDF(){
+  const q=(document.getElementById('teacherSearch')?.value||'').toLowerCase();
+  const rows=db.teachers.filter(t=>`${t.name||''} ${t.phone||''} ${t.email||''} ${t.designation||''} ${t.qualification||''}`.toLowerCase().includes(q));
+  await downloadRowsPDF('TEACHER & STAFF INFORMATION',
+    [{label:'Name',key:'name'},{label:'Designation / Duties',key:'designation'},{label:'Gender',key:'gender'},{label:'Phone',key:'phone'},{label:'Email',key:'email'},{label:'Status',key:'status'}],
+    rows.map(t=>({name:t.name||'',designation:t.designation||'Teacher',gender:t.gender||'',phone:t.phone||'',email:t.email||'',status:t.status||'Active'})),
+    true,'TPLS_Teacher_Staff_Report.pdf');
+}
+async function downloadExpensesPDF(){
+  const cat=document.getElementById('expenseCategory')?.value||'';
+  const rows=db.expenses.filter(e=>!cat||e.category===cat).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  await downloadRowsPDF('SCHOOL EXPENSE REPORT',
+    [{label:'Date',key:'date'},{label:'Category',key:'category'},{label:'Description',key:'description'},{label:'Amount',key:'amount'}],
+    rows.map(e=>({date:e.date||'',category:e.category||'',description:e.description||'',amount:money(e.amount)})),
+    false,'TPLS_Expense_Report.pdf');
+}
+async function downloadNotificationsPDF(){
+  const rows=teacherInboxData.notifications||[];
+  await downloadRowsPDF('TEACHER NOTIFICATION HISTORY',
+    [{label:'Teacher',key:'teacher'},{label:'Title',key:'title'},{label:'Message',key:'message'},{label:'Date',key:'date'},{label:'Read',key:'read'}],
+    rows.map(n=>({teacher:teacherName(n.teacher_id),title:n.title||'',message:n.message||'',date:String(n.created_at||'').replace('T',' ').slice(0,16),read:n.is_read?'Read':'Unread'})),
+    true,'TPLS_Teacher_Notification_History.pdf');
+}
+
+async function downloadStudentsPDF(){
+ try{
+   const jsPDF=await ensureJsPDF(); const doc=new jsPDF('p','mm','a4');
+   const logo=await imageToDataURL('assets/school-logo.jpg');
+   const q=(document.getElementById('studentSearch')?.value||'').toLowerCase();
+   const cl=document.getElementById('studentClass')?.value||'';
+   const rows=db.students.filter(s=>(!q||`${s.name} ${s.id} ${s.phone}`.toLowerCase().includes(q))&&(!cl||s.class===cl));
+   pdfHeader(doc,'STUDENT INFORMATION REPORT',logo);
+   doc.setFontSize(8);doc.text(`Students included: ${rows.length}${cl?' • Class: '+cl:''}`,18,60);
+   let y=68;
+   for(let i=0;i<rows.length;i++){
+     if(i>0 && y>245){doc.addPage();pdfHeader(doc,'STUDENT INFORMATION REPORT',logo);y=60;}
+     const s=rows[i];
+     doc.setDrawColor(218,226,238);doc.roundedRect(16,y-5,178,65,4,4,'S');
+     const img=await imageToDataURL(s.photo||'assets/school-logo.jpg');
+     if(img){try{doc.addImage(img,'JPEG',20,y,32,42);}catch(e){}}
+     doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text(String(s.name||''),58,y+3);
+     doc.setFont('helvetica','normal');doc.setFontSize(8);
+     const fields=[['Student ID',s.id],['Class / Section',`${s.class||''}${s.section?' / '+s.section:''}`],['Guardian',s.guardian],['Phone',s.phone],['Gender',s.gender],['Date of Birth',s.dob],['Monthly Fee',money(s.fee)],['Admission Date',s.admission],['Status',s.status]];
+     let yy=y+11; fields.forEach(([k,v],idx)=>{const col=idx%2, xx=58+col*68, line=yy+Math.floor(idx/2)*9;doc.setFont('helvetica','bold');doc.text(k+':',xx,line);doc.setFont('helvetica','normal');doc.text(String(v??'—').slice(0,34),xx+24,line);});
+     y+=72;
+   }
+   if(!rows.length)doc.text('No students match the current filters.',18,72);
+   doc.save('TPLS_Student_Information_Report.pdf');toast('Student PDF generated.');
+ }catch(err){console.error(err);toast('Could not generate Student PDF: '+(err.message||'PDF library unavailable'));}
+}
+async function downloadReceiptPDF(id){
+ const f=db.fees.find(x=>x.id===id);if(!f)return toast('Receipt not found.');
+ try{const jsPDF=await ensureJsPDF();const doc=new jsPDF('p','mm','a4');const logo=await imageToDataURL('assets/school-logo.jpg');const s=db.students.find(x=>x.id===f.studentId)||{};const photo=await imageToDataURL(s.photo||'assets/school-logo.jpg');
+ pdfHeader(doc,'FEE RECEIPT',logo);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text('Receipt No: '+String(f.receipt||''),140,47);doc.setFont('helvetica','normal');doc.text('Date: '+String(f.date||''),140,53);
+ if(photo){try{doc.addImage(photo,'JPEG',18,65,35,45);}catch(e){}}
+ doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text(String(s.name||''),62,70);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text('Student ID: '+String(s.id||'—'),62,78);doc.text('Class / Section: '+String((s.class||'')+(s.section?' / '+s.section:'')),62,85);doc.text('Father / Guardian: '+String(s.guardian||'—'),62,92);
+ let y=122;const items=[['Monthly Fee ('+String(f.month||'')+')',f.expected],['Previous Balance',f.previous],['Discount',f.discount],['Amount Paid',f.paid],['Remaining Balance',f.remaining]];doc.setFontSize(9);doc.setDrawColor(210,218,230);doc.rect(18,y,174,10);doc.setFont('helvetica','bold');doc.text('Description',23,y+7);doc.text('Amount (PKR)',145,y+7);y+=10;items.forEach(([k,v])=>{doc.setFont('helvetica','normal');doc.rect(18,y,174,10);doc.text(String(k),23,y+7);doc.text(Number(v||0).toLocaleString(),145,y+7);y+=10;});doc.setFont('helvetica','bold');doc.text('Amount in Words: '+amountWords(f.paid),18,y+12);doc.line(25,255,80,255);doc.line(130,255,185,255);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text('Received By',43,261);doc.text('Principal',149,261);doc.save(String(f.receipt||'TPLS_Receipt')+'.pdf');toast('Receipt PDF generated.');}
+ catch(err){console.error(err);toast('Could not generate Receipt PDF: '+(err.message||'PDF error'));}
+}
 function showReceiptById(id){showReceipt(db.fees.find(f=>f.id===id))}
 function showReceipt(f){if(!f)return;currentReceipt=f;const s=db.students.find(x=>x.id===f.studentId)||{};document.getElementById('receiptPrintArea').innerHTML=`<div class="receipt"><div class="receipt-head"><div class="receipt-school"><img class="receipt-logo" src="assets/school-logo.jpg"><div><h2>THE PROGRESS OF LIFE SCHOOL</h2><p>CHAK 8JB MEHBOOB TOWN, FAISALABAD</p><p style="font-size:11px">PROGRESS FOR CHRISTIAN CHILDREN</p></div></div><div class="receipt-no"><strong>FEE RECEIPT</strong><br>Receipt No: ${esc(f.receipt)}<br>Date: ${esc(f.date)}</div></div><div class="receipt-student"><img class="photo-lg" src="${s.photo||'assets/school-logo.jpg'}"><div><strong>${esc(s.name||'')}</strong><div>Student ID: ${esc(s.id||'')}</div><div>Class / Section: ${esc(s.class||'')} ${s.section?'/ '+esc(s.section):''}</div><div>Father / Guardian: ${esc(s.guardian||'')}</div></div></div><table class="receipt-table"><tr><th>Description</th><th>Amount (PKR)</th></tr><tr><td>Monthly Fee (${esc(f.month)})</td><td>${Number(f.expected).toLocaleString()}</td></tr><tr><td>Previous Balance</td><td>${Number(f.previous).toLocaleString()}</td></tr><tr><td>Discount</td><td>${Number(f.discount).toLocaleString()}</td></tr><tr><td><strong>Amount Paid</strong></td><td><strong>${Number(f.paid).toLocaleString()}</strong></td></tr><tr><td><strong>Remaining Balance</strong></td><td><strong>${Number(f.remaining).toLocaleString()}</strong></td></tr></table><p><strong>Amount in Words:</strong> ${amountWords(f.paid)}</p><div class="signs"><div class="sign">Received By</div><div class="sign">Principal</div></div></div>`;document.getElementById('receiptModal').classList.add('show')}
 function amountWords(n){n=Number(n||0);if(n===0)return'Zero Only';if(n<1000000)return n.toLocaleString('en-PK')+' Only';return n.toLocaleString('en-PK')+' Only'}
@@ -778,7 +999,14 @@ function printReceipt(){window.print()}
 function openExpense(){document.getElementById('exDate').value=today();document.getElementById('exDescription').value='';document.getElementById('exAmount').value='';document.getElementById('expenseModal').classList.add('show')}
 function saveExpense(){const e={id:Date.now().toString(),date:document.getElementById('exDate').value,category:document.getElementById('exCategory').value,description:document.getElementById('exDescription').value.trim(),amount:Number(document.getElementById('exAmount').value||0)};if(!e.amount)return toast('Enter an expense amount.');db.expenses.push(e);saveDB();closeModal('expenseModal');renderExpenses();refreshDashboard();renderReports();toast('Expense saved.')}
 function renderExpenses(){const cat=document.getElementById('expenseCategory').value,arr=[...db.expenses].sort((a,b)=>b.date.localeCompare(a.date)).filter(e=>!cat||e.category===cat);document.getElementById('expenseRows').innerHTML=arr.length?arr.map(e=>`<tr><td>${esc(e.date)}</td><td>${esc(e.category)}</td><td>${esc(e.description)}</td><td>${money(e.amount)}</td><td><button class="btn btn-danger" onclick="deleteExpense('${e.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="5" class="empty">No expenses recorded yet.</td></tr>`}
-function deleteExpense(id){if(confirm('Delete this expense?')){db.expenses=db.expenses.filter(e=>e.id!==id);saveDB();renderExpenses();refreshDashboard();renderReports()}}
+async function deleteExpense(id){
+ const e=db.expenses.find(x=>x.id===id); if(!e)return;
+ if(!confirm('Delete this expense? This will remove it from the cloud.'))return;
+ try{
+   if(remoteReady && e._remoteId){const {error}=await supabaseClient.from('expenses').delete().eq('id',e._remoteId);if(error)throw error;}
+   db.expenses=db.expenses.filter(x=>x.id!==id);saveLocal();renderExpenses();refreshDashboard();renderReports();toast('Expense deleted from the portal and cloud.');
+ }catch(err){console.error(err);toast('Expense was not deleted: '+(err.message||'Cloud error'));}
+}
 function reportRange(){
  const type=document.getElementById('reportType')?.value||'month';
  const month=document.getElementById('reportMonth')?.value||monthNow();
@@ -822,6 +1050,9 @@ function openPrintWindow(title,body,landscape){
  if(!w){toast('Please allow pop-ups to print');return;}
  w.document.write(`<html><head><title>${esc(title)}</title><style>
  body{font-family:Arial,Segoe UI,sans-serif;padding:28px;color:#182335}
+ .school-head{display:flex;align-items:center;gap:16px;border-bottom:2px solid #2563eb;padding-bottom:12px;margin-bottom:18px}
+ .school-head img{width:72px;height:72px;object-fit:contain}
+ .school-head h1{font-size:22px;margin:0 0 4px;color:#082e63}
  h1{font-size:22px;margin:0 0 4px;color:#082e63}
  h2{font-size:17px;margin:22px 0 10px;color:#082e63}
  .meta{color:#667085;margin-bottom:18px}
@@ -831,7 +1062,9 @@ function openPrintWindow(title,body,landscape){
  .status{font-weight:700}
  .waiting{color:#a16b00;font-weight:700}
  @media print{@page{size:${landscape?'landscape':'auto'};margin:12mm}body{padding:0}}
- </style></head><body>${body}<script>window.onload=()=>setTimeout(()=>window.print(),250)<\/script></body></html>`);
+ 
+.designation-duty-guide{margin:0 0 14px;padding:15px;border:1px solid #dfe7f3;border-radius:16px;background:linear-gradient(135deg,#f8fbff,#f5f0ff);color:#172033}.designation-duty-guide>strong{font-size:13px}.ddg-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}.ddg-grid>div{background:#fff;border:1px solid #e5ebf3;border-radius:12px;padding:10px}.ddg-grid b{display:block;font-size:11px;color:#173b78;margin-bottom:4px}.ddg-grid span{font-size:10px;line-height:1.45;color:#64748b;display:block}@media(max-width:700px){.ddg-grid{grid-template-columns:1fr}}
+</style></head><body><div class="school-head"><img src="assets/school-logo.jpg"><div><h1>The Progress of Life School</h1><div>CHAK 8JB MEHBOOB TOWN, FAISALABAD</div><div>PROGRESS FOR CHRISTIAN CHILDREN</div></div></div>${body}<script>window.onload=()=>setTimeout(()=>window.print(),250)<\/script></body></html>`);
  w.document.close();
 }
 function printTeacherRequest(type,id){
