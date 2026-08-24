@@ -133,7 +133,7 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 <div id="loginScreen" class="login">
   <div class="login-visual">
     <div class="login-copy">
-      <img class="school-mark" src="assets/school-logo.jpg" onerror="this.style.display='none'">
+      <img class="school-mark" src="school-logo.jpg" onerror="this.style.display='none'">
       <h1>The Progress of Life School</h1>
       <p>School Management System</p>
       <p>Manage students, teachers, fees and school finances in one simple, professional place.</p>
@@ -176,7 +176,7 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 
 <div id="app" class="app hidden">
 <aside class="sidebar">
-  <div class="brand"><img src="assets/school-logo.jpg"><div><strong>THE PROGRESS OF LIFE</strong><small>SCHOOL</small></div></div>
+  <div class="brand"><img src="school-logo.jpg"><div><strong>THE PROGRESS OF LIFE</strong><small>SCHOOL</small></div></div>
   <div class="nav">
     <button data-page="dashboard" class="active" onclick="go('dashboard')"><span class="ico">⌂</span><span>Dashboard</span></button>
     <button data-page="students" onclick="go('students')"><span class="ico">👨‍🎓</span><span>Students</span></button>
@@ -630,9 +630,9 @@ function populateClassFilter(){const sel=document.getElementById('studentClass')
 function renderStudents(){
  populateClassFilter();const q=(document.getElementById('studentSearch').value||'').toLowerCase(),cl=document.getElementById('studentClass').value;
  const arr=db.students.filter(s=>(!q||`${s.name} ${s.id} ${s.phone}`.toLowerCase().includes(q))&&(!cl||s.class===cl));
- document.getElementById('studentRows').innerHTML=arr.length?arr.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${s.photo||'assets/school-logo.jpg'}"><strong>${esc(s.name)}</strong></div></td><td>${esc(s.id)}</td><td>${esc(s.class)} ${s.section?'/ '+esc(s.section):''}</td><td>${esc(s.guardian)}</td><td>${esc(s.phone)}</td><td>${money(s.fee)}</td><td><span class="badge active-badge">${esc(s.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="editStudent('${s.id}')">Edit</button> <button class="btn btn-danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">No students found. Click “Add Student” to begin.</td></tr>`;
+ document.getElementById('studentRows').innerHTML=arr.length?arr.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${s.photo||'school-logo.jpg'}"><strong>${esc(s.name)}</strong></div></td><td>${esc(s.id)}</td><td>${esc(s.class)} ${s.section?'/ '+esc(s.section):''}</td><td>${esc(s.guardian)}</td><td>${esc(s.phone)}</td><td>${money(s.fee)}</td><td><span class="badge active-badge">${esc(s.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="editStudent('${s.id}')">Edit</button> <button class="btn btn-danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">No students found. Click “Add Student” to begin.</td></tr>`;
 }
-function openStudent(s=null){currentPhoto=s?.photo||'';document.getElementById('studentModalTitle').textContent=s?'Edit Student':'Add Student';document.getElementById('studentEditId').value=s?.id||'';['Name','Id','Guardian','Phone','Class','Section','Dob','Gender','Fee','Admission','Address'].forEach(k=>{let el=document.getElementById('st'+k);if(el)el.value=s?({Name:s.name,Id:s.id,Guardian:s.guardian,Phone:s.phone,Class:s.class,Section:s.section,Dob:s.dob,Gender:s.gender,Fee:s.fee,Admission:s.admission,Address:s.address}[k]??''):k==='Fee'?'2000':''});document.getElementById('photoPreview').src=currentPhoto||'assets/school-logo.jpg';document.getElementById('stPhoto').value='';document.getElementById('studentModal').classList.add('show')}
+function openStudent(s=null){currentPhoto=s?.photo||'';document.getElementById('studentModalTitle').textContent=s?'Edit Student':'Add Student';document.getElementById('studentEditId').value=s?.id||'';['Name','Id','Guardian','Phone','Class','Section','Dob','Gender','Fee','Admission','Address'].forEach(k=>{let el=document.getElementById('st'+k);if(el)el.value=s?({Name:s.name,Id:s.id,Guardian:s.guardian,Phone:s.phone,Class:s.class,Section:s.section,Dob:s.dob,Gender:s.gender,Fee:s.fee,Admission:s.admission,Address:s.address}[k]??''):k==='Fee'?'2000':''});document.getElementById('photoPreview').src=currentPhoto||'school-logo.jpg';document.getElementById('stPhoto').value='';document.getElementById('studentModal').classList.add('show')}
 function previewPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{currentPhoto=r.result;document.getElementById('photoPreview').src=currentPhoto};r.readAsDataURL(f)}
 async function saveStudent(){
  const id=document.getElementById('studentEditId').value||document.getElementById('stId').value.trim();const s={id,name:document.getElementById('stName').value.trim(),guardian:document.getElementById('stGuardian').value.trim(),phone:document.getElementById('stPhone').value.trim(),class:document.getElementById('stClass').value.trim(),section:document.getElementById('stSection').value.trim(),dob:document.getElementById('stDob').value,gender:document.getElementById('stGender').value,fee:Number(document.getElementById('stFee').value||0),admission:document.getElementById('stAdmission').value,address:document.getElementById('stAddress').value.trim(),photo:currentPhoto,status:'Active'};
@@ -679,7 +679,7 @@ function renderTeachers(){
  document.getElementById('teacherRows').innerHTML=arr.length?arr.map(t=>{
    const a=t.assignments||[];
    const assignmentText=a.length?a.map(x=>`${esc(x.className)} — ${esc(x.subject)}`).join('<br>'):'—';
-   return `<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${t.photo||'assets/school-logo.jpg'}"><div><strong>${esc(t.name||'')}</strong><div style="font-size:11px;color:var(--muted)">${esc('Teacher')} · ${esc(t.qualification||'')}</div></div></div></td><td><strong>${esc(t.designation||'Teacher')}</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">Teaching access: ${((t.assignments||[]).length)?'Assigned':'Available'}</div></td><td>${esc(t.gender||'')}</td><td>${esc(t.phone||'')}</td><td>${assignmentText}</td><td><span class="badge ${String(t.status||'Active').toLowerCase()}">${esc(t.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="openTeacher('${esc(t.id)}')">Edit</button></td></tr>`;
+   return `<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${t.photo||'school-logo.jpg'}"><div><strong>${esc(t.name||'')}</strong><div style="font-size:11px;color:var(--muted)">${esc('Teacher')} · ${esc(t.qualification||'')}</div></div></div></td><td><strong>${esc(t.designation||'Teacher')}</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">Teaching access: ${((t.assignments||[]).length)?'Assigned':'Available'}</div></td><td>${esc(t.gender||'')}</td><td>${esc(t.phone||'')}</td><td>${assignmentText}</td><td><span class="badge ${String(t.status||'Active').toLowerCase()}">${esc(t.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="openTeacher('${esc(t.id)}')">Edit</button></td></tr>`;
  }).join(''):`<tr><td colspan="7" class="empty">No teachers or staff found.</td></tr>`;
 }
 function openTeacher(id=''){
@@ -698,7 +698,7 @@ document.querySelectorAll('.extraRole').forEach(cb=>cb.checked=designationText.t
  document.getElementById('teJoining').value=t?.joining||'';
  document.getElementById('teStatus').value=t?.status||'Active';
  document.getElementById('tePhoto').value='';
- document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto||'assets/school-logo.jpg';
+ document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto||'school-logo.jpg';
  teacherAssignments=(t?.assignments||[]).map(a=>({className:a.className,subject:a.subject}));
  document.getElementById('teacherModalTitle').textContent=t?'Edit Teacher':'Add Teacher';
  renderTeacherAssignmentChips();
@@ -824,7 +824,7 @@ async function downloadRowsPDF(title,columns,rows,landscape,filename){
   try{
     const jsPDF=await ensureJsPDF();
     const doc=new jsPDF(landscape?'l':'p','mm','a4');
-    const logo=await imageToDataURL('assets/school-logo.jpg');
+    const logo=await imageToDataURL('school-logo.jpg');
     const pageW=doc.internal.pageSize.getWidth(), pageH=doc.internal.pageSize.getHeight();
     const margin=12, tableW=pageW-margin*2, widths=columns.map((c,i)=>c.width||tableW/columns.length);
     const headerH=58;
@@ -864,7 +864,7 @@ async function downloadRowsPDF(title,columns,rows,landscape,filename){
 
 async function downloadFinancialReportPDF(){
   try{
-    const jsPDF=await ensureJsPDF(),doc=new jsPDF('l','mm','a4'),logo=await imageToDataURL('assets/school-logo.jpg');
+    const jsPDF=await ensureJsPDF(),doc=new jsPDF('l','mm','a4'),logo=await imageToDataURL('school-logo.jpg');
     const r=reportRange(), collected=r.fees.reduce((a,f)=>a+Number(f.paid||0),0), expenses=r.expenses.reduce((a,e)=>a+Number(e.amount||0),0);
     const label=r.type==='month'?r.month:r.type==='year'?r.year:r.day;
     pdfHeader(doc,'FINANCIAL REPORT • '+label,logo);
@@ -960,7 +960,7 @@ async function downloadNotificationsPDF(){
 async function downloadStudentsPDF(){
  try{
    const jsPDF=await ensureJsPDF(); const doc=new jsPDF('p','mm','a4');
-   const logo=await imageToDataURL('assets/school-logo.jpg');
+   const logo=await imageToDataURL('school-logo.jpg');
    const q=(document.getElementById('studentSearch')?.value||'').toLowerCase();
    const cl=document.getElementById('studentClass')?.value||'';
    const rows=db.students.filter(s=>(!q||`${s.name} ${s.id} ${s.phone}`.toLowerCase().includes(q))&&(!cl||s.class===cl));
@@ -971,7 +971,7 @@ async function downloadStudentsPDF(){
      if(i>0 && y>245){doc.addPage();pdfHeader(doc,'STUDENT INFORMATION REPORT',logo);y=60;}
      const s=rows[i];
      doc.setDrawColor(218,226,238);doc.roundedRect(16,y-5,178,65,4,4,'S');
-     const img=await imageToDataURL(s.photo||'assets/school-logo.jpg');
+     const img=await imageToDataURL(s.photo||'school-logo.jpg');
      if(img){try{doc.addImage(img,'JPEG',20,y,32,42);}catch(e){}}
      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text(String(s.name||''),58,y+3);
      doc.setFont('helvetica','normal');doc.setFontSize(8);
@@ -985,7 +985,7 @@ async function downloadStudentsPDF(){
 }
 async function downloadReceiptPDF(id){
  const f=db.fees.find(x=>x.id===id);if(!f)return toast('Receipt not found.');
- try{const jsPDF=await ensureJsPDF();const doc=new jsPDF('p','mm','a4');const logo=await imageToDataURL('assets/school-logo.jpg');const s=db.students.find(x=>x.id===f.studentId)||{};const photo=await imageToDataURL(s.photo||'assets/school-logo.jpg');
+ try{const jsPDF=await ensureJsPDF();const doc=new jsPDF('p','mm','a4');const logo=await imageToDataURL('school-logo.jpg');const s=db.students.find(x=>x.id===f.studentId)||{};const photo=await imageToDataURL(s.photo||'school-logo.jpg');
  pdfHeader(doc,'FEE RECEIPT',logo);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text('Receipt No: '+String(f.receipt||''),140,47);doc.setFont('helvetica','normal');doc.text('Date: '+String(f.date||''),140,53);
  if(photo){try{doc.addImage(photo,'JPEG',18,65,35,45);}catch(e){}}
  doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text(String(s.name||''),62,70);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text('Student ID: '+String(s.id||'—'),62,78);doc.text('Class / Section: '+String((s.class||'')+(s.section?' / '+s.section:'')),62,85);doc.text('Father / Guardian: '+String(s.guardian||'—'),62,92);
@@ -993,7 +993,7 @@ async function downloadReceiptPDF(id){
  catch(err){console.error(err);toast('Could not generate Receipt PDF: '+(err.message||'PDF error'));}
 }
 function showReceiptById(id){showReceipt(db.fees.find(f=>f.id===id))}
-function showReceipt(f){if(!f)return;currentReceipt=f;const s=db.students.find(x=>x.id===f.studentId)||{};document.getElementById('receiptPrintArea').innerHTML=`<div class="receipt"><div class="receipt-head"><div class="receipt-school"><img class="receipt-logo" src="assets/school-logo.jpg"><div><h2>THE PROGRESS OF LIFE SCHOOL</h2><p>CHAK 8JB MEHBOOB TOWN, FAISALABAD</p><p style="font-size:11px">PROGRESS FOR CHRISTIAN CHILDREN</p></div></div><div class="receipt-no"><strong>FEE RECEIPT</strong><br>Receipt No: ${esc(f.receipt)}<br>Date: ${esc(f.date)}</div></div><div class="receipt-student"><img class="photo-lg" src="${s.photo||'assets/school-logo.jpg'}"><div><strong>${esc(s.name||'')}</strong><div>Student ID: ${esc(s.id||'')}</div><div>Class / Section: ${esc(s.class||'')} ${s.section?'/ '+esc(s.section):''}</div><div>Father / Guardian: ${esc(s.guardian||'')}</div></div></div><table class="receipt-table"><tr><th>Description</th><th>Amount (PKR)</th></tr><tr><td>Monthly Fee (${esc(f.month)})</td><td>${Number(f.expected).toLocaleString()}</td></tr><tr><td>Previous Balance</td><td>${Number(f.previous).toLocaleString()}</td></tr><tr><td>Discount</td><td>${Number(f.discount).toLocaleString()}</td></tr><tr><td><strong>Amount Paid</strong></td><td><strong>${Number(f.paid).toLocaleString()}</strong></td></tr><tr><td><strong>Remaining Balance</strong></td><td><strong>${Number(f.remaining).toLocaleString()}</strong></td></tr></table><p><strong>Amount in Words:</strong> ${amountWords(f.paid)}</p><div class="signs"><div class="sign">Received By</div><div class="sign">Principal</div></div></div>`;document.getElementById('receiptModal').classList.add('show')}
+function showReceipt(f){if(!f)return;currentReceipt=f;const s=db.students.find(x=>x.id===f.studentId)||{};document.getElementById('receiptPrintArea').innerHTML=`<div class="receipt"><div class="receipt-head"><div class="receipt-school"><img class="receipt-logo" src="school-logo.jpg"><div><h2>THE PROGRESS OF LIFE SCHOOL</h2><p>CHAK 8JB MEHBOOB TOWN, FAISALABAD</p><p style="font-size:11px">PROGRESS FOR CHRISTIAN CHILDREN</p></div></div><div class="receipt-no"><strong>FEE RECEIPT</strong><br>Receipt No: ${esc(f.receipt)}<br>Date: ${esc(f.date)}</div></div><div class="receipt-student"><img class="photo-lg" src="${s.photo||'school-logo.jpg'}"><div><strong>${esc(s.name||'')}</strong><div>Student ID: ${esc(s.id||'')}</div><div>Class / Section: ${esc(s.class||'')} ${s.section?'/ '+esc(s.section):''}</div><div>Father / Guardian: ${esc(s.guardian||'')}</div></div></div><table class="receipt-table"><tr><th>Description</th><th>Amount (PKR)</th></tr><tr><td>Monthly Fee (${esc(f.month)})</td><td>${Number(f.expected).toLocaleString()}</td></tr><tr><td>Previous Balance</td><td>${Number(f.previous).toLocaleString()}</td></tr><tr><td>Discount</td><td>${Number(f.discount).toLocaleString()}</td></tr><tr><td><strong>Amount Paid</strong></td><td><strong>${Number(f.paid).toLocaleString()}</strong></td></tr><tr><td><strong>Remaining Balance</strong></td><td><strong>${Number(f.remaining).toLocaleString()}</strong></td></tr></table><p><strong>Amount in Words:</strong> ${amountWords(f.paid)}</p><div class="signs"><div class="sign">Received By</div><div class="sign">Principal</div></div></div>`;document.getElementById('receiptModal').classList.add('show')}
 function amountWords(n){n=Number(n||0);if(n===0)return'Zero Only';if(n<1000000)return n.toLocaleString('en-PK')+' Only';return n.toLocaleString('en-PK')+' Only'}
 function printReceipt(){window.print()}
 function openExpense(){document.getElementById('exDate').value=today();document.getElementById('exDescription').value='';document.getElementById('exAmount').value='';document.getElementById('expenseModal').classList.add('show')}
@@ -1064,7 +1064,7 @@ function openPrintWindow(title,body,landscape){
  @media print{@page{size:${landscape?'landscape':'auto'};margin:12mm}body{padding:0}}
  
 .designation-duty-guide{margin:0 0 14px;padding:15px;border:1px solid #dfe7f3;border-radius:16px;background:linear-gradient(135deg,#f8fbff,#f5f0ff);color:#172033}.designation-duty-guide>strong{font-size:13px}.ddg-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}.ddg-grid>div{background:#fff;border:1px solid #e5ebf3;border-radius:12px;padding:10px}.ddg-grid b{display:block;font-size:11px;color:#173b78;margin-bottom:4px}.ddg-grid span{font-size:10px;line-height:1.45;color:#64748b;display:block}@media(max-width:700px){.ddg-grid{grid-template-columns:1fr}}
-</style></head><body><div class="school-head"><img src="assets/school-logo.jpg"><div><h1>The Progress of Life School</h1><div>CHAK 8JB MEHBOOB TOWN, FAISALABAD</div><div>PROGRESS FOR CHRISTIAN CHILDREN</div></div></div>${body}<script>window.onload=()=>setTimeout(()=>window.print(),250)<\/script></body></html>`);
+</style></head><body><div class="school-head"><img src="school-logo.jpg"><div><h1>The Progress of Life School</h1><div>CHAK 8JB MEHBOOB TOWN, FAISALABAD</div><div>PROGRESS FOR CHRISTIAN CHILDREN</div></div></div>${body}<script>window.onload=()=>setTimeout(()=>window.print(),250)<\/script></body></html>`);
  w.document.close();
 }
 function printTeacherRequest(type,id){
