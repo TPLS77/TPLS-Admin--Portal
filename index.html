@@ -147,7 +147,306 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 .tpls-pdf-sheet input,.tpls-pdf-sheet select,.tpls-pdf-sheet textarea{border:1px solid #cbd5e1!important;background:#fff!important;padding:7px!important;box-sizing:border-box!important}
 .tpls-pdf-foot{margin-top:18px;padding-top:10px;border-top:1px solid #d7e0eb;font-size:9px;color:#667085}
 </style>
-<style id="tpls-template-pdf-css">.pdf-template-extra{margin-top:12px}.pdf-box{border:1px solid #c7d3e1;border-radius:4px;margin:8px 0;min-height:44px}.pdf-label{background:#eef4fb;color:#163f73;font-weight:700;font-size:10px;padding:5px 7px;border-bottom:1px solid #c7d3e1}.pdf-value{padding:8px;font-size:10px;min-height:24px;white-space:pre-wrap}.pdf-line{display:flex;gap:8px;align-items:flex-end;font-size:10px;font-weight:700;margin:12px 0}.pdf-line .line{border-bottom:1px solid #7a8798;flex:1;height:14px}.pdf-signrow{display:grid;grid-template-columns:1fr 1fr;gap:18px}.pdf-checks{border:1px solid #d4deea;padding:8px;margin:8px 0;font-size:10px}.pdf-note{border:1px solid #d4deea;padding:10px;margin:8px 0;font-size:10px;line-height:1.5;background:#fafcff}</style></head>
+<style id="tpls-template-pdf-css">.pdf-template-extra{margin-top:12px}.pdf-box{border:1px solid #c7d3e1;border-radius:4px;margin:8px 0;min-height:44px}.pdf-label{background:#eef4fb;color:#163f73;font-weight:700;font-size:10px;padding:5px 7px;border-bottom:1px solid #c7d3e1}.pdf-value{padding:8px;font-size:10px;min-height:24px;white-space:pre-wrap}.pdf-line{display:flex;gap:8px;align-items:flex-end;font-size:10px;font-weight:700;margin:12px 0}.pdf-line .line{border-bottom:1px solid #7a8798;flex:1;height:14px}.pdf-signrow{display:grid;grid-template-columns:1fr 1fr;gap:18px}.pdf-checks{border:1px solid #d4deea;padding:8px;margin:8px 0;font-size:10px}.pdf-note{border:1px solid #d4deea;padding:10px;margin:8px 0;font-size:10px;line-height:1.5;background:#fafcff}</style>
+<style id="dashboard-v2-design">
+/* Dashboard V2 — modeled directly on the requested visual layout */
+.dashboard-welcome{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}
+.dashboard-welcome .eyebrow{font-size:10px;letter-spacing:.13em;font-weight:900;color:#2563eb;margin-bottom:5px}
+.dashboard-welcome h1{font-size:27px;margin:0;color:#10284d;letter-spacing:-.02em}
+.dashboard-welcome p{margin:5px 0 0;color:#6b778c;font-size:13px}
+.dashboard-actions{display:flex;gap:9px;flex-wrap:wrap}
+.dash-session{font-weight:800}
+.dash-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:13px;margin-bottom:16px}
+.dash-kpi{min-width:0;min-height:112px;padding:17px;border:1px solid #e2e9f3;border-radius:17px;background:#fff;box-shadow:0 10px 28px rgba(15,23,42,.055);display:flex;gap:12px;align-items:flex-start}
+.dash-kpi .kpi-icon{width:45px;height:45px;border-radius:13px;display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+.dash-kpi span,.dash-kpi small{display:block;color:#6b778c}
+.dash-kpi span{font-size:12px;font-weight:700}.dash-kpi strong{display:block;font-size:23px;line-height:1.15;margin:7px 0 4px;color:#10284d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dash-kpi small{font-size:10px}
+.kpi-students .kpi-icon{background:#e7f0ff}.kpi-staff .kpi-icon{background:#e5faf0}.kpi-classes .kpi-icon{background:#eee9ff}.kpi-fees .kpi-icon{background:#e5faf7}.kpi-pending .kpi-icon{background:#fff2dc}.kpi-expenses .kpi-icon{background:#ffe9ed}
+.kpi-fees strong{color:#078d75}.kpi-pending strong{color:#c92d3d}.kpi-expenses strong{color:#d94a4a}
+.dash-grid-top{display:grid;grid-template-columns:1.22fr 1fr .78fr;gap:15px;margin-bottom:15px}
+.dash-grid-bottom{display:grid;grid-template-columns:1.05fr .95fr;gap:15px;margin-bottom:15px}
+.dash-panel{padding:17px!important}
+.dash-panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.dash-panel-head h3{margin:0;font-size:16px;color:#132c51}.dash-panel-head p{margin:4px 0 0;color:#7a8799;font-size:11px}.dash-panel-head .btn{font-size:10px;padding:7px 9px;white-space:nowrap}
+.fee-overview{display:flex;align-items:center;gap:25px;min-height:135px}
+.fee-ring{width:145px;height:145px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#10b981 0deg,#10b981 260deg,#e6ebf2 260deg,#e6ebf2 360deg);position:relative;flex:0 0 auto}
+.fee-ring:after{content:"";position:absolute;width:105px;height:105px;border-radius:50%;background:#fff}
+.fee-ring>div{position:relative;z-index:1;text-align:center}.fee-ring strong{display:block;font-size:25px;color:#10284d}.fee-ring span{font-size:10px;color:#6b778c;font-weight:700}
+.fee-summary{display:grid;gap:13px;flex:1}.fee-summary div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #edf1f6;padding-bottom:8px}.fee-summary div:last-child{border-bottom:0}.fee-summary span{font-size:11px;color:#6b778c}.fee-summary strong{font-size:12px;color:#17365f}
+.mini-bars{height:42px;display:flex;align-items:flex-end;gap:6px;border-top:1px solid #edf1f6;padding-top:8px}.mini-bars i{display:block;flex:1;min-width:5px;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#2563eb,#4f46e5);opacity:.88}
+.class-chart{display:grid;gap:9px;max-height:220px;overflow:auto;padding-right:4px}.class-row{display:grid;grid-template-columns:62px 1fr 32px;align-items:center;gap:8px;font-size:10px}.class-row label{font-weight:800;color:#43566f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.class-track{height:8px;background:#edf2f8;border-radius:8px;overflow:hidden}.class-track i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#2563eb,#4f46e5)}.class-row b{text-align:right;color:#17365f}
+.queue-list{display:grid;gap:9px}.queue-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:#f8faff;border:1px solid #edf1f6;cursor:pointer}.queue-item:hover{background:#f1f6ff}.queue-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#eaf2ff}.queue-item div:nth-child(2){min-width:0;flex:1}.queue-item b{display:block;font-size:11px;color:#1c3557}.queue-item small{display:block;font-size:9px;color:#7a8799;margin-top:2px}.queue-count{font-weight:900;font-size:15px;color:#2563eb}
+.dash-table th,.dash-table td{font-size:11px!important;padding:9px 8px!important}.dash-table th{font-size:10px!important}.student-mini{display:flex;align-items:center;gap:7px}.student-mini-avatar{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#e8f0fc;color:#2863a8;font-weight:800;font-size:10px}
+.quick-access{padding:17px!important}.quick-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:9px}.quick-grid button{border:1px solid #e3eaf3;background:linear-gradient(180deg,#fff,#f8fbff);border-radius:13px;padding:12px 7px;display:flex;flex-direction:column;align-items:center;gap:4px;color:#203b61;transition:.18s}.quick-grid button:hover{transform:translateY(-2px);border-color:#bdd2ee;box-shadow:0 8px 20px rgba(37,99,235,.09)}.quick-grid span{font-size:21px}.quick-grid b{font-size:10px}.quick-grid small{font-size:8px;color:#8490a2}
+@media(max-width:1250px){.dash-kpis{grid-template-columns:repeat(3,1fr)}.dash-grid-top{grid-template-columns:1fr 1fr}.dash-grid-top>.dash-panel:last-child{grid-column:1/-1}.quick-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:850px){.dash-grid-top,.dash-grid-bottom{grid-template-columns:1fr}.dashboard-welcome{align-items:flex-start;flex-direction:column}.dash-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.dash-kpis{grid-template-columns:1fr}.quick-grid{grid-template-columns:repeat(2,1fr)}.fee-overview{gap:15px}.fee-ring{width:125px;height:125px}.fee-ring:after{width:91px;height:91px}.fee-ring strong{font-size:21px}}
+</style>
+
+
+<style id="professional-v3-theme">
+/* =========================================================
+   PROFESSIONAL V3 VISUAL THEME
+   Visual-only overrides: no database, auth, event, or API logic changed.
+   ========================================================= */
+:root{
+ --p1:#0757b8; --p2:#2563eb; --p3:#4f46e5; --p4:#7c3aed;
+ --ink:#102a50; --muted:#718096; --soft:#f4f7fc; --line:#e4ebf5;
+ --glass:rgba(255,255,255,.82);
+}
+html,body{min-height:100%;background:#f4f7fc!important}
+body{
+ font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+ color:var(--ink)!important;
+ background:
+  radial-gradient(circle at 0% 0%,rgba(37,99,235,.12),transparent 27%),
+  radial-gradient(circle at 100% 8%,rgba(124,58,237,.10),transparent 25%),
+  linear-gradient(135deg,#f8fbff 0%,#f2f6fc 55%,#f8f7ff 100%)!important;
+}
+
+/* Sidebar */
+.sidebar{
+ background:
+  radial-gradient(circle at 70% 0%,rgba(96,165,250,.23),transparent 28%),
+  linear-gradient(180deg,#062451 0%,#0a438b 52%,#29236e 100%)!important;
+ border-right:1px solid rgba(255,255,255,.10)!important;
+ box-shadow:14px 0 45px rgba(8,39,84,.18)!important;
+}
+.sidebar .brand{
+ border:1px solid rgba(255,255,255,.12)!important;
+ background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.035))!important;
+ box-shadow:0 12px 30px rgba(0,0,0,.12)!important;
+ backdrop-filter:blur(14px);
+}
+.sidebar .nav button{
+ border:1px solid transparent!important;
+}
+.sidebar .nav button.active{
+ background:linear-gradient(135deg,#1675ed,#4f46e5)!important;
+ box-shadow:0 10px 28px rgba(37,99,235,.34)!important;
+ border-color:rgba(255,255,255,.12)!important;
+}
+.sidebar .nav button:hover:not(.active){
+ background:linear-gradient(90deg,rgba(255,255,255,.11),rgba(255,255,255,.04))!important;
+}
+
+/* Topbar */
+.topbar{
+ background:rgba(255,255,255,.88)!important;
+ border-bottom:1px solid rgba(148,163,184,.16)!important;
+ box-shadow:0 10px 35px rgba(15,23,42,.06)!important;
+ backdrop-filter:blur(18px)!important;
+}
+.topbar input,.topbar .search,.search-box{
+ border:1px solid #dfe7f2!important;
+ background:#f8fbff!important;
+ border-radius:13px!important;
+}
+
+/* Universal cards */
+.card,.panel,.modal-content,.table-card,.form-card,.stat,.notice-card,.report-card{
+ border:1px solid rgba(148,163,184,.20)!important;
+ border-radius:18px!important;
+ background:rgba(255,255,255,.92)!important;
+ box-shadow:0 12px 34px rgba(15,23,42,.065)!important;
+}
+.card:hover,.panel:hover,.stat:hover,.report-card:hover{
+ box-shadow:0 17px 40px rgba(15,23,42,.09)!important;
+}
+
+/* Page headers */
+.page > .section-title:first-child,
+.page .page-header,.page-header{
+ border-radius:18px!important;
+}
+.section-title h3,.page-header h2,.page-header h3{
+ color:#102a50!important;font-weight:850!important;
+}
+
+/* Buttons */
+.btn{
+ border-radius:11px!important;
+ font-weight:750!important;
+ transition:transform .16s ease,box-shadow .16s ease,filter .16s ease!important;
+}
+.btn-primary{
+ border:0!important;
+ background:linear-gradient(135deg,#1675ed 0%,#4f46e5 100%)!important;
+ box-shadow:0 8px 22px rgba(37,99,235,.23)!important;
+}
+.btn-primary:hover{transform:translateY(-1px);filter:saturate(1.08);box-shadow:0 12px 27px rgba(37,99,235,.29)!important}
+.btn-secondary{
+ background:linear-gradient(180deg,#fff,#f5f8fd)!important;
+ border:1px solid #dbe4ef!important;color:#294463!important;
+}
+.btn-danger{box-shadow:0 7px 18px rgba(220,53,69,.15)!important}
+
+/* Inputs / selects */
+input,select,textarea{
+ border-radius:11px!important;
+ border:1px solid #d8e2ee!important;
+ background:#fff!important;
+ box-shadow:inset 0 1px 2px rgba(15,23,42,.025)!important;
+}
+input:focus,select:focus,textarea:focus{
+ border-color:#6da5ee!important;
+ box-shadow:0 0 0 4px rgba(37,99,235,.10)!important;
+ outline:none!important;
+}
+
+/* Tables */
+.table{border-collapse:separate!important;border-spacing:0!important;overflow:hidden}
+.table th{
+ background:linear-gradient(180deg,#f8fbff,#edf4ff)!important;
+ color:#47617f!important;border-bottom:1px solid #dfe8f3!important;
+ font-weight:800!important;
+}
+.table td{border-bottom:1px solid #edf1f6!important}
+.table tbody tr:hover{background:#f7faff!important}
+
+/* Badges / statuses */
+.badge{
+ border-radius:999px!important;font-weight:800!important;
+ padding:5px 9px!important;
+}
+
+/* Toolbars / filters */
+.toolbar,.filters,.filter-bar{
+ background:linear-gradient(180deg,#fff,#f8fbff)!important;
+ border:1px solid #e2e9f3!important;border-radius:15px!important;
+ box-shadow:0 7px 22px rgba(15,23,42,.04)!important;
+}
+
+/* Dashboard visuals */
+.dash-kpi{
+ position:relative;overflow:hidden!important;
+ background:linear-gradient(145deg,#ffffff,#f7faff)!important;
+}
+.dash-kpi:after{
+ content:"";position:absolute;width:100px;height:100px;border-radius:50%;
+ right:-42px;top:-46px;background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(124,58,237,.06));
+}
+.dash-kpi .kpi-icon{box-shadow:0 8px 18px rgba(37,99,235,.08)!important}
+.dash-panel{background:rgba(255,255,255,.94)!important}
+.quick-access{
+ background:linear-gradient(135deg,#fff,#f6f9ff)!important;
+}
+.quick-grid button{
+ background:linear-gradient(180deg,#fff,#f7faff)!important;
+ border:1px solid #dfe7f1!important;
+}
+.quick-grid button:hover{
+ border-color:#a9c5ec!important;
+ box-shadow:0 12px 25px rgba(37,99,235,.11)!important;
+}
+
+/* Cards used throughout feature pages */
+.stat{
+ position:relative;overflow:hidden;
+ background:linear-gradient(145deg,#fff,#f7faff)!important;
+}
+.stat:before{
+ content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+ background:linear-gradient(180deg,#1675ed,#6d4ee8);opacity:.85;
+}
+.stat .icon{
+ box-shadow:0 7px 17px rgba(37,99,235,.08)!important;
+}
+.modal-backdrop{backdrop-filter:blur(6px)!important}
+
+/* Feature page title accent */
+.page h2:after,.page-header h2:after{
+ content:"";display:block;width:48px;height:4px;margin-top:7px;border-radius:4px;
+ background:linear-gradient(90deg,#1675ed,#7c3aed);
+}
+
+/* =========================================================
+   LOGIN — complete visual redesign, existing auth fields/IDs preserved
+   ========================================================= */
+#login{
+ min-height:100vh!important;
+ background:
+  radial-gradient(circle at 15% 15%,rgba(96,165,250,.27),transparent 28%),
+  radial-gradient(circle at 88% 82%,rgba(139,92,246,.27),transparent 30%),
+  linear-gradient(135deg,#041a3a 0%,#073f87 48%,#32206e 100%)!important;
+ position:relative!important;overflow:hidden!important;
+}
+#login:before{
+ content:"";position:absolute;inset:0;
+ background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+ background-size:42px 42px;opacity:.45;pointer-events:none;
+}
+#login:after{
+ content:"";position:absolute;width:560px;height:560px;border-radius:50%;
+ right:-180px;top:-180px;
+ background:radial-gradient(circle,rgba(96,165,250,.28),transparent 66%);
+ pointer-events:none;
+}
+#login .login-container,#login .login-box,#login .auth-card{
+ position:relative;z-index:2!important;
+}
+#login .login-container{
+ max-width:1040px!important;
+ min-height:100vh!important;
+ margin:auto!important;
+ display:grid!important;
+ grid-template-columns:1.08fr .92fr!important;
+ align-items:center!important;
+ gap:38px!important;
+ padding:45px!important;
+}
+#login .login-brand,#login .login-intro{
+ color:#fff!important;
+}
+#login .login-brand img,#login img{
+ filter:drop-shadow(0 12px 25px rgba(0,0,0,.24));
+}
+#login .login-brand h1,#login .login-intro h1{
+ font-size:38px!important;line-height:1.08!important;
+ font-weight:900!important;letter-spacing:-.04em!important;
+}
+#login .login-brand p,#login .login-intro p{color:rgba(255,255,255,.78)!important}
+#login .login-box,#login .auth-card{
+ background:rgba(255,255,255,.96)!important;
+ border:1px solid rgba(255,255,255,.42)!important;
+ border-radius:25px!important;
+ padding:31px!important;
+ box-shadow:0 30px 80px rgba(0,0,0,.28)!important;
+ backdrop-filter:blur(18px)!important;
+}
+#login .login-box h2,#login .auth-card h2{
+ color:#102a50!important;font-size:25px!important;font-weight:900!important;
+}
+#login .login-box .btn-primary,#login .auth-card .btn-primary{
+ width:100%!important;min-height:48px!important;
+ font-size:14px!important;
+ background:linear-gradient(135deg,#1675ed,#4f46e5)!important;
+}
+#login input{
+ min-height:45px!important;
+ background:#f8fbff!important;
+}
+#login .quote-banner{
+ margin-top:20px!important;
+ background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.045))!important;
+ border:1px solid rgba(255,255,255,.15)!important;
+ border-radius:17px!important;padding:16px!important;
+ color:#fff!important;box-shadow:0 12px 30px rgba(0,0,0,.12)!important;
+}
+#login .quote-banner *{color:inherit!important}
+#login .login-footer{color:rgba(255,255,255,.64)!important}
+#login a{color:#2563eb!important;font-weight:750!important}
+
+/* Mobile */
+@media(max-width:900px){
+ #login .login-container{grid-template-columns:1fr!important;max-width:540px!important;padding:25px!important}
+ #login .login-brand h1,#login .login-intro h1{font-size:29px!important}
+ #login .quote-banner{display:none!important}
+}
+</style>
+
+</head>
 <body>
 <div id="loginScreen" class="login">
   <div class="login-visual">
@@ -219,23 +518,89 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 <header class="topbar"><h2 id="pageTitle">Dashboard</h2><div class="user"><div><strong id="adminName">Administrator</strong><div style="font-size:11px;color:var(--muted)">School Admin</div></div><div class="avatar" id="avatar">A</div></div></header>
 <section class="content">
 
+
 <div id="dashboard" class="page active">
-  <div class="section-title"><div><h3>School Overview</h3><div style="color:var(--muted);font-size:13px">Your financial and student snapshot</div></div><button class="btn btn-secondary" onclick="refreshDashboard()">↻ Refresh</button></div>
-  <div class="cards">
-    <div class="card stat"><div><p>Total Students</p><h3 id="sTotal">0</h3><p>Active students</p></div><div class="icon">👨‍🎓</div></div>
-    <div class="card stat"><div><p>Teaching Staff</p><h3 id="tTotal">0</h3><p>All active staff who may also teach</p></div><div class="icon">👩‍🏫</div></div>
-    <div class="card stat"><div><p>Fees Collected</p><h3 id="fCollected">PKR 0</h3><p>This month</p></div><div class="icon">💳</div></div>
-    <div class="card stat"><div><p>Pending Fees</p><h3 id="fPending" class="negative">PKR 0</h3><p>Outstanding</p></div><div class="icon">⏳</div></div>
+  <div class="dashboard-welcome">
+    <div>
+      <div class="eyebrow">SCHOOL ADMINISTRATION</div>
+      <h1>Good Morning, <span id="dashAdminName">Admin</span>! 👋</h1>
+      <p>Here’s what’s happening across The Progress of Life School today.</p>
+    </div>
+    <div class="dashboard-actions">
+      <button class="btn btn-secondary dash-session" id="dashSession">Academic Session</button>
+      <button class="btn btn-secondary" onclick="refreshDashboard()">↻ Refresh</button>
+    </div>
   </div>
-  <div class="cards" style="margin-top:16px">
-    <div class="card stat"><div><p>Expected Fees</p><h3 id="fExpected">PKR 0</h3><p>Monthly</p></div><div class="icon">📅</div></div>
-    <div class="card stat"><div><p>Expenses</p><h3 id="eTotal">PKR 0</h3><p>This month</p></div><div class="icon">💰</div></div>
-    <div class="card stat"><div><p>Net Balance</p><h3 id="netBalance" class="positive">PKR 0</h3><p>Collected − expenses</p></div><div class="icon">📈</div></div>
-    <div class="card stat"><div><p>Receipts</p><h3 id="rTotal">0</h3><p>Payments recorded</p></div><div class="icon">🧾</div></div>
+
+  <div class="dash-kpis">
+    <div class="dash-kpi kpi-students">
+      <div class="kpi-icon">👨‍🎓</div><div><span>Total Students</span><strong id="sTotal">0</strong><small>Active student records</small></div>
+    </div>
+    <div class="dash-kpi kpi-staff">
+      <div class="kpi-icon">👩‍🏫</div><div><span>Total Staff</span><strong id="tTotal">0</strong><small>Active teaching staff</small></div>
+    </div>
+    <div class="dash-kpi kpi-classes">
+      <div class="kpi-icon">🎓</div><div><span>Total Classes</span><strong id="dashClasses">0</strong><small>Classes / sections</small></div>
+    </div>
+    <div class="dash-kpi kpi-fees">
+      <div class="kpi-icon">💳</div><div><span>Monthly Collection</span><strong id="fCollected">PKR 0</strong><small>This month</small></div>
+    </div>
+    <div class="dash-kpi kpi-pending">
+      <div class="kpi-icon">⏳</div><div><span>Pending Fees</span><strong id="fPending">PKR 0</strong><small>Outstanding this month</small></div>
+    </div>
+    <div class="dash-kpi kpi-expenses">
+      <div class="kpi-icon">💰</div><div><span>Monthly Expenses</span><strong id="eTotal">PKR 0</strong><small>Recorded expenses</small></div>
+    </div>
   </div>
-  <div class="grid2">
-    <div class="card"><div class="section-title"><h3>Recent Payments</h3><button class="btn btn-secondary" onclick="go('fees')">View all</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Student</th><th>Month</th><th>Paid</th><th>Date</th></tr></thead><tbody id="recentPayments"></tbody></table></div></div>
-    <div class="card"><div class="section-title"><h3>Fee Status</h3></div><div id="statusBars"></div></div>
+
+  <div class="dash-grid-top">
+    <div class="card dash-panel fee-panel">
+      <div class="dash-panel-head"><div><h3>Fee Collection Overview</h3><p>Expected vs collected for the current month</p></div><button class="btn btn-secondary" onclick="go('fees')">View Fees →</button></div>
+      <div class="fee-overview">
+        <div class="fee-ring"><div><strong id="dashFeePct">0%</strong><span>Collected</span></div></div>
+        <div class="fee-summary">
+          <div><span>Expected</span><strong id="fExpected">PKR 0</strong></div>
+          <div><span>Collected</span><strong class="positive" id="dashCollected2">PKR 0</strong></div>
+          <div><span>Remaining</span><strong class="negative" id="dashPending2">PKR 0</strong></div>
+        </div>
+      </div>
+      <div class="mini-bars" id="dashFeeBars"></div>
+    </div>
+
+    <div class="card dash-panel">
+      <div class="dash-panel-head"><div><h3>Students by Class</h3><p>Current student distribution</p></div><button class="btn btn-secondary" onclick="go('students')">View All →</button></div>
+      <div id="dashClassChart" class="class-chart"></div>
+    </div>
+
+    <div class="card dash-panel">
+      <div class="dash-panel-head"><div><h3>Management Queue</h3><p>Items requiring administrator attention</p></div></div>
+      <div class="queue-list" id="dashQueue"></div>
+    </div>
+  </div>
+
+  <div class="dash-grid-bottom">
+    <div class="card dash-panel">
+      <div class="dash-panel-head"><div><h3>Recent Admissions</h3><p>Latest students added to the school</p></div><button class="btn btn-secondary" onclick="go('students')">View All →</button></div>
+      <div class="table-wrap"><table class="table dash-table"><thead><tr><th>Student</th><th>Class</th><th>Admission No.</th><th>Date</th><th>Status</th></tr></thead><tbody id="dashAdmissions"></tbody></table></div>
+    </div>
+    <div class="card dash-panel">
+      <div class="dash-panel-head"><div><h3>Recent Fee Payments</h3><p>Latest receipts recorded</p></div><button class="btn btn-secondary" onclick="go('fees')">View All →</button></div>
+      <div class="table-wrap"><table class="table dash-table"><thead><tr><th>Student</th><th>Month</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead><tbody id="dashPayments"></tbody></table></div>
+    </div>
+  </div>
+
+  <div class="card quick-access">
+    <div class="dash-panel-head"><div><h3>Quick Access</h3><p>Common school administration tasks</p></div></div>
+    <div class="quick-grid">
+      <button onclick="openStudent()"><span>👨‍🎓</span><b>Add Student</b><small>New admission</small></button>
+      <button onclick="openTeacher()"><span>👩‍🏫</span><b>Add Staff</b><small>Staff directory</small></button>
+      <button onclick="go('fees')"><span>💳</span><b>Collect Fees</b><small>Record payment</small></button>
+      <button onclick="go('expenses')"><span>💰</span><b>Add Expense</b><small>School spending</small></button>
+      <button onclick="go('reports')"><span>📊</span><b>Generate Report</b><small>Financial report</small></button>
+      <button onclick="openNotificationComposer()"><span>🔔</span><b>Send Notice</b><small>Teacher notification</small></button>
+      <button onclick="go('student-results')"><span>📚</span><b>Student Results</b><small>Academic results</small></button>
+      <button onclick="go('leave-applications')"><span>📝</span><b>Review Requests</b><small>Leaves & suggestions</small></button>
+    </div>
   </div>
 </div>
 
@@ -658,15 +1023,64 @@ function go(page){
 function refreshAll(){document.getElementById('feeMonthFilter').value=monthNow();document.getElementById('receiptMonthFilter').value=monthNow();if(document.getElementById('reportMonth'))document.getElementById('reportMonth').value=monthNow();if(document.getElementById('reportYear'))document.getElementById('reportYear').value=new Date().getFullYear();if(document.getElementById('reportDay'))document.getElementById('reportDay').value=today();refreshDashboard();renderStudents();renderTeachers();renderFees();renderExpenses();renderReceipts();renderReports();populateClassFilter();refreshTeacherData();}
 function refreshDashboard(){
  const m=monthNow(), ledger=monthlyLedger(m);
- const students=ledger.map(x=>x.student), expected=ledger.reduce((a,x)=>a+x.expected,0), collected=ledger.reduce((a,x)=>a+x.paid,0);
+ const students=db.students.filter(s=>s.status!=='Inactive');
+ const activeTeachers=db.teachers.filter(t=>t.status!=='Inactive');
+ const expected=ledger.reduce((a,x)=>a+x.expected,0), collected=ledger.reduce((a,x)=>a+x.paid,0);
  const expenses=db.expenses.filter(e=>String(e.date).slice(0,7)===m).reduce((a,e)=>a+Number(e.amount||0),0);
  const pending=ledger.reduce((a,x)=>a+x.pending,0);
- document.getElementById('sTotal').textContent=students.length;document.getElementById('tTotal').textContent=db.teachers.filter(t=>t.status!=='Inactive').length;
- document.getElementById('fCollected').textContent=money(collected);document.getElementById('fPending').textContent=money(pending);document.getElementById('fExpected').textContent=money(expected);document.getElementById('eTotal').textContent=money(expenses);document.getElementById('netBalance').textContent=money(collected-expenses);document.getElementById('rTotal').textContent=db.fees.length;
- const recent=[...db.fees].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6);
- document.getElementById('recentPayments').innerHTML=recent.length?recent.map(f=>`<tr><td>${esc(studentName(f.studentId))}</td><td>${esc(f.month)}</td><td>${money(f.paid)}</td><td>${esc(f.date)}</td></tr>`).join(''):`<tr><td colspan="4" class="empty">No payments recorded yet.</td></tr>`;
- const paid=ledger.filter(x=>x.status==='Paid').length, partial=ledger.filter(x=>x.status==='Partial').length, pend=ledger.filter(x=>x.status==='Pending'||x.status==='Unpaid').length;
- document.getElementById('statusBars').innerHTML=`${bar('Paid',paid,students.length)}${bar('Partial',partial,students.length)}${bar('Pending / Unpaid',pend,students.length)}`;
+ const classMap={};
+ students.forEach(s=>{const key=(s.class||'Unassigned').trim()||'Unassigned';classMap[key]=(classMap[key]||0)+1;});
+ const classCount=Object.keys(classMap).filter(k=>k!=='Unassigned').length;
+ const pct=expected?Math.min(100,Math.round(collected/expected*100)):0;
+
+ document.getElementById('sTotal').textContent=students.length;
+ document.getElementById('tTotal').textContent=activeTeachers.length;
+ document.getElementById('dashClasses').textContent=classCount;
+ document.getElementById('fCollected').textContent=money(collected);
+ document.getElementById('fPending').textContent=money(pending);
+ document.getElementById('eTotal').textContent=money(expenses);
+ document.getElementById('fExpected').textContent=money(expected);
+ document.getElementById('dashCollected2').textContent=money(collected);
+ document.getElementById('dashPending2').textContent=money(Math.max(0,expected-collected));
+ document.getElementById('dashFeePct').textContent=pct+'%';
+ const ring=document.querySelector('.fee-ring');
+ if(ring) ring.style.background=`conic-gradient(#10b981 0deg,#10b981 ${pct*3.6}deg,#e6ebf2 ${pct*3.6}deg,#e6ebf2 360deg)`;
+
+ const feeBars=document.getElementById('dashFeeBars');
+ if(feeBars){
+   const months=[]; const d=new Date();
+   for(let i=5;i>=0;i--){const x=new Date(d.getFullYear(),d.getMonth()-i,1);const key=x.toISOString().slice(0,7);months.push({key,val:db.fees.filter(f=>f.month===key).reduce((a,f)=>a+Number(f.paid||0),0)});}
+   const mx=Math.max(...months.map(x=>x.val),1);
+   feeBars.innerHTML=months.map(x=>`<i title="${esc(x.key)} — ${money(x.val)}" style="height:${Math.max(8,Math.round(x.val/mx*38))}px"></i>`).join('');
+ }
+
+ const classEl=document.getElementById('dashClassChart');
+ if(classEl){
+   const entries=Object.entries(classMap).sort((a,b)=>b[1]-a[1]).slice(0,8), mx=Math.max(...entries.map(x=>x[1]),1);
+   classEl.innerHTML=entries.length?entries.map(([name,n])=>`<div class="class-row"><label title="${esc(name)}">${esc(name)}</label><div class="class-track"><i style="width:${Math.round(n/mx*100)}%"></i></div><b>${n}</b></div>`).join(''):'<div class="empty">No student/class data yet.</div>';
+ }
+
+ const recentStudents=[...students].sort((a,b)=>String(b.admission||'').localeCompare(String(a.admission||''))).slice(0,5);
+ document.getElementById('dashAdmissions').innerHTML=recentStudents.length?recentStudents.map(s=>`<tr><td><div class="student-mini"><span class="student-mini-avatar">${esc((s.name||'S')[0].toUpperCase())}</span><strong>${esc(s.name||'—')}</strong></div></td><td>${esc(s.class||'—')}${s.section?`-${esc(s.section)}`:''}</td><td>${esc(s.id||'—')}</td><td>${esc(s.admission||'—')}</td><td><span class="badge ${s.status==='Inactive'?'pending':'paid'}">${esc(s.status||'Active')}</span></td></tr>`).join(''):'<tr><td colspan="5" class="empty">No admissions recorded yet.</td></tr>';
+
+ const recent=[...db.fees].sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,5);
+ document.getElementById('dashPayments').innerHTML=recent.length?recent.map(f=>`<tr><td><strong>${esc(studentName(f.studentId))}</strong></td><td>${esc(f.month||'—')}</td><td><strong>${money(f.paid)}</strong></td><td>${esc(f.date||'—')}</td><td><span class="badge paid">Paid</span></td></tr>`).join(''):'<tr><td colspan="5" class="empty">No payments recorded yet.</td></tr>';
+
+ const pendingLeaves=typeof teacherInboxData!=='undefined'?(teacherInboxData.requests||[]).filter(r=>r.request_type==='leave'&&r.status==='Pending').length:0;
+ const pendingSuggestions=typeof teacherInboxData!=='undefined'?(teacherInboxData.requests||[]).filter(r=>r.request_type==='suggestion'&&r.status==='Pending').length:0;
+ const resultCount=typeof teacherInboxData!=='undefined'?(teacherInboxData.results||[]).length:0;
+ const planCount=typeof teacherInboxData!=='undefined'?(teacherInboxData.plans||[]).length:0;
+ const queue=[
+   {icon:'📝',title:'Leave Applications',sub:'Teacher requests awaiting review',n:pendingLeaves,page:'leave-applications'},
+   {icon:'💡',title:'Teacher Suggestions',sub:'Suggestions awaiting review',n:pendingSuggestions,page:'suggestions'},
+   {icon:'📊',title:'Student Results',sub:'Results submitted by teachers',n:resultCount,page:'student-results'},
+   {icon:'📚',title:'Lesson Plans',sub:'Lesson plans submitted',n:planCount,page:'lesson-plans'}
+ ];
+ document.getElementById('dashQueue').innerHTML=queue.map(q=>`<div class="queue-item" onclick="go('${q.page}')"><span class="queue-icon">${q.icon}</span><div><b>${q.title}</b><small>${q.sub}</small></div><span class="queue-count">${q.n}</span></div>`).join('');
+
+ const nm=db.account?.name||'Admin';
+ const dn=document.getElementById('dashAdminName'); if(dn)dn.textContent=nm;
+ const ses=document.getElementById('dashSession'); if(ses)ses.textContent='Academic Session '+new Date().getFullYear()+'–'+(new Date().getFullYear()+1);
 }
 function bar(label,n,total){let pct=total?Math.round(n/total*100):0;return `<div style="margin:16px 0"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>${label}</span><strong>${n}</strong></div><div style="height:9px;background:#edf1f6;border-radius:10px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${label==='Pending'?'#dc3545':label==='Partial'?'#f2b51d':'#159957'};border-radius:10px"></div></div></div>`}
 function studentName(id){return db.students.find(s=>s.id===id)?.name||'Unknown'}
