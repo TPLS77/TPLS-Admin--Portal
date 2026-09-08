@@ -127,6 +127,27 @@ body{background:radial-gradient(circle at 5% 0%,rgba(37,99,235,.09),transparent 
 .btn-primary{background:linear-gradient(135deg,#2563eb,#4f46e5)!important;box-shadow:0 10px 24px rgba(37,99,235,.18)!important}.btn-primary:hover{filter:brightness(1.04);transform:translateY(-1px)}
 .section-title{margin-bottom:18px}.table th{background:linear-gradient(180deg,#f8fbff,#eef4ff)!important;color:#38516f!important}.badge{box-shadow:inset 0 0 0 1px rgba(0,0,0,.04)}
 .quote-banner{box-shadow:0 20px 45px rgba(37,99,235,.20)!important}
+
+/* Professional saved teacher cards */
+.teacher-list-wrap{padding:16px}
+.teacher-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.teacher-card{border:1px solid var(--line);border-radius:18px;background:#fff;overflow:hidden;box-shadow:0 8px 24px rgba(23,54,95,.06);transition:.2s transform,.2s box-shadow}
+.teacher-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(23,54,95,.11)}
+.teacher-card-top{display:flex;gap:13px;align-items:center;padding:17px;background:linear-gradient(135deg,#f7fbff,#fff)}
+.teacher-card-avatar{width:64px;height:64px;border-radius:16px;object-fit:cover;border:2px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.10);background:#eef4fa}
+.teacher-card-name{font-size:17px;font-weight:800;color:#17365f;margin-bottom:3px}
+.teacher-card-id{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.3px}
+.teacher-card-body{padding:15px 17px}
+.teacher-card-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:13px}
+.teacher-meta-box{padding:9px 10px;border-radius:12px;background:#f8fafc;border:1px solid #edf1f5}
+.teacher-meta-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.teacher-meta-value{font-size:12px;font-weight:700;color:#25364a;word-break:break-word}
+.teacher-card-section{margin-top:11px}.teacher-card-section-title{font-size:11px;font-weight:800;color:#17365f;margin-bottom:7px}
+.teacher-assignment-pills{display:flex;flex-wrap:wrap;gap:6px}.teacher-assignment-pill{font-size:10px;padding:6px 8px;border-radius:999px;background:#f0f6ff;border:1px solid #dce9f8;color:#24517e;font-weight:700}
+.teacher-card-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 17px;border-top:1px solid #edf1f5}
+.teacher-status-dot{font-size:11px;font-weight:800}.teacher-status-dot.active{color:#15803d}.teacher-status-dot.inactive{color:#b91c1c}
+@media(max-width:700px){.teacher-grid{grid-template-columns:1fr}.teacher-card-meta{grid-template-columns:1fr}}
+
 </style>
 
 <style id="tpls-pdf-tools-style">
@@ -512,6 +533,46 @@ input:focus,select:focus,textarea:focus{
 }
 </style>
 
+<style id="professional-teacher-profile-css">
+
+/* =========================================================
+   PROFESSIONAL TEACHER PROFILE + ACADEMIC SESSION
+   ========================================================= */
+.teacher-profile-modal{width:min(860px,100%)!important}
+.teacher-profile-hero{display:grid;grid-template-columns:120px 1fr auto;gap:20px;align-items:center;padding:22px;background:linear-gradient(135deg,#0b4f9e,#2563eb 58%,#4f46e5);color:#fff}
+.teacher-profile-photo{width:104px;height:104px;border-radius:22px;object-fit:cover;background:#fff;border:4px solid rgba(255,255,255,.8);box-shadow:0 12px 28px rgba(0,0,0,.2)}
+.teacher-profile-name{font-size:25px;font-weight:900;margin:0 0 5px}
+.teacher-profile-code{font-size:12px;opacity:.82;margin-bottom:10px}
+.teacher-profile-status{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);font-size:11px;font-weight:800}
+.teacher-profile-actions{display:flex;gap:8px;align-items:center}
+.teacher-section{padding:20px;border-bottom:1px solid #edf1f6}
+.teacher-section:last-child{border-bottom:0}
+.teacher-section-title{display:flex;align-items:center;gap:9px;margin-bottom:14px;color:#17365f;font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.teacher-section-title span{width:30px;height:30px;border-radius:9px;background:#eaf2ff;display:grid;place-items:center;font-size:15px}
+.teacher-info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.teacher-info-item{padding:12px 13px;border:1px solid #e4ebf5;border-radius:12px;background:linear-gradient(180deg,#fff,#f8fbff)}
+.teacher-info-item label{display:block;font-size:10px;color:#718096;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+.teacher-info-item input,.teacher-info-item select{width:100%;padding:8px 9px;font-size:13px}
+.teacher-profile-note{padding:11px 13px;border-radius:11px;background:#f5f9ff;border:1px solid #dce9fb;color:#526a87;font-size:11px;line-height:1.5}
+.teacher-assignment-editor{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;align-items:end}
+.teacher-assignment-editor .field{margin:0}
+.teacher-savebar{padding:15px 20px;background:#f8fbff;border-top:1px solid #e5ebf3;display:flex;justify-content:flex-end;gap:9px;position:sticky;bottom:0;z-index:2}
+.session-modal-box{width:min(520px,100%)!important}
+.session-preview{padding:18px;border-radius:16px;background:linear-gradient(135deg,#edf5ff,#f4f0ff);border:1px solid #dbe6f7;text-align:center;margin-bottom:16px}
+.session-preview small{display:block;color:#718096;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.session-preview strong{display:block;color:#102a50;font-size:30px;margin-top:6px}
+.event-help{margin-top:12px;padding:12px 14px;border-radius:12px;background:#fff8e6;border:1px solid #f0d58a;color:#725600;font-size:11px;line-height:1.55}
+@media(max-width:700px){
+ .teacher-profile-hero{grid-template-columns:78px 1fr;gap:13px}
+ .teacher-profile-photo{width:72px;height:72px;border-radius:16px}
+ .teacher-profile-name{font-size:19px}
+ .teacher-profile-actions{grid-column:1/-1}
+ .teacher-info-grid{grid-template-columns:1fr 1fr}
+ .teacher-assignment-editor{grid-template-columns:1fr}
+}
+@media(max-width:480px){.teacher-info-grid{grid-template-columns:1fr}}
+
+</style>
 </head>
 <body>
 <div id="loginScreen" class="login">
@@ -595,7 +656,7 @@ input:focus,select:focus,textarea:focus{
       <p>Here’s what’s happening across The Progress of Life School today.</p>
     </div>
     <div class="dashboard-actions">
-      <button class="btn btn-secondary dash-session" id="dashSession">Academic Session</button>
+      <button class="btn btn-secondary dash-session" id="dashSession" onclick="openAcademicSession()">Academic Session</button>
       <button class="btn btn-secondary" onclick="refreshDashboard()">↻ Refresh</button>
     </div>
   </div>
@@ -679,7 +740,7 @@ input:focus,select:focus,textarea:focus{
 
 <div id="teachers" class="page">
   <div class="section-title"><div><h3>Teachers</h3><div style="color:var(--muted);font-size:13px">Keep teacher contact and employment details.</div></div><button class="btn btn-primary" onclick="openTeacher()">+ Add Teacher</button></div>
-  <div class="card"><div class="toolbar"><input id="teacherSearch" placeholder="Search teacher or subject..." oninput="renderTeachers()"></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Designation</th><th>Gender</th><th>CNIC</th><th>Phone</th><th>Class & Subject Assignments</th><th>Status</th><th></th></tr></thead><tbody id="teacherRows"></tbody></table></div></div>
+  <div class="card"><div class="toolbar"><input id="teacherSearch" placeholder="Search teacher, ID, phone, subject or class..." oninput="renderTeachers()"><div class="spacer"></div><button class="btn btn-secondary" onclick="downloadTeachersPDF()">⬇ Download Teacher Information</button></div><div class="teacher-list-wrap"><div id="teacherRows" class="teacher-grid"></div></div></div>
 </div>
 
 <div id="staff-salaries" class="page">
@@ -833,50 +894,113 @@ input:focus,select:focus,textarea:focus{
 </div></div></div>
 
 <!-- Teacher Modal -->
-<div id="teacherModal" class="modal"><div class="modal-box"><div class="modal-head"><strong id="teacherModalTitle">Add Teacher</strong><button class="close" onclick="closeModal('teacherModal')">×</button></div><div class="modal-body">
-<input id="teacherEditId" type="hidden">
-<div class="form-grid">
-<div class="field"><label>Name *</label><input id="teName"></div>
-<div class="field"><label>CNIC Number</label><input id="teCnic" placeholder="XXXXX-XXXXXXX-X" maxlength="15"></div>
-<div class="field"><label>Primary Designation</label><select id="teDesignation">
-<option>Teacher</option><option>Principal</option><option>Vice Principal</option><option>Head Teacher</option><option>General Secretary</option><option>Coordinator of Higher Section</option><option>Coordinator of Lower Section</option><option>Academic Coordinator</option><option>Examination Coordinator</option><option>Discipline Coordinator</option><option>Financial Secretary</option><option>Accountant</option><option>Administrator</option><option>HR / Staff Coordinator</option><option>IT Coordinator</option><option>Student Affairs Coordinator</option><option>Librarian</option><option>Lab Assistant</option><option>Sports Coordinator</option><option>Office Assistant</option><option>Receptionist</option><option>Support Staff</option><option>Other</option>
-</select></div>
-<div class="field fullrow">
-  <label>Additional Responsibilities</label>
-  <div class="hint">A person can be a teacher and hold one or more additional responsibilities. These responsibilities appear together in the same login.</div>
-  <div class="role-checks">
-    <label class="role-check"><input type="checkbox" class="extraRole" value="Financial Secretary"> Financial Secretary</label>
-    <label class="role-check"><input type="checkbox" class="extraRole" value="Accountant"> Accountant</label>
-    <label class="role-check"><input type="checkbox" class="extraRole" value="Administrator"> Administrator</label>
-    <label class="role-check"><input type="checkbox" class="extraRole" value="Principal"> Principal</label>
-    <label class="role-check"><input type="checkbox" class="extraRole" value="General Secretary"> General Sec.</label>
-    <label class="role-check"><input type="checkbox" class="extraRole" value="Coordinator of Higher Section"> High Section Coordinator</label>
-    <label class="role-check"><input type="checkbox" class="extraRole" value="Coordinator of Lower Section"> Low Section Coordinator</label>
-    <label class="role-check"><input type="checkbox" class="extraRole" value="Academic Coordinator"> Academic Coordinator</label>
-    <label class="role-check"><input type="checkbox" class="extraRole" value="Examination Coordinator"> Examination Coordinator</label>
-    <label class="role-check"><input type="checkbox" class="extraRole" value="Discipline Coordinator"> Discipline Coordinator</label>
+<div id="teacherModal" class="modal">
+  <div class="modal-box teacher-profile-modal">
+    <div class="modal-head">
+      <strong id="teacherModalTitle">Add Teacher</strong>
+      <button class="close" onclick="closeModal('teacherModal')">×</button>
+    </div>
+
+    <div class="teacher-profile-hero">
+      <img id="teacherPhotoPreview" class="teacher-profile-photo" src="school-logo.jpg" alt="Teacher photo">
+      <div>
+        <div class="teacher-profile-name" id="teacherProfileNamePreview">New Teacher</div>
+        <div class="teacher-profile-code" id="teacherProfileCodePreview">Teacher profile</div>
+        <span class="teacher-profile-status">● <span id="teacherProfileStatusPreview">Active</span></span>
+      </div>
+      <div class="teacher-profile-actions">
+        <label class="btn btn-secondary" style="background:#fff;color:#17365f;cursor:pointer">
+          📷 Upload Photo
+          <input id="tePhoto" type="file" accept="image/*" onchange="previewTeacherPhoto(event)" style="display:none">
+        </label>
+      </div>
+    </div>
+
+    <div class="modal-body" style="padding:0">
+      <input id="teacherEditId" type="hidden">
+
+      <div class="teacher-section">
+        <div class="teacher-section-title"><span>👤</span> Personal Information</div>
+        <div class="teacher-info-grid">
+          <div class="teacher-info-item"><label>Full Name *</label><input id="teName" oninput="updateTeacherProfilePreview()"></div>
+          <div class="teacher-info-item"><label>CNIC Number</label><input id="teCnic" placeholder="XXXXX-XXXXXXX-X" maxlength="15"></div>
+          <div class="teacher-info-item"><label>Gender</label><select id="teGender"><option>Male</option><option>Female</option></select></div>
+          <div class="teacher-info-item"><label>Phone</label><input id="tePhone" placeholder="03XX-XXXXXXX"></div>
+          <div class="teacher-info-item"><label>Email</label><input id="teEmail" type="email" placeholder="teacher@example.com"></div>
+          <div class="teacher-info-item"><label>Qualification</label><input id="teQualification" placeholder="e.g. BS Chemistry, MA English"></div>
+        </div>
+      </div>
+
+      <div class="teacher-section">
+        <div class="teacher-section-title"><span>💼</span> Employment Information</div>
+        <div class="teacher-info-grid">
+          <div class="teacher-info-item"><label>Teacher ID</label><input id="teacherCodeDisplay" readonly></div>
+          <div class="teacher-info-item"><label>Primary Designation</label>
+            <select id="teDesignation">
+              <option>Teacher</option><option>Principal</option><option>Vice Principal</option><option>Head Teacher</option><option>General Secretary</option><option>Coordinator of Higher Section</option><option>Coordinator of Lower Section</option><option>Academic Coordinator</option><option>Examination Coordinator</option><option>Discipline Coordinator</option><option>Financial Secretary</option><option>Accountant</option><option>Administrator</option><option>HR / Staff Coordinator</option><option>IT Coordinator</option><option>Student Affairs Coordinator</option><option>Librarian</option><option>Lab Assistant</option><option>Sports Coordinator</option><option>Office Assistant</option><option>Receptionist</option><option>Support Staff</option><option>Other</option>
+            </select>
+          </div>
+          <div class="teacher-info-item"><label>Joining Date</label><input id="teJoining" type="date"></div>
+          <div class="teacher-info-item"><label>Status</label><select id="teStatus" onchange="updateTeacherProfilePreview()"><option>Active</option><option>Inactive</option></select></div>
+        </div>
+
+        <div style="margin-top:13px">
+          <div class="teacher-profile-note"><strong>Additional Responsibilities:</strong> select any roles this staff member also holds. These roles remain combined with teaching access.</div>
+          <div class="role-checks" style="margin-top:10px">
+            <label class="role-check"><input type="checkbox" class="extraRole" value="Financial Secretary"> Financial Secretary</label>
+            <label class="role-check"><input type="checkbox" class="extraRole" value="Accountant"> Accountant</label>
+            <label class="role-check"><input type="checkbox" class="extraRole" value="Administrator"> Administrator</label>
+            <label class="role-check"><input type="checkbox" class="extraRole" value="Principal"> Principal</label>
+            <label class="role-check"><input type="checkbox" class="extraRole" value="General Secretary"> General Sec.</label>
+            <label class="role-check"><input type="checkbox" class="extraRole" value="Coordinator of Higher Section"> High Section Coordinator</label>
+            <label class="role-check"><input type="checkbox" class="extraRole" value="Coordinator of Lower Section"> Low Section Coordinator</label>
+            <label class="role-check"><input type="checkbox" class="extraRole" value="Academic Coordinator"> Academic Coordinator</label>
+            <label class="role-check"><input type="checkbox" class="extraRole" value="Examination Coordinator"> Examination Coordinator</label>
+            <label class="role-check"><input type="checkbox" class="extraRole" value="Discipline Coordinator"> Discipline Coordinator</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="teacher-section">
+        <div class="teacher-section-title"><span>📚</span> Teaching Assignments</div>
+        <div class="teacher-profile-note" style="margin-bottom:12px">Assign every class and subject this teacher teaches. These assignments control the teacher's teaching access and result/lesson-plan options.</div>
+        <div class="teacher-assignment-editor">
+          <div class="field"><label>Class</label><select id="teClass"></select></div>
+          <div class="field"><label>Subject</label><select id="teSubjectSelect"></select></div>
+          <button type="button" class="btn btn-secondary" onclick="addTeacherAssignment()">+ Add Assignment</button>
+        </div>
+        <div id="teacherAssignmentChips" class="chips" style="margin-top:12px"></div>
+      </div>
+    </div>
+
+    <div class="teacher-savebar">
+      <button class="btn btn-secondary" onclick="closeModal('teacherModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTeacher()">Save Teacher</button>
+    </div>
   </div>
 </div>
-<div class="field"><label>Gender</label><select id="teGender"><option>Male</option><option>Female</option></select></div>
-<div class="field"><label>Phone</label><input id="tePhone"></div>
-<div class="field"><label>Email</label><input id="teEmail" type="email"></div>
-<div class="field"><label>Qualification</label><input id="teQualification" placeholder="e.g. BS Chemistry, MA English"></div>
-<div class="field"><label>Joining Date</label><input id="teJoining" type="date"></div>
-<div class="field"><label>Status</label><select id="teStatus"><option>Active</option><option>Inactive</option></select></div>
-<div class="notice fullrow" style="margin-bottom:10px"><strong>Teaching Staff Access</strong><br>Every designated staff member may teach. Their designation does not remove teaching features; add their teaching assignments below whenever applicable.</div><div class="field fullrow"><label>Teacher Photo</label><input id="tePhoto" type="file" accept="image/*" onchange="previewTeacherPhoto(event)"><div style="margin-top:8px"><img id="teacherPhotoPreview" class="photo-lg" alt="Teacher photo preview"></div></div>
+
+<!-- Academic Session Modal -->
+<div id="sessionModal" class="modal">
+  <div class="modal-box session-modal-box">
+    <div class="modal-head">
+      <strong>🎓 Academic Session</strong>
+      <button class="close" onclick="closeModal('sessionModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="session-preview"><small>Current School Session</small><strong id="sessionPreview">2026–2027</strong></div>
+      <div class="field">
+        <label>Academic Session</label>
+        <input id="academicSessionInput" placeholder="2026–2027">
+      </div>
+      <div class="note">You can change the academic session at any time. The selected session is saved in this browser and shown on the dashboard.</div>
+      <div style="display:flex;justify-content:flex-end;gap:9px;margin-top:18px">
+        <button class="btn btn-secondary" onclick="closeModal('sessionModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveAcademicSession()">Save Session</button>
+      </div>
+    </div>
+  </div>
 </div>
-<div id="teacherAssignmentsSection"><div class="section-title" style="margin-top:18px"><h3>Teaching Assignments</h3></div>
-<div class="hint" style="margin-bottom:10px"><strong>Teaching access is additive:</strong> every staff designation can also be a teaching staff member. Select each class and subject this person teaches, whether their designation is Teacher, Financial Secretary, Accountant, Coordinator, Administrator, or another role.</div>
-<div class="form-grid">
-<div class="field"><label>Class</label><select id="teClass"></select></div>
-<div class="field"><label>Subject</label><select id="teSubjectSelect"></select></div>
-</div>
-<div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:8px">
-<button type="button" class="btn btn-secondary" onclick="addTeacherAssignment()">+ Add Class & Subject</button>
-<div id="teacherAssignmentChips" class="chips"></div>
-</div></div>
-<div style="display:flex;justify-content:flex-end;gap:9px;margin-top:18px"><button class="btn btn-secondary" onclick="closeModal('teacherModal')">Cancel</button><button class="btn btn-primary" onclick="saveTeacher()">Save Teacher</button></div>
-</div></div></div>
 
 <!-- Fee Modal -->
 <div id="feeModal" class="modal"><div class="modal-box"><div class="modal-head"><strong>Record Fee Payment</strong><button class="close" onclick="closeModal('feeModal')">×</button></div><div class="modal-body"><div class="form-grid">
@@ -908,7 +1032,7 @@ input:focus,select:focus,textarea:focus{
 <div class="field"><label>Event Type</label><select id="eventType"><option>Academic</option><option>Meeting</option><option>Sports</option><option>Holiday</option><option>Training</option><option>Other</option></select></div>
 <div class="field fullrow"><label>Description</label><textarea id="eventDescription" rows="4" placeholder="Add event details..."></textarea></div>
 </div>
-<div style="display:flex;justify-content:flex-end;gap:9px;margin-top:18px"><button class="btn btn-secondary" onclick="closeModal('eventModal')">Cancel</button><button class="btn btn-primary" onclick="saveSchoolEvent()">Save Event</button></div>
+<div class="event-help">Events are shared with the teacher portal through the Supabase <strong>school_events</strong> table. If cloud saving fails, the message will tell you exactly what needs to be fixed in Supabase.</div><div style="display:flex;justify-content:flex-end;gap:9px;margin-top:18px"><button class="btn btn-secondary" onclick="closeModal('eventModal')">Cancel</button><button class="btn btn-primary" onclick="saveSchoolEvent()">Save Event</button></div>
 </div></div></div>
 <div id="teacherDetailModal" class="modal"><div class="modal-box"><div class="modal-head"><strong id="teacherDetailTitle">Teacher Submission</strong><button class="close" onclick="closeModal('teacherDetailModal')">×</button></div><div class="modal-body" id="teacherDetailBody"></div></div></div>
 
@@ -1146,6 +1270,28 @@ function go(page){
  if(page==='dashboard')refreshDashboard();if(page==='students')renderStudents();if(page==='teachers')renderTeachers();if(page==='fees')renderFees();if(page==='expenses')renderExpenses();if(page==='receipts')renderReceipts();if(page==='reports')renderReports();if(page==='events')loadEvents();if(page==='school-growth'){refreshTeacherData();renderGrowthAnalytics();}if(['leave-applications','suggestions','lesson-plans','student-results','teacher-notifications'].includes(page))refreshTeacherData();
 }
 function refreshAll(){document.getElementById('feeMonthFilter').value=monthNow();document.getElementById('receiptMonthFilter').value=monthNow();if(document.getElementById('reportMonth'))document.getElementById('reportMonth').value=monthNow();if(document.getElementById('reportYear'))document.getElementById('reportYear').value=new Date().getFullYear();if(document.getElementById('reportDay'))document.getElementById('reportDay').value=today();refreshDashboard();renderStudents();renderTeachers();renderFees();renderExpenses();renderReceipts();renderReports();populateClassFilter();loadEvents();refreshTeacherData();}
+function defaultAcademicSession(){
+ const y=new Date().getFullYear(); return y+'–'+(y+1);
+}
+function getAcademicSession(){
+ return localStorage.getItem('tpls_academic_session')||db.academicSession||defaultAcademicSession();
+}
+function openAcademicSession(){
+ const value=getAcademicSession();
+ const input=document.getElementById('academicSessionInput'); if(input)input.value=value;
+ const preview=document.getElementById('sessionPreview'); if(preview)preview.textContent=value;
+ document.getElementById('sessionModal')?.classList.add('show');
+}
+function saveAcademicSession(){
+ const value=document.getElementById('academicSessionInput')?.value.trim();
+ if(!value)return toast('Please enter an academic session.');
+ if(!/^(19|20)\d{2}\s*[–-]\s*(19|20)\d{2}$/.test(value))return toast('Use a format such as 2026–2027.');
+ const normalized=value.replace(/\s*[–-]\s*/,'–');
+ db.academicSession=normalized; saveLocal(); localStorage.setItem('tpls_academic_session',normalized);
+ const dash=document.getElementById('dashSession'); if(dash)dash.textContent='Academic Session '+normalized;
+ const preview=document.getElementById('sessionPreview'); if(preview)preview.textContent=normalized;
+ closeModal('sessionModal'); toast('Academic session updated to '+normalized+'.');
+}
 function refreshDashboard(){
  const m=monthNow(), ledger=monthlyLedger(m);
  const students=db.students.filter(s=>s.status!=='Inactive');
@@ -1205,7 +1351,7 @@ function refreshDashboard(){
 
  const nm=db.account?.name||'Admin';
  const dn=document.getElementById('dashAdminName'); if(dn)dn.textContent=nm;
- const ses=document.getElementById('dashSession'); if(ses)ses.textContent='Academic Session '+new Date().getFullYear()+'–'+(new Date().getFullYear()+1);
+ const ses=document.getElementById('dashSession'); if(ses)ses.textContent='Academic Session '+getAcademicSession();
 }
 function bar(label,n,total){let pct=total?Math.round(n/total*100):0;return `<div style="margin:16px 0"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>${label}</span><strong>${n}</strong></div><div style="height:9px;background:#edf1f6;border-radius:10px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${label==='Pending'?'#dc3545':label==='Partial'?'#f2b51d':'#159957'};border-radius:10px"></div></div></div>`}
 function studentName(id){return db.students.find(s=>s.id===id)?.name||'Unknown'}
@@ -1292,7 +1438,7 @@ async function deleteStudent(id){
  }
  db.students=db.students.filter(x=>x.id!==id);saveLocal();renderStudents();refreshDashboard();renderFees();toast('Student permanently deleted.');
 }
-const TEACHER_CLASSES=['Nursery','Prep','Kindergarten','1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'];
+const TEACHER_CLASSES=['Play Group','Nursery','Prep','Kindergarten','1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'];
 const TEACHER_SUBJECTS=['Chemistry','Biology','Physics','English','Urdu','Ethics','Pakistan Studies','Social Studies','Math','Computer Science','General Science','Bible','Drawing','Islamiat','General Knowledge','Physical Education','Arabic','Other'];
 let teacherAssignments=[];
 function initTeacherSelectors(){
@@ -1314,24 +1460,44 @@ function addTeacherAssignment(){
  }
 }
 function renderTeachers(){
- const q=(document.getElementById('teacherSearch').value||'').toLowerCase();
- const arr=db.teachers.filter(t=>`${t.name||''} ${t.cnic||''} ${t.phone||''} ${t.email||''} ${t.designation||''} ${t.staffType||''} ${t.subject||''} ${(t.assignments||[]).map(a=>a.className+' '+a.subject).join(' ')}`.toLowerCase().includes(q));
- document.getElementById('teacherRows').innerHTML=arr.length?arr.map(t=>{
+ const q=(document.getElementById('teacherSearch').value||'').toLowerCase().trim();
+ const arr=db.teachers.filter(t=>`${t.name||''} ${t.id||''} ${t.cnic||''} ${t.phone||''} ${t.email||''} ${t.designation||''} ${t.staffType||''} ${t.subject||''} ${(t.assignments||[]).map(a=>a.className+' '+a.subject).join(' ')}`.toLowerCase().includes(q));
+ const el=document.getElementById('teacherRows');
+ if(!arr.length){el.innerHTML='<div class="empty" style="grid-column:1/-1;padding:34px">No teachers or staff found.</div>';return;}
+ el.innerHTML=arr.map(t=>{
    const a=t.assignments||[];
-   const assignmentText=a.length?a.map(x=>`${esc(x.className)} — ${esc(x.subject)}`).join('<br>'):'—';
-   return `<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${t.photo||'school-logo.jpg'}"><div><strong>${esc(t.name||'')}</strong><div style="font-size:11px;color:var(--muted)">${esc('Teacher')} · ${esc(t.qualification||'')}</div></div></div></td><td><strong>${esc(t.designation||'Teacher')}</strong><div style="font-size:11px;color:var(--muted);margin-top:3px">Teaching access: ${((t.assignments||[]).length)?'Assigned':'Available'}</div></td><td>${esc(t.gender||'')}</td><td>${esc(t.cnic||'')}</td><td>${esc(t.phone||'')}</td><td>${assignmentText}</td><td><span class="badge ${String(t.status||'Active').toLowerCase()}">${esc(t.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="openTeacher('${esc(t.id)}')">Edit</button></td></tr>`;
- }).join(''):`<tr><td colspan="8" class="empty">No teachers or staff found.</td></tr>`;
+   const status=String(t.status||'Active');
+   const photo=t.photo||'school-logo.jpg';
+   const pills=a.length?a.map(x=>`<span class="teacher-assignment-pill">${esc(x.className)} · ${esc(x.subject)}</span>`).join(''):'<span class="hint">No assignments</span>';
+   return `<article class="teacher-card">
+     <div class="teacher-card-top">
+       <img class="teacher-card-avatar" src="${photo}" alt="${esc(t.name||'Teacher')}">
+       <div style="min-width:0;flex:1"><div class="teacher-card-name">${esc(t.name||'Unnamed Teacher')}</div><div class="teacher-card-id">${esc(t.id||'Teacher ID not set')}</div></div>
+     </div>
+     <div class="teacher-card-body">
+       <div class="teacher-card-meta">
+         <div class="teacher-meta-box"><div class="teacher-meta-label">Designation</div><div class="teacher-meta-value">${esc(t.designation||'Teacher')}</div></div>
+         <div class="teacher-meta-box"><div class="teacher-meta-label">Qualification</div><div class="teacher-meta-value">${esc(t.qualification||'Not provided')}</div></div>
+         <div class="teacher-meta-box"><div class="teacher-meta-label">Phone</div><div class="teacher-meta-value">${esc(t.phone||'Not provided')}</div></div>
+         <div class="teacher-meta-box"><div class="teacher-meta-label">Email</div><div class="teacher-meta-value">${esc(t.email||'Not provided')}</div></div>
+       </div>
+       <div class="teacher-card-section"><div class="teacher-card-section-title">Class & Subject Assignments</div><div class="teacher-assignment-pills">${pills}</div></div><div class="teacher-card-section"><div class="teacher-card-section-title">Additional Responsibilities</div><div class="teacher-card-responsibilities">${esc((t.designation||'').split(/\s*\+\s*/).slice(1).join(', ')||'None')}</div></div>
+     </div>
+     <div class="teacher-card-footer"><span class="teacher-status-dot ${status.toLowerCase()==='active'?'active':'inactive'}">● ${esc(status)}</span><button class="btn btn-secondary" onclick="openTeacher('${esc(t.id)}')">View / Edit Profile</button></div>
+   </article>`;
+ }).join('');
 }
 function openTeacher(id=''){
  initTeacherSelectors(); teacherAssignments=[];
  const t=id?db.teachers.find(x=>x.id===id):null;
  currentTeacherPhoto=t?.photo||'';
+ const teacherId=t?.id||uid('TEACHER');
  document.getElementById('teacherEditId').value=t?.id||'';
  document.getElementById('teName').value=t?.name||'';
  document.getElementById('teCnic').value=t?.cnic||'';
  const designationText=t?.designation||'Teacher';
-document.getElementById('teDesignation').value=(designationText.split(/\s*\+\s*/)[0]||'Teacher');
-document.querySelectorAll('.extraRole').forEach(cb=>cb.checked=designationText.toLowerCase().includes(cb.value.toLowerCase()));
+ document.getElementById('teDesignation').value=(designationText.split(/\s*\+\s*/)[0]||'Teacher');
+ document.querySelectorAll('.extraRole').forEach(cb=>cb.checked=designationText.toLowerCase().includes(cb.value.toLowerCase()));
  document.getElementById('teGender').value=t?.gender||'Male';
  document.getElementById('tePhone').value=t?.phone||'';
  document.getElementById('teEmail').value=t?.email||'';
@@ -1340,10 +1506,21 @@ document.querySelectorAll('.extraRole').forEach(cb=>cb.checked=designationText.t
  document.getElementById('teStatus').value=t?.status||'Active';
  document.getElementById('tePhoto').value='';
  document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto||'school-logo.jpg';
+ document.getElementById('teacherCodeDisplay').value=teacherId;
+ document.getElementById('teacherProfileCodePreview').textContent=teacherId;
  teacherAssignments=(t?.assignments||[]).map(a=>({className:a.className,subject:a.subject}));
  document.getElementById('teacherModalTitle').textContent=t?'Edit Teacher':'Add Teacher';
+ updateTeacherProfilePreview();
  renderTeacherAssignmentChips();
  document.getElementById('teacherModal').classList.add('show');
+}
+function updateTeacherProfilePreview(){
+ const name=document.getElementById('teName')?.value.trim()||'New Teacher';
+ const status=document.getElementById('teStatus')?.value||'Active';
+ const n=document.getElementById('teacherProfileNamePreview'); if(n)n.textContent=name;
+ const s=document.getElementById('teacherProfileStatusPreview'); if(s)s.textContent=status;
+ const code=document.getElementById('teacherCodeDisplay')?.value||document.getElementById('teacherEditId')?.value||'Teacher profile';
+ const c=document.getElementById('teacherProfileCodePreview'); if(c)c.textContent=code;
 }
 function toggleTeacherAssignments(){
  const box=document.getElementById('teacherAssignmentsSection');
@@ -1822,7 +1999,14 @@ async function saveSchoolEvent(){
  if(remoteReady&&supabaseClient){
    const q=id?supabaseClient.from('school_events').update(payload).eq('id',id).select().single():supabaseClient.from('school_events').insert(payload).select().single();
    const {data,error}=await q;
-   if(error)return toast('Could not save event: '+error.message);
+   if(error){
+      console.error('School event save error:',error);
+      const msg=String(error.message||error);
+      if(/school_events|schema cache|relation|permission|row-level security|policy/i.test(msg)){
+        return toast('Event not saved. Supabase school_events table/RLS needs to be configured: '+msg);
+      }
+      return toast('Could not save event: '+msg);
+    }
    if(id)schoolEvents=schoolEvents.map(e=>String(e.id)===String(id)?data:e);else schoolEvents.push(data);
  }else{
    const local={...payload,id:id||uuid(),created_at:new Date().toISOString()};
@@ -1998,6 +2182,38 @@ window.addEventListener('error',e=>{console.error('TPLS Admin Portal runtime err
 })();
 </script>
 
+<script>
+async function ensurePDFEngine(){
+  if(window.jspdf?.jsPDF && window.jspdf.jsPDF.API?.autoTable) return true;
+  const load=src=>new Promise((resolve,reject)=>{const x=document.createElement('script');x.src=src;x.onload=resolve;x.onerror=reject;document.head.appendChild(x);});
+  try{
+    if(!window.jspdf?.jsPDF) await load('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+    if(!window.jspdf.jsPDF.API?.autoTable) await load('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
+    return !!(window.jspdf?.jsPDF && window.jspdf.jsPDF.API?.autoTable);
+  }catch(e){return false;}
+}
+async function downloadTeachersPDF(){
+  const ok=await ensurePDFEngine();
+  if(!ok) return toast('PDF engine could not load. Please check your internet connection and try again.');
+  const teachers=db.teachers||[];
+  if(!teachers.length)return toast('No teacher information to download.');
+  try{
+    const doc=new window.jspdf.jsPDF({unit:'mm',format:'a4',orientation:'landscape'});
+    const logo=document.querySelector('.school-mark,.brand img,.receipt-logo');
+    if(logo?.src){try{doc.addImage(logo.src,'JPEG',12,10,18,18)}catch(e){}}
+    doc.setTextColor(18,61,115);doc.setFont('helvetica','bold');doc.setFontSize(16);doc.text('THE PROGRESS OF LIFE SCHOOL',34,16);
+    doc.setFontSize(8);doc.setTextColor(82,98,122);doc.text('Chak 8JB, Mehboob Town, Daewoo Road, Faisalabad',34,22);
+    doc.setFontSize(12);doc.setTextColor(18,61,115);doc.text('Teacher & Staff Information',12,36);
+    const rows=teachers.map(t=>{
+      const assignments=(t.assignments||[]).map(a=>`${a.className} — ${a.subject}`).join('\n')||'None';
+      const extras=(t.designation||'').split(/\s*\+\s*/).slice(1).join(', ')||'None';
+      return [t.id||'',t.name||'',t.cnic||'',t.gender||'',t.phone||'',t.email||'',t.qualification||'',t.designation||'Teacher',t.joining||'',t.status||'Active',extras,assignments];
+    });
+    doc.autoTable({startY:40,head:[['Teacher ID','Name','CNIC','Gender','Phone','Email','Qualification','Designation','Joining Date','Status','Additional Responsibilities','Class & Subject Assignments']],body:rows,theme:'grid',styles:{font:'helvetica',fontSize:6.5,cellPadding:2,overflow:'linebreak',valign:'middle'},headStyles:{fillColor:[18,61,115],textColor:255,fontStyle:'bold',fontSize:6.5},alternateRowStyles:{fillColor:[245,248,252]},margin:{left:10,right:10},didDrawPage:data=>{doc.setFontSize(6);doc.setTextColor(100,116,133);doc.text(`Page ${data.pageNumber}`,doc.internal.pageSize.getWidth()-10,doc.internal.pageSize.getHeight()-6,{align:'right'});}});
+    doc.save('TPLS_Teacher_Information.pdf');
+  }catch(e){console.error(e);toast('PDF could not be generated: '+(e.message||e));}
+}
+</script>
 <!-- Professional report download enhancement (isolated from login and portal logic) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
