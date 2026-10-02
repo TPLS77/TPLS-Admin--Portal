@@ -804,9 +804,11 @@ input:focus,select:focus,textarea:focus{
 </div>
 
 <div id="student-results" class="page">
-  <div class="section-title"><div><h3>Student Results</h3><div style="color:var(--muted);font-size:13px">See every student's subject-wise results, missing subjects, total percentage and total grade.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" onclick="printStudentResults()">🖨 Print Results</button><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh Results</button></div></div>
+  <div class="section-title"><div><h3>Student Results</h3><div style="color:var(--muted);font-size:13px">See every student's subject-wise results, missing subjects, total percentage and total grade.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" onclick="printStudentResults()">🖨 Print Results</button><button class="btn btn-secondary" onclick="downloadCompleteStudentResults()">⬇ Download All Subjects</button><button class="btn btn-secondary" onclick="refreshTeacherData()">↻ Refresh Results</button></div></div>
   <div class="card result-controls"><div class="toolbar">
-    <select id="resultClassFilter" onchange="renderStudentResults()"><option value="">All Classes</option></select>
+    <select id="resultClassFilter" onchange="updateResultSubjectFilter();renderStudentResults()"><option value="">All Classes</option></select>
+    <select id="resultSectionFilter" onchange="updateResultSubjectFilter();renderStudentResults()"><option value="">All Sections</option></select>
+    <select id="resultSubjectFilter" onchange="renderStudentResults()"><option value="">All Subjects</option></select>
     <select id="resultTermFilter" onchange="renderStudentResults()"><option value="">All Terms</option></select>
     <select id="resultAssessmentFilter" onchange="renderStudentResults()"><option value="">Latest / All Assessments</option></select>
     <input id="resultSearch" placeholder="Search student..." oninput="renderStudentResults()">
@@ -819,7 +821,7 @@ input:focus,select:focus,textarea:focus{
     <div class="card stat"><div><p>Subjects Expected</p><h3 id="resultSubjectCount">0</h3><p>Based on teacher assignments</p></div><div class="icon">📚</div></div>
   </div>
   <div class="card" style="margin-top:18px"><div class="table-wrap"><table class="table result-table"><thead id="resultHead"></thead><tbody id="resultRows"></tbody></table></div></div>
-  <div class="hint" style="margin-top:10px">A student's total is calculated from the combined obtained marks ÷ combined total marks for the uploaded subjects. If any assigned subject is missing, the overall result is marked <strong>Waiting</strong>.</div>
+  <div class="hint" style="margin-top:10px">Each subject shows <strong>Obtained / Total</strong> marks. A zero mark is displayed as <strong>Free</strong>. Position is calculated within each selected class/stream from the highest complete-result percentage. A student's total is calculated from the combined obtained marks ÷ combined total marks for the uploaded subjects. If any assigned subject is missing, the overall result is marked <strong>Waiting</strong>.</div>
 </div>
 
 <div id="teacher-notifications" class="page">
@@ -880,7 +882,7 @@ input:focus,select:focus,textarea:focus{
 <div class="field"><label>Student Name *</label><input id="stName"></div><div class="field"><label>Student ID *</label><input id="stId" placeholder="PLS-2026-001"></div>
 <div class="field"><label>Father / Guardian Name</label><input id="stGuardian"></div><div class="field"><label>B-Form No.</label><input id="stBForm" placeholder="XXXXX-XXXXXXX-X" maxlength="15"></div>
 <div class="field"><label>Parent Phone</label><input id="stPhone"></div>
-<div class="field"><label>Class *</label><input id="stClass" placeholder="5th"></div><div class="field"><label>Section</label><input id="stSection" placeholder="A"></div>
+<div class="field"><label>Class *</label><select id="stClass" onchange="syncStudentSectionOptions()"><option value="">Select class</option><option>Play Group</option><option>Nursery</option><option>Prep</option><option>Kindergarten</option><option>1st</option><option>2nd</option><option>3rd</option><option>4th</option><option>5th</option><option>6th</option><option>7th</option><option>8th</option><option>9th</option><option>10th</option></select></div><div class="field"><label id="stSectionLabel">Section</label><select id="stSection"><option value="">No section</option></select></div>
 <div class="field"><label>Date of Birth</label><input id="stDob" type="date"></div><div class="field"><label>Gender</label><select id="stGender"><option>Male</option><option>Female</option></select></div>
 <div class="field"><label>Monthly Fee (PKR) *</label><input id="stFee" type="number" min="0" value="2000"></div><div class="field"><label>Admission Date</label><input id="stAdmission" type="date"></div>
 <div class="field fullrow"><label>Address</label><textarea id="stAddress" rows="2"></textarea></div>
@@ -962,7 +964,18 @@ input:focus,select:focus,textarea:focus{
       </div>
 
       <div class="teacher-section">
-        <div class="teacher-section-title"><span>📚</span> Teaching Assignments</div>
+        <div class="teacher-section" style="margin-bottom:16px">
+        <div class="teacher-section-title"><span>🎓</span> Class Incharge</div>
+        <div class="teacher-profile-note" style="margin-bottom:12px">Set which class/section this teacher is Class Incharge of. This controls only the Results module; all normal teaching assignments and students remain visible.</div>
+        <div class="teacher-assignment-editor">
+          <div class="field"><label>Incharge Class</label><select id="teInchargeClass" onchange="updateInchargeSectionOptions()"></select></div>
+          <div class="field"><label>Section</label><select id="teInchargeSection"><option value="">Whole class</option></select></div>
+          <button type="button" class="btn btn-secondary" onclick="addTeacherIncharge()">+ Add Incharge Class</button>
+        </div>
+        <div id="teacherInchargeChips" class="chips" style="margin-top:12px"></div>
+      </div>
+
+      <div class="teacher-section-title"><span>📚</span> Teaching Assignments</div>
         <div class="teacher-profile-note" style="margin-bottom:12px">Assign every class and subject this teacher teaches. These assignments control the teacher's teaching access and result/lesson-plan options.</div>
         <div class="teacher-assignment-editor">
           <div class="field"><label>Class</label><select id="teClass"></select></div>
@@ -1414,15 +1427,16 @@ function renderStudents(){
  populateClassFilter();
  const q=(document.getElementById('studentSearch').value||'').toLowerCase().trim(),cl=currentClass||document.getElementById('studentClass').value,st=(document.getElementById('studentStatus')?.value||'').toLowerCase();
  const arr=db.students.filter(s=>(!q||`${s.name} ${s.id} ${s.phone}`.toLowerCase().includes(q))&&(!cl||s.class===cl)&&(!st||(st==='free'?Number(s.fee||0)<=0:String(s.status||'Active').toLowerCase()===st))).sort((a,b)=>{const r=classRank(a.class)-classRank(b.class);return r||String(a.name||'').localeCompare(String(b.name||''),undefined,{sensitivity:'base'});});
- document.getElementById('studentRows').innerHTML=arr.length?arr.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${s.photo||'school-logo.jpg'}"><strong>${esc(s.name)}</strong></div></td><td>${esc(s.id)}</td><td>${esc(s.class)} ${s.section?'/ '+esc(s.section):''}</td><td>${esc(s.guardian)}</td><td>${esc(s.phone)}</td><td>${money(s.fee)}</td><td><span class="badge ${String(s.status||'Active').toLowerCase()==='inactive'?'pending':'active-badge'}">${esc(s.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="editStudent('${s.id}')">Edit</button> ${String(s.status||'Active').toLowerCase()==='inactive'?`<button class="btn btn-secondary" onclick="reactivateStudent('${s.id}')">Reactivate</button>`:`<button class="btn btn-primary" onclick="deactivateStudent('${s.id}')">Deactivate</button>`} <button class="btn btn-danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">No students found.</td></tr>`;
+ document.getElementById('studentRows').innerHTML=arr.length?arr.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${s.photo||'school-logo.jpg'}"><strong>${esc(s.name)}</strong></div></td><td>${esc(s.id)}</td><td>${esc(s.class)} ${s.section?'/ '+esc(s.section):''}</td><td>${esc(s.guardian)}</td><td>${esc(s.phone)}</td><td>${Number(s.fee||0)===0?'Free':money(s.fee)}</td><td><span class="badge ${String(s.status||'Active').toLowerCase()==='inactive'?'pending':'active-badge'}">${esc(s.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="editStudent('${s.id}')">Edit</button> ${String(s.status||'Active').toLowerCase()==='inactive'?`<button class="btn btn-secondary" onclick="reactivateStudent('${s.id}')">Reactivate</button>`:`<button class="btn btn-primary" onclick="deactivateStudent('${s.id}')">Deactivate</button>`} <button class="btn btn-danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">No students found.</td></tr>`;
 }
-function openStudent(s=null){currentPhoto=s?.photo||'';document.getElementById('studentModalTitle').textContent=s?'Edit Student':'Add Student';document.getElementById('studentEditId').value=s?.id||'';['Name','Id','Guardian','BForm','Phone','Class','Section','Dob','Gender','Fee','Admission','Address'].forEach(k=>{let el=document.getElementById('st'+k);if(el)el.value=s?({Name:s.name,Id:s.id,Guardian:s.guardian,BForm:s.bForm,Phone:s.phone,Class:s.class,Section:s.section,Dob:s.dob,Gender:s.gender,Fee:s.fee,Admission:s.admission,Address:s.address}[k]??''):k==='Fee'?'2000':''});document.getElementById('photoPreview').src=currentPhoto||'school-logo.jpg';document.getElementById('stPhoto').value='';document.getElementById('studentModal').classList.add('show')}
+function openStudent(s=null){currentPhoto=s?.photo||'';document.getElementById('studentModalTitle').textContent=s?'Edit Student':'Add Student';document.getElementById('studentEditId').value=s?.id||'';['Name','Id','Guardian','BForm','Phone','Class','Section','Dob','Gender','Fee','Admission','Address'].forEach(k=>{let el=document.getElementById('st'+k);if(el)el.value=s?({Name:s.name,Id:s.id,Guardian:s.guardian,BForm:s.bForm,Phone:s.phone,Class:s.class,Section:s.section,Dob:s.dob,Gender:s.gender,Fee:s.fee,Admission:s.admission,Address:s.address}[k]??''):k==='Fee'?'2000':''});syncStudentSectionOptions();if(s?.section)document.getElementById('stSection').value=s.section;document.getElementById('photoPreview').src=currentPhoto||'school-logo.jpg';document.getElementById('stPhoto').value='';document.getElementById('studentModal').classList.add('show')}
 function previewPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{currentPhoto=r.result;document.getElementById('photoPreview').src=currentPhoto};r.readAsDataURL(f)}
 async function saveStudent(){
   const id=document.getElementById('studentEditId').value||document.getElementById('stId').value.trim();
   const existing=db.students.find(x=>x.id===id);
   const s={id,name:document.getElementById('stName').value.trim(),guardian:document.getElementById('stGuardian').value.trim(),bForm:document.getElementById('stBForm').value.trim(),phone:document.getElementById('stPhone').value.trim(),class:document.getElementById('stClass').value.trim(),section:document.getElementById('stSection').value.trim(),dob:document.getElementById('stDob').value,gender:document.getElementById('stGender').value,fee:Number(document.getElementById('stFee').value||0),admission:document.getElementById('stAdmission').value,address:document.getElementById('stAddress').value.trim(),photo:currentPhoto,status:existing?.status||'Active',_remoteId:existing?._remoteId};
   if(!s.name||!s.id||!s.class)return toast('Name, Student ID and Class are required.');
+  if((s.class==='9th'||s.class==='10th')&&!['Arts','Science'].includes(s.section))return toast(`Please select Arts or Science for ${s.class}.`);
   if(!remoteReady)return toast('Please sign in to save students to the cloud.');
   try{
     if(s.photo && String(s.photo).startsWith('data:image/')){
@@ -1466,12 +1480,43 @@ async function deleteStudent(id){
  }
  db.students=db.students.filter(x=>x.id!==id);saveLocal();renderStudents();refreshDashboard();renderFees();toast('Student permanently deleted.');
 }
-const TEACHER_CLASSES=['Play Group','Nursery','Prep','Kindergarten','1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'];
-const TEACHER_SUBJECTS=['Chemistry','Biology','Physics','English','Urdu','Ethics','Pakistan Studies','Social Studies','Math','Computer Science','General Science','Bible','Drawing','Islamiat','General Knowledge','Physical Education','Arabic','Other'];
-let teacherAssignments=[];
+const TEACHER_CLASSES=['Play Group','Nursery','Prep','Kindergarten','1st','2nd','3rd','4th','5th','6th','7th','8th','9th','9th (Arts)','9th (Science)','10th','10th (Arts)','10th (Science)'];
+const TEACHER_SUBJECTS=['Ethic','General Science','Education','Economics','P.S','Chemistry','Biology','Physics','English','Urdu','Ethics','Pakistan Studies','Social Studies','Math','Computer Science','Bible','Drawing','Islamiat','General Knowledge','Physical Education','Arabic','Other'];
+let teacherAssignments=[]; let teacherInchargeClasses=[];
+function syncStudentSectionOptions(){
+ const c=document.getElementById('stClass'), s=document.getElementById('stSection'), l=document.getElementById('stSectionLabel'); if(!c||!s)return;
+ const old=s.value;
+ const senior=c.value==='9th'||c.value==='10th';
+ if(senior){
+   s.innerHTML='<option value="">Select Arts or Science</option><option value="Arts">Arts</option><option value="Science">Science</option>';
+   s.required=true;
+   if(l)l.textContent='Stream / Section *';
+ }else{
+   s.innerHTML='<option value="">No section</option><option value="A">A</option><option value="B">B</option><option value="C">C</option>';
+   s.required=false;
+   if(l)l.textContent='Section';
+ }
+ if([...s.options].some(o=>o.value===old))s.value=old;
+}
+function updateInchargeSectionOptions(){
+ const c=document.getElementById('teInchargeClass'), s=document.getElementById('teInchargeSection'); if(!c||!s)return;
+ if(c.value==='9th'||c.value==='10th') s.innerHTML='<option value="">Select section</option><option value="Arts">Arts</option><option value="Science">Science</option>';
+ else s.innerHTML='<option value="">Whole class</option>';
+}
+function renderTeacherInchargeChips(){
+ const el=document.getElementById('teacherInchargeChips'); if(!el)return;
+ el.innerHTML=teacherInchargeClasses.length?teacherInchargeClasses.map((a,i)=>`<span class="chip">${esc(a.className)}${a.section?' — '+esc(a.section):''} <button type="button" title="Remove" onclick="teacherInchargeClasses.splice(${i},1);renderTeacherInchargeChips()">×</button></span>`).join(''):'<span class="hint">No Class Incharge assigned.</span>';
+}
+function addTeacherIncharge(){
+ const c=document.getElementById('teInchargeClass')?.value||'', sec=document.getElementById('teInchargeSection')?.value||'';
+ if(!c)return;
+ if((c==='9th'||c==='10th')&&!sec)return toast('Please select Arts or Science for 9th/10th Class Incharge.');
+ if(!teacherInchargeClasses.some(a=>a.className===c&&a.section===sec)){teacherInchargeClasses.push({className:c,section:sec});renderTeacherInchargeChips();}
+}
+function inchargeScopeName(a){return a.section?`${a.className} (${a.section})`:a.className}
 function initTeacherSelectors(){
  const c=document.getElementById('teClass'), s=document.getElementById('teSubjectSelect');
- if(c)c.innerHTML=TEACHER_CLASSES.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+ if(c)c.innerHTML=TEACHER_CLASSES.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join(''); const ic=document.getElementById('teInchargeClass'); if(ic){ic.innerHTML=['Play Group','Nursery','Prep','Kindergarten','1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'].map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join(''); updateInchargeSectionOptions();}
  if(s)s.innerHTML=TEACHER_SUBJECTS.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
 }
 function renderTeacherAssignmentChips(){
@@ -1516,7 +1561,7 @@ function renderTeachers(){
  }).join('');
 }
 function openTeacher(id=''){
- initTeacherSelectors(); teacherAssignments=[];
+ initTeacherSelectors(); initResultFilters(); teacherAssignments=[]; teacherInchargeClasses=[];
  const t=id?db.teachers.find(x=>x.id===id):null;
  currentTeacherPhoto=t?.photo||'';
  const teacherId=t?.id||uid('TEACHER');
@@ -1536,7 +1581,9 @@ function openTeacher(id=''){
  document.getElementById('teacherPhotoPreview').src=currentTeacherPhoto||'school-logo.jpg';
  document.getElementById('teacherCodeDisplay').value=teacherId;
  document.getElementById('teacherProfileCodePreview').textContent=teacherId;
- teacherAssignments=(t?.assignments||[]).map(a=>({className:a.className,subject:a.subject}));
+ teacherAssignments=(t?.assignments||[]).filter(a=>a.subject!=='__CLASS_INCHARGE__').map(a=>({className:a.className,subject:a.subject}));
+ teacherInchargeClasses=(t?.assignments||[]).filter(a=>a.subject==='__CLASS_INCHARGE__').map(a=>{const m=String(a.className||'').match(/^(9th|10th|) \((Arts|Science)\)$/); return m?{className:m[1],section:m[2]}:{className:a.className,section:''};});
+ renderTeacherInchargeChips();
  document.getElementById('teacherModalTitle').textContent=t?'Edit Teacher':'Add Teacher';
  updateTeacherProfilePreview();
  renderTeacherAssignmentChips();
@@ -1582,9 +1629,12 @@ async function saveTeacher(){
       console.error('Teacher assignment cleanup error:',del.error);
       return toast('Teacher saved, but assignments could not be updated: '+del.error.message);
     }
-    const assignments=t.assignments.map(x=>({teacher_id:t._remoteId,class_name:x.className,subject:x.subject}));
-    if(assignments.length){
-      const ins=await supabaseClient.from('teacher_assignments').insert(assignments);
+    const assignments=t.assignments.map(x=>({teacher_id:t._remoteId,class_name:x.className,subject:x.subject})).concat(teacherInchargeClasses.map(x=>({teacher_id:t._remoteId,class_name:inchargeScopeName(x),subject:'__CLASS_INCHARGE__'})));
+    // De-duplicate assignments before inserting. The database has a unique constraint
+    // on teacher_id + class_name + subject, so repeated class/subject entries must be removed.
+    const uniqueAssignments=[...new Map(assignments.map(a=>[`${a.teacher_id}|${a.class_name}|${a.subject}`,a])).values()];
+    if(uniqueAssignments.length){
+      const ins=await supabaseClient.from('teacher_assignments').insert(uniqueAssignments);
       if(ins.error){
         console.error('Teacher assignment insert error:',ins.error);
         return toast('Teacher saved, but class/subject assignments failed: '+ins.error.message);
@@ -1857,6 +1907,7 @@ function teacherByRemoteId(id){return db.teachers.find(t=>t._remoteId===id)||nul
 function studentByRemoteId(id){return db.students.find(s=>s._remoteId===id)||null}
 function typeLabel(t){return t==='leave'?'📝 Leave':t==='suggestion'?'💡 Suggestion':t==='result'?'📊 Result':'📚 Lesson Plan'}
 function gradeFromPercentage(p){p=Number(p);if(!Number.isFinite(p))return '—';if(p>=90)return 'A+';if(p>=80)return 'A';if(p>=70)return 'B';if(p>=60)return 'C';if(p>=50)return 'D';return 'F'}
+function resultMarkDisplay(v){const n=Number(v);return Number.isFinite(n)&&n===0?'Free':(v===null||v===undefined||v===''?'—':String(v));}
 function formatDate(v){return v?String(v).slice(0,10):'—'}
 function teacherName(id){return teacherByRemoteId(id)?.name||'Teacher'}
 function resultRows(){return teacherInboxData.results||[]}
@@ -1962,45 +2013,154 @@ function renderLessonPlans(){
  fillUniqueSelect('lessonClassFilter',teacherInboxData.plans.map(r=>r.class_name),'All Classes');fillUniqueSelect('lessonSubjectFilter',teacherInboxData.plans.map(r=>r.subject),'All Subjects');
  document.getElementById('lessonRows').innerHTML=rows.length?rows.map(r=>`<tr><td>${esc(teacherName(r.teacher_id))}</td><td>${esc(r.class_name)}</td><td>${esc(r.subject)}</td><td style="max-width:300px;white-space:normal"><strong>${esc(r.topic)}</strong></td><td>${esc(formatDate(r.lesson_date))}</td><td><button class="btn btn-secondary" onclick="openTeacherSubmission('lesson','${r.id}')">View Plan</button><button class="btn btn-danger" onclick="deleteTeacherSubmission('teacher_lesson_plans','${r.id}','lesson plan')">🗑 Delete</button></td></tr>`).join(''):`<tr><td colspan="6" class="empty">No lesson plans found.</td></tr>`;
 }
+function normalizeResultScope(className,section){
+ const raw=String(className||'').trim();
+ const sec=String(section||'').trim();
+ let m=raw.match(/^(9th|10th)\s*\((Arts|Science)\)$/i);
+ if(m)return `${m[1]} (${m[2][0].toUpperCase()+m[2].slice(1).toLowerCase()})`;
+ m=raw.match(/^(9th|10th)\s+(Arts|Science)$/i);
+ if(m)return `${m[1]} (${m[2][0].toUpperCase()+m[2].slice(1).toLowerCase()})`;
+ if((raw==='9th'||raw==='10th')&&(sec==='Arts'||sec==='Science'))return `${raw} (${sec})`;
+ return raw;
+}
 function prepareResultFilters(){
- const results=teacherInboxData.results;const students=db.students;
- fillUniqueSelect('resultClassFilter',[...new Set(students.map(s=>s.class).filter(Boolean))],'All Classes');
+ const results=teacherInboxData.results;const students=db.students.filter(s=>s.status!=='Inactive');
+ const scopes=students.map(s=>resultScopeLabel(s)).filter(Boolean);
+ fillUniqueSelect('resultClassFilter',scopes,'All Classes');
  fillUniqueSelect('resultTermFilter',results.map(r=>r.term),'All Terms');
  fillUniqueSelect('resultAssessmentFilter',results.map(r=>r.assessment_name),'Latest / All Assessments');
+ updateResultSubjectFilter();
 }
+function resultScopeForStudent(s){return resultScopeLabel(s);}
+function resultScopeLabel(s){return normalizeResultScope(s?.class,s?.section);}
 function expectedSubjectsForClass(className){
- const set=new Set();db.teachers.forEach(t=>(t.assignments||[]).forEach(a=>{if(a.className===className&&a.subject)set.add(a.subject)}));
- if(!set.size)teacherInboxData.results.filter(r=>r.class_name===className).forEach(r=>set.add(r.subject));
+ const scope=normalizeResultScope(className,'');
+ const fixed={
+   '9th (Arts)':['Ethic','General Science','Education','Economics','Math','Urdu','English'],
+   '10th (Arts)':['P.S','General Science','Education','Economics','Math','Urdu','English'],
+   '9th (Science)':['Ethic','Chemistry','Physics','Biology','Math','Urdu','English'],
+   '10th (Science)':['P.S','Chemistry','Physics','Biology','Math','Urdu','English']
+ };
+ if(fixed[scope])return fixed[scope];
+ const set=new Set();
+ db.teachers.forEach(t=>(t.assignments||[]).forEach(a=>{
+   if(a.subject==='__CLASS_INCHARGE__')return;
+   const ascope=normalizeResultScope(a.className,'');
+   if(ascope===scope)set.add(a.subject);
+ }));
+ teacherInboxData.results.filter(r=>normalizeResultScope(r.class_name,r.section||'')===scope).forEach(r=>{if(r.subject)set.add(r.subject)});
  return [...set].sort((a,b)=>a.localeCompare(b));
 }
-function latestResultFor(studentId,subject,className,term,assessment){
- let rows=teacherInboxData.results.filter(r=>r.student_id===studentId&&r.class_name===className&&r.subject===subject);
+function resultSubjectAliases(subject){
+ const map={
+   'Ethic':['Ethic','Ethics'],
+   'P.S':['P.S','Pakistan Studies'],
+   'General Science':['General Science'],
+   'Education':['Education'],
+   'Economics':['Economics'],
+   'Math':['Math','Mathematics'],
+   'Urdu':['Urdu'],
+   'English':['English'],
+   'Chemistry':['Chemistry'],
+   'Physics':['Physics'],
+   'Biology':['Biology']
+ };
+ return map[subject]||[subject];
+}
+function latestResultFor(student,subject,className,term,assessment){
+ const ids=new Set([student?._remoteId,student?.id].filter(v=>v!==undefined&&v!==null).map(String));
+ const scope=normalizeResultScope(className,student?.section||'');
+ const base=scope.match(/^(9th|10th) \((Arts|Science)\)$/)?.[1]||scope;
+ const aliases=new Set(resultSubjectAliases(subject).map(x=>String(x).toLowerCase()));
+ let rows=teacherInboxData.results.filter(r=>ids.has(String(r.student_id))&&aliases.has(String(r.subject||'').toLowerCase()));
+ rows=rows.filter(r=>{const rs=normalizeResultScope(r.class_name,r.section||'');return rs===scope||rs===base;});
  if(term)rows=rows.filter(r=>String(r.term||'')===term);if(assessment)rows=rows.filter(r=>String(r.assessment_name||'')===assessment);
  rows.sort((a,b)=>String(b.created_at||b.exam_date||'').localeCompare(String(a.created_at||a.exam_date||'')));
  return rows[0]||null;
 }
+function resultScopeLabel(s){const c=String(s?.class||'');const sec=String(s?.section||'').trim();return (c==='9th'||c==='10th')&&sec?`${c} (${sec})`:c}
+function parseResultScope(v){const m=String(v||'').match(/^(9th|10th) \((Arts|Science)\)$/);return m?{className:m[1],section:m[2]}:{className:String(v||''),section:''}}
+function initResultFilters(){
+ const cf=document.getElementById('resultClassFilter'), sf=document.getElementById('resultSectionFilter');
+ const scopes=[...new Set(db.students.filter(s=>s.status!=='Inactive').map(resultScopeLabel).filter(Boolean))]; ['9th (Arts)','9th (Science)','10th (Arts)','10th (Science)'].forEach(x=>{if(!scopes.includes(x))scopes.push(x);}); scopes.sort();
+ cf.innerHTML='<option value="">All Classes</option>'+scopes.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+ sf.innerHTML='<option value="">All Sections</option><option value="Arts">Arts</option><option value="Science">Science</option>';
+ updateResultSubjectFilter();
+}
+function updateResultSubjectFilter(){
+ const cf=document.getElementById('resultClassFilter')?.value||'', sf=document.getElementById('resultSectionFilter')?.value||'';
+ let scopes=[];
+ if(cf) scopes=[cf];
+ else scopes=[...new Set(db.students.filter(s=>s.status!=='Inactive').filter(s=>!sf||String(s.section||'').toLowerCase()===sf.toLowerCase()).map(resultScopeLabel).filter(Boolean))];
+ const sub=[...new Set(scopes.flatMap(c=>expectedSubjectsForClass(c)))].sort();
+ const su=document.getElementById('resultSubjectFilter'); if(su)su.innerHTML='<option value="">All Subjects</option>'+sub.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+}
+function resultPositionLabel(n){return n===1?'1st':n===2?'2nd':n===3?'3rd':n?`${n}th`:'—'}
+function calculateResultPositions(students,term,assessment){
+ const groups={};
+ students.forEach(s=>{
+   const scope=resultScopeLabel(s), subjects=expectedSubjectsForClass(scope);
+   let obtained=0,total=0,uploaded=0;
+   subjects.forEach(subject=>{const r=latestResultFor(s,subject,scope,term,assessment);if(r){uploaded++;obtained+=Number(r.obtained_marks||0);total+=Number(r.total_marks||0);}});
+   if(subjects.length&&uploaded===subjects.length&&total>0){
+     const pct=obtained/total*100;
+     (groups[scope]||(groups[scope]=[])).push({id:String(s.id),pct,obtained,total});
+   }
+ });
+ const positions={};
+ Object.values(groups).forEach(arr=>{arr.sort((a,b)=>b.pct-a.pct||b.obtained-a.obtained||a.id.localeCompare(b.id));arr.forEach((x,i)=>{positions[x.id]=resultPositionLabel(i+1);});});
+ return positions;
+}
 function renderStudentResults(){
- const cf=document.getElementById('resultClassFilter')?.value||'';const term=document.getElementById('resultTermFilter')?.value||'';const assessment=document.getElementById('resultAssessmentFilter')?.value||'';const q=(document.getElementById('resultSearch')?.value||'').toLowerCase();
- let students=db.students.filter(s=>s.status!=='Inactive'&&(!cf||s.class===cf)&&(!q||[s.name,s.id,s.class,s.guardian].join(' ').toLowerCase().includes(q)));
- const classes=[...new Set(students.map(s=>s.class).filter(Boolean))];const allSubjects=[...new Set(classes.flatMap(c=>expectedSubjectsForClass(c)))].sort((a,b)=>a.localeCompare(b));
- const visibleSubjects=allSubjects.length?allSubjects:[];
+ const selectedScope=document.getElementById('resultClassFilter')?.value||'', sec=document.getElementById('resultSectionFilter')?.value||'', subjectFilter=document.getElementById('resultSubjectFilter')?.value||'', term=document.getElementById('resultTermFilter')?.value||'', assessment=document.getElementById('resultAssessmentFilter')?.value||'', q=(document.getElementById('resultSearch')?.value||'').toLowerCase();
+ let students=db.students.filter(s=>s.status!=='Inactive'&&(!selectedScope||resultScopeLabel(s)===selectedScope)&&(!sec||String(s.section||'').toLowerCase()===sec.toLowerCase())&&(!q||[s.name,s.id,s.class,s.section,s.guardian].join(' ').toLowerCase().includes(q)));
+ const scopes=[...new Set(students.map(resultScopeLabel).filter(Boolean))];
+ let visibleSubjects=[...new Set(scopes.flatMap(c=>expectedSubjectsForClass(c)))];
+ if(subjectFilter)visibleSubjects=visibleSubjects.filter(x=>x===subjectFilter);
  document.getElementById('resultSubjectCount').textContent=visibleSubjects.length;
  document.getElementById('resultStudentCount').textContent=students.length;
- const head=document.getElementById('resultHead');head.innerHTML=`<tr><th>Student</th><th>Class</th>${visibleSubjects.map(x=>`<th>${esc(x)}</th>`).join('')}<th>Total Result</th></tr>`;
+ const positions=calculateResultPositions(students,term,assessment);
+ const head=document.getElementById('resultHead');head.innerHTML=`<tr><th>Position</th><th>Student</th><th>Class</th>${visibleSubjects.map(x=>`<th>${esc(x)}</th>`).join('')}<th>Total Result</th></tr>`;
  let complete=0,waiting=0;
  const rows=students.map(s=>{
-   const subjects=expectedSubjectsForClass(s.class);let uploaded=0,totalObt=0,totalMarks=0;const cells=visibleSubjects.map(subject=>{
+   const scope=resultScopeLabel(s), subjects=expectedSubjectsForClass(scope), checkSubjects=subjectFilter?[subjectFilter]:subjects;
+   let uploaded=0,totalObt=0,totalMarks=0;
+   const cells=visibleSubjects.map(subject=>{
      if(!subjects.includes(subject))return `<td class="result-cell"><span class="hint">—</span></td>`;
-     const r=latestResultFor(s._remoteId,subject,s.class,term,assessment);if(!r)return `<td class="result-cell waiting"><strong>Waiting</strong><div class="gr">Not uploaded</div></td>`;
+     const r=latestResultFor(s,subject,scope,term,assessment); if(!r)return `<td class="result-cell waiting"><strong>Waiting</strong><div class="gr">Not uploaded</div></td>`;
      uploaded++;totalObt+=Number(r.obtained_marks||0);totalMarks+=Number(r.total_marks||0);const pct=Number(r.percentage??(Number(r.obtained_marks||0)/Number(r.total_marks||1)*100));const grade=r.grade||gradeFromPercentage(pct);
-     return `<td class="result-cell"><div class="pct">${pct.toFixed(1)}%</div><div class="gr">Grade ${esc(grade)}</div><div class="gr">${esc(teacherName(r.teacher_id))}</div></td>`;
+     return `<td class="result-cell"><div class="marks"><strong>${esc(resultMarkDisplay(r.obtained_marks))} / ${esc(resultMarkDisplay(r.total_marks))}</strong></div><div class="pct">${pct.toFixed(1)}%</div><div class="gr">Grade ${esc(grade)}</div><div class="gr">${esc(teacherName(r.teacher_id))}</div></td>`;
    });
-   const expected=subjects.length;const isComplete=expected>0&&uploaded>=expected;if(isComplete)complete++;else waiting++;
-   const totalPct=totalMarks?totalObt/totalMarks*100:0;const totalCell=isComplete?`<td class="result-total"><div class="pct">${totalPct.toFixed(1)}%</div><div class="gr">Grade ${gradeFromPercentage(totalPct)}</div><div class="result-complete">Complete</div></td>`:`<td class="result-total"><div class="result-pending">Waiting</div><div class="gr">${uploaded}/${expected} subjects uploaded</div>${totalMarks?`<div class="gr">Current: ${totalPct.toFixed(1)}%</div>`:''}</td>`;
-   return `<tr><td><div class="result-name">${esc(s.name)}</div><div class="hint">${esc(s.id)}</div></td><td>${esc(s.class)}${s.section?' / '+esc(s.section):''}</td>${cells.join('')}${totalCell}</tr>`;
+   const expected=checkSubjects.length,isComplete=expected>0&&uploaded>=expected;if(isComplete)complete++;else waiting++;
+   const totalPct=totalMarks?totalObt/totalMarks*100:0;
+   const totalCell=isComplete?`<td class="result-total"><div class="marks"><strong>${esc(resultMarkDisplay(totalObt))} / ${esc(resultMarkDisplay(totalMarks))}</strong></div><div class="pct">${totalPct.toFixed(1)}%</div><div class="gr">Grade ${gradeFromPercentage(totalPct)}</div><div class="result-complete">Complete</div></td>`:`<td class="result-total"><div class="result-pending">Waiting</div><div class="gr">${uploaded}/${expected} subjects uploaded</div>${totalMarks?`<div class="gr">Current: ${totalPct.toFixed(1)}%</div>`:''}</td>`;
+   return `<tr><td><strong>${esc(positions[String(s.id)]||'—')}</strong></td><td><div class="result-name">${esc(s.name)}</div><div class="hint">${esc(s.id)}</div></td><td>${esc(s.class)}${s.section?' / '+esc(s.section):''}</td>${cells.join('')}${totalCell}</tr>`;
  }).join('');
- document.getElementById('resultRows').innerHTML=rows||`<tr><td colspan="${visibleSubjects.length+3}" class="empty">No students found for the selected filters.</td></tr>`;
+ document.getElementById('resultRows').innerHTML=rows||`<tr><td colspan="${visibleSubjects.length+4}" class="empty">No students found for the selected filters.</td></tr>`;
  document.getElementById('resultCompleteCount').textContent=complete;document.getElementById('resultWaitingCount').textContent=waiting;
+}
+function downloadCompleteStudentResults(){
+ const selectedScope=document.getElementById('resultClassFilter')?.value||'', sec=document.getElementById('resultSectionFilter')?.value||'', term=document.getElementById('resultTermFilter')?.value||'', assessment=document.getElementById('resultAssessmentFilter')?.value||'', q=(document.getElementById('resultSearch')?.value||'').toLowerCase();
+ const students=db.students.filter(s=>s.status!=='Inactive'&&(!selectedScope||resultScopeLabel(s)===selectedScope)&&(!sec||String(s.section||'').toLowerCase()===sec.toLowerCase())&&(!q||[s.name,s.id,s.class,s.section,s.guardian].join(' ').toLowerCase().includes(q)));
+ const scopes=[...new Set(students.map(resultScopeLabel).filter(Boolean))];
+ const subjects=[...new Set(scopes.flatMap(c=>expectedSubjectsForClass(c)))].sort();
+ if(!students.length||!subjects.length)return toast('No student result data is available to download.');
+ const headers=['Student ID','Student Name','Class','Section',...subjects.flatMap(x=>[`${x} Obtained`,`${x} Total`]),'Overall Obtained','Overall Total','Overall %','Grade'];
+ const rows=students.map(s=>{
+   const scope=resultScopeLabel(s), expected=expectedSubjectsForClass(scope);
+   let totalObt=0,totalMarks=0;
+   const vals=[];
+   subjects.forEach(subject=>{
+     const r=expected.includes(subject)?latestResultFor(s,subject,scope,term,assessment):null;
+     if(r){totalObt+=Number(r.obtained_marks||0);totalMarks+=Number(r.total_marks||0);}
+     vals.push(r?resultMarkDisplay(r.obtained_marks):'Waiting',r?resultMarkDisplay(r.total_marks):'Waiting');
+   });
+   const pct=totalMarks?totalObt/totalMarks*100:0;
+   return [s.id,s.name,s.class,s.section||'',...vals,resultMarkDisplay(totalObt),resultMarkDisplay(totalMarks),totalMarks?pct.toFixed(1)+'%':'Waiting',totalMarks?gradeFromPercentage(pct):'Waiting'];
+ });
+ const csv=[headers,...rows].map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n');
+ const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\ufeff'+encodeURIComponent(csv);a.download='TPLS_Student_Results_All_Subjects.csv';document.body.appendChild(a);a.click();a.remove();
+ toast('Complete student results downloaded with all subjects.');
 }
 function renderNotifications(){
  const active=db.teachers.filter(t=>t.status!=='Inactive'&&t._remoteId).length;document.getElementById('notificationTeacherCount').textContent=active;document.getElementById('notificationSentCount').textContent=teacherInboxData.notifications.length;
