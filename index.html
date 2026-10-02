@@ -573,6 +573,10 @@ input:focus,select:focus,textarea:focus{
 @media(max-width:480px){.teacher-info-grid{grid-template-columns:1fr}}
 
 </style>
+
+<style id="student-roll-photo-fixes">
+.student-roll-badge{display:inline-flex;align-items:center;justify-content:center;min-width:30px;padding:4px 7px;border-radius:8px;background:#eef5ff;color:#164b8a;font-weight:800;font-size:11px}
+</style>
 </head>
 <body>
 <div id="loginScreen" class="login">
@@ -734,8 +738,8 @@ input:focus,select:focus,textarea:focus{
 </div>
 
 <div id="students" class="page">
-  <div class="section-title"><div><h3>Students</h3><div style="color:var(--muted);font-size:13px">Save complete student information and photos.</div></div><button class="btn btn-primary" onclick="openStudent()">+ Add Student</button></div>
-  <div class="card"><div class="toolbar"><input id="studentSearch" placeholder="Search name, ID or phone..." oninput="renderStudents()"><select id="studentClass" onchange="renderStudents()"><option value="">All Classes</option></select><select id="studentStatus" onchange="renderStudents()"><option value="">All Status</option><option value="Active">Active</option><option value="Inactive">Inactive</option><option value="Free">Free Students</option></select><div class="spacer"></div><button class="btn btn-secondary" onclick="exportStudents()">Export CSV</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Student</th><th>ID</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Monthly Fee</th><th>Status</th><th></th></tr></thead><tbody id="studentRows"></tbody></table></div></div>
+  <div class="section-title"><div><h3>Students</h3><div style="color:var(--muted);font-size:13px">Save complete student information, roll numbers and photos.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-secondary" onclick="assignStudentRollNumbers()">🔢 Auto Assign Roll Numbers</button><button class="btn btn-primary" onclick="openStudent()">+ Add Student</button></div></div>
+  <div class="card"><div class="toolbar"><input id="studentSearch" placeholder="Search name, ID, roll number or phone..." oninput="renderStudents()"><select id="studentClass" onchange="renderStudents()"><option value="">All Classes</option></select><select id="studentStatus" onchange="renderStudents()"><option value="">All Status</option><option value="Active">Active</option><option value="Inactive">Inactive</option><option value="Free">Free Students</option></select><div class="spacer"></div><button class="btn btn-secondary" onclick="exportStudents()">Export CSV</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Student</th><th>ID</th><th>Roll No.</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Monthly Fee</th><th>Status</th><th></th></tr></thead><tbody id="studentRows"></tbody></table></div></div>
 </div>
 
 <div id="teachers" class="page">
@@ -882,6 +886,7 @@ input:focus,select:focus,textarea:focus{
 <div class="field"><label>Student Name *</label><input id="stName"></div><div class="field"><label>Student ID *</label><input id="stId" placeholder="PLS-2026-001"></div>
 <div class="field"><label>Father / Guardian Name</label><input id="stGuardian"></div><div class="field"><label>B-Form No.</label><input id="stBForm" placeholder="XXXXX-XXXXXXX-X" maxlength="15"></div>
 <div class="field"><label>Parent Phone</label><input id="stPhone"></div>
+<div class="field"><label>Roll Number</label><input id="stRollNumber" inputmode="numeric" placeholder="e.g. 1"></div>
 <div class="field"><label>Class *</label><select id="stClass" onchange="syncStudentSectionOptions()"><option value="">Select class</option><option>Play Group</option><option>Nursery</option><option>Prep</option><option>Kindergarten</option><option>1st</option><option>2nd</option><option>3rd</option><option>4th</option><option>5th</option><option>6th</option><option>7th</option><option>8th</option><option>9th</option><option>10th</option></select></div><div class="field"><label id="stSectionLabel">Section</label><select id="stSection"><option value="">No section</option></select></div>
 <div class="field"><label>Date of Birth</label><input id="stDob" type="date"></div><div class="field"><label>Gender</label><select id="stGender"><option>Male</option><option>Female</option></select></div>
 <div class="field"><label>Monthly Fee (PKR) *</label><input id="stFee" type="number" min="0" value="2000"></div><div class="field"><label>Admission Date</label><input id="stAdmission" type="date"></div>
@@ -1088,6 +1093,46 @@ async function signedImage(bucket,path){
  const signed=await supabaseClient.storage.from(bucket).createSignedUrl(path,60*60*24);
  return signed.error?'':signed.data.signedUrl;
 }
+
+async function resolveStudentPhoto(student){
+  if(!student || !supabaseClient) return '';
+  const buckets=['student-photos','student-photo'];
+  const paths=[];
+  const raw=String(student.photoPath||'').trim();
+  if(raw) paths.push(raw);
+  const base=raw.split('/').pop();
+  if(base && student.id) paths.push(`${student.id}/${base}`);
+  if(student.id) paths.push(`${student.id}/`);
+  const uniquePaths=[...new Set(paths.filter(Boolean))];
+
+  // First use the exact stored path.
+  for(const bucket of buckets){
+    for(const path of uniquePaths){
+      if(path.endsWith('/')) continue;
+      const signed=await supabaseClient.storage.from(bucket).createSignedUrl(path,60*60*24);
+      if(!signed.error && signed.data?.signedUrl) return signed.data.signedUrl;
+    }
+  }
+
+  // Then look inside the student's folder. This supports existing uploads
+  // where photo_path is empty or where the old portal stored only the file.
+  for(const bucket of buckets){
+    for(const folder of [student.id, `Student ID/${student.id}`, `student/${student.id}`]){
+      const listed=await supabaseClient.storage.from(bucket).list(folder,{limit:100,sortBy:{column:'name',order:'asc'}});
+      if(listed.error || !Array.isArray(listed.data)) continue;
+      const image=listed.data.find(x=>/\.(jpe?g|png|webp|gif)$/i.test(String(x.name||'')));
+      if(image?.name){
+        const path=`${folder}/${image.name}`.replace(/^\/+/,'');
+        const signed=await supabaseClient.storage.from(bucket).createSignedUrl(path,60*60*24);
+        if(!signed.error && signed.data?.signedUrl){
+          student.photoPath=path;
+          return signed.data.signedUrl;
+        }
+      }
+    }
+  }
+  return '';
+}
 async function saveDB(){
   // Fast local-first save. Do not re-upload/re-upsert every student, teacher and fee
   // whenever one small record changes.
@@ -1099,7 +1144,15 @@ async function loadRemote(){
 
   // Fetch only the columns the portal actually uses. Keep the five requests parallel.
   const [ss,tt,aa,ff,ee]=await Promise.all([
-    supabaseClient.from('students').select('id,student_code,name,gender,guardian_name,b_form_no,phone,class_name,section,date_of_birth,monthly_fee,admission_date,address,photo_path,status').order('created_at'),
+    (async()=>{
+      let r=await supabaseClient.from('students').select('id,student_code,name,gender,guardian_name,b_form_no,phone,class_name,section,roll_number,date_of_birth,monthly_fee,admission_date,address,photo_path,status').order('created_at');
+      // Backward compatibility: if the optional Roll Number column has not yet
+      // been created in Supabase, still allow the administrator to log in.
+      if(r.error && /roll_number|column .* does not exist|schema cache/i.test(String(r.error.message||r.error.details||''))){
+        r=await supabaseClient.from('students').select('id,student_code,name,gender,guardian_name,b_form_no,phone,class_name,section,date_of_birth,monthly_fee,admission_date,address,photo_path,status').order('created_at');
+      }
+      return r;
+    })(),
     supabaseClient.from('teachers').select('id,teacher_code,name,staff_type,designation,cnic_number,gender,phone,email,qualification,joining_date,photo_path,status').order('created_at'),
     supabaseClient.from('teacher_assignments').select('teacher_id,class_name,subject'),
     supabaseClient.from('fee_payments').select('id,receipt_number,student_id,fee_month,paid_amount,discount,payment_date,notes').order('payment_date'),
@@ -1113,16 +1166,16 @@ async function loadRemote(){
   db.students=(ss.data||[]).map(s=>({
     id:s.student_code,_remoteId:s.id,name:s.name,gender:s.gender||'Male',
     guardian:s.guardian_name||'',bForm:s.b_form_no||'',phone:s.phone||'',
-    class:s.class_name||'',section:s.section||'',dob:s.date_of_birth||'',
+    class:s.class_name||'',section:s.section||'',rollNumber:s.roll_number==null?'':String(s.roll_number),dob:s.date_of_birth||'',
     fee:Number(s.monthly_fee||0),admission:s.admission_date||'',address:s.address||'',
     photo:'',photoPath:s.photo_path||'',status:s.status||'Active'
   }));
 
-  // Sign image URLs in parallel instead of one-by-one.
+  // Resolve existing student photos even when the bucket/path was created by an
+  // earlier version of the portal. We try both common bucket names and the
+  // student's ID folder before falling back to the stored photo_path.
   await Promise.all(db.students.map(async s=>{
-    if(!s.photoPath) return;
-    const signed=await supabaseClient.storage.from('student-photos').createSignedUrl(s.photoPath,60*60);
-    if(!signed.error) s.photo=signed.data.signedUrl;
+    s.photo=await resolveStudentPhoto(s);
   }));
 
   db.teachers=(tt.data||[]).map(t=>({
@@ -1182,8 +1235,8 @@ async function setSalaryStatus(status){
  closeModal('salaryModal'); await loadStaffSalaries(); toast(`Salary submission ${status.toLowerCase()}.`);
 }
 function salaryPdfRows(rows){return rows.map(r=>[r.teachers?.name||'Unknown',r.teachers?.teacher_code||'',String(r.salary_month||'').slice(0,7),`PKR ${Number(r.amount||0).toLocaleString()}`,r.paid_by||'',r.bank_name||'',r.status||'Pending',String(r.submitted_at||'').slice(0,10)]);}
-function downloadSalaryPDF(id){const r=staffSalaryRows.find(x=>x.id===id);if(!r)return toast('Salary record not found.');if(!window.jspdf?.jsPDF)return toast('PDF library is not available. Refresh the page and try again.');try{const {jsPDF}=window.jspdf,doc=new jsPDF({unit:'mm',format:'a4'}),logo=document.querySelector('.school-mark')?.src||document.querySelector('.brand img')?.src;doc.setFillColor(244,248,253);doc.roundedRect(10,8,190,30,3,3,'F');if(logo)try{doc.addImage(logo,'JPEG',14,12,22,22);}catch(e){console.warn('Salary PDF logo could not be embedded',e);}doc.setFont('helvetica','bold');doc.setFontSize(15);doc.text('THE PROGRESS OF LIFE SCHOOL',41,16);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text('Chak 8JB, Mehboob Town, Daewoo Road, Faisalabad',41,23);doc.setFont('helvetica','bold');doc.text('PROGRESS FOR CHRISTIAN CHILDREN',41,28);doc.setFontSize(12);doc.text('Staff Salary Submission',14,50);const rows=[['Staff Name',r.teachers?.name||''],['Registration No.',r.teachers?.teacher_code||''],['Salary Month',String(r.salary_month||'').slice(0,7)],['Amount Received',`PKR ${Number(r.amount||0).toLocaleString()}`],['Paid By',r.paid_by||''],['Bank',r.bank_name||''],['Status',r.status||'Pending'],['Submitted',String(r.submitted_at||'').slice(0,10)]];let y=62;rows.forEach(([k,v])=>{doc.setFont('helvetica','bold');doc.text(k,20,y);doc.setFont('helvetica','normal');doc.text(String(v||'—'),70,y);y+=10;});if(r.notes){doc.setFont('helvetica','bold');doc.text('Notes',20,y+4);doc.setFont('helvetica','normal');doc.text(doc.splitTextToSize(String(r.notes),120),70,y+4);}doc.setFontSize(8);doc.text('Generated from the TPLS Admin Portal',20,285);doc.save(`salary-${String(r.teachers?.teacher_code||r.id).replace(/[^a-z0-9_-]/gi,'_')}-${String(r.salary_month||'').slice(0,7)}.pdf`);}catch(err){console.error(err);toast('Salary PDF could not be generated: '+(err.message||err));}}
-function downloadStaffSalariesPDF(){const q=(document.getElementById('salarySearch')?.value||'').toLowerCase(),st=(document.getElementById('salaryStatusFilter')?.value||'').toLowerCase();const rows=staffSalaryRows.filter(r=>(!q||`${r.teachers?.name||''} ${r.teachers?.teacher_code||''} ${r.bank_name||''} ${r.paid_by||''}`.toLowerCase().includes(q))&&(!st||String(r.status||'Pending').toLowerCase()===st));if(!rows.length)return toast('No salary records to export.');if(!window.jspdf?.jsPDF)return toast('PDF library is not available. Refresh the page and try again.');try{const {jsPDF}=window.jspdf,doc=new jsPDF('l','mm','a4'),logo=document.querySelector('.school-mark')?.src||document.querySelector('.brand img')?.src;doc.setFillColor(244,248,253);doc.roundedRect(10,8,277,25,3,3,'F');if(logo)try{doc.addImage(logo,'JPEG',14,10,20,20);}catch(e){console.warn('Salary report logo could not be embedded',e);}doc.setFont('helvetica','bold');doc.setFontSize(15);doc.text('THE PROGRESS OF LIFE SCHOOL',40,16);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text('Staff Salary Report • Chak 8JB, Mehboob Town, Daewoo Road, Faisalabad',40,23);if(typeof doc.autoTable!=='function')return toast('PDF table engine is not available. Please refresh the page.');doc.autoTable({head:[['Staff','Registration','Month','Amount','Paid By','Bank','Status','Submitted']],body:salaryPdfRows(rows),startY:39,styles:{fontSize:8,cellPadding:2},headStyles:{fontStyle:'bold'},margin:{left:14,right:14},didDrawPage:()=>{doc.setFontSize(7);doc.text('THE PROGRESS OF LIFE SCHOOL • Official school record',14,202);}});doc.save('staff-salary-report.pdf');}catch(err){console.error(err);toast('Salary report PDF could not be generated: '+(err.message||err));}}
+function downloadSalaryPDF(id){const r=staffSalaryRows.find(x=>x.id===id);if(!r)return toast('Salary record not found.');if(!window.jspdf?.jsPDF)return toast('PDF library is not available. Refresh the page and try again.');try{const {jsPDF}=window.jspdf,doc=new jsPDF({unit:'mm',format:'a4'}),logo=document.querySelector('.school-mark')?.src||document.querySelector('.brand img')?.src;doc.setFillColor(244,248,253);doc.roundedRect(10,8,190,30,3,3,'F');if(logo)try{doc.addImage(logo,'JPEG',14,12,22,22);}catch(e){console.warn('Salary PDF logo could not be embedded',e);}doc.setFont('helvetica','bold');doc.setFontSize(15);doc.text('THE PROGRESS OF LIFE SCHOOL',41,16);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text('8JB Mehboob Town, Daewoo Road, Faisalabad',41,23);doc.setFont('helvetica','bold');doc.text('PROGRESS FOR CHRISTIAN CHILDREN',41,28);doc.setFontSize(12);doc.text('Staff Salary Submission',14,50);const rows=[['Staff Name',r.teachers?.name||''],['Registration No.',r.teachers?.teacher_code||''],['Salary Month',String(r.salary_month||'').slice(0,7)],['Amount Received',`PKR ${Number(r.amount||0).toLocaleString()}`],['Paid By',r.paid_by||''],['Bank',r.bank_name||''],['Status',r.status||'Pending'],['Submitted',String(r.submitted_at||'').slice(0,10)]];let y=62;rows.forEach(([k,v])=>{doc.setFont('helvetica','bold');doc.text(k,20,y);doc.setFont('helvetica','normal');doc.text(String(v||'—'),70,y);y+=10;});if(r.notes){doc.setFont('helvetica','bold');doc.text('Notes',20,y+4);doc.setFont('helvetica','normal');doc.text(doc.splitTextToSize(String(r.notes),120),70,y+4);}doc.setFontSize(8);doc.text('Generated from the TPLS Admin Portal',20,285);doc.save(`salary-${String(r.teachers?.teacher_code||r.id).replace(/[^a-z0-9_-]/gi,'_')}-${String(r.salary_month||'').slice(0,7)}.pdf`);}catch(err){console.error(err);toast('Salary PDF could not be generated: '+(err.message||err));}}
+function downloadStaffSalariesPDF(){const q=(document.getElementById('salarySearch')?.value||'').toLowerCase(),st=(document.getElementById('salaryStatusFilter')?.value||'').toLowerCase();const rows=staffSalaryRows.filter(r=>(!q||`${r.teachers?.name||''} ${r.teachers?.teacher_code||''} ${r.bank_name||''} ${r.paid_by||''}`.toLowerCase().includes(q))&&(!st||String(r.status||'Pending').toLowerCase()===st));if(!rows.length)return toast('No salary records to export.');if(!window.jspdf?.jsPDF)return toast('PDF library is not available. Refresh the page and try again.');try{const {jsPDF}=window.jspdf,doc=new jsPDF('l','mm','a4'),logo=document.querySelector('.school-mark')?.src||document.querySelector('.brand img')?.src;doc.setFillColor(244,248,253);doc.roundedRect(10,8,277,25,3,3,'F');if(logo)try{doc.addImage(logo,'JPEG',14,10,20,20);}catch(e){console.warn('Salary report logo could not be embedded',e);}doc.setFont('helvetica','bold');doc.setFontSize(15);doc.text('THE PROGRESS OF LIFE SCHOOL',40,16);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text('Staff Salary Report • 8JB Mehboob Town, Daewoo Road, Faisalabad',40,23);if(typeof doc.autoTable!=='function')return toast('PDF table engine is not available. Please refresh the page.');doc.autoTable({head:[['Staff','Registration','Month','Amount','Paid By','Bank','Status','Submitted']],body:salaryPdfRows(rows),startY:39,styles:{fontSize:8,cellPadding:2},headStyles:{fontStyle:'bold'},margin:{left:14,right:14},didDrawPage:()=>{doc.setFontSize(7);doc.text('THE PROGRESS OF LIFE SCHOOL • Official school record',14,202);}});doc.save('staff-salary-report.pdf');}catch(err){console.error(err);toast('Salary report PDF could not be generated: '+(err.message||err));}}
 function exportStaffSalaries(){
  const rows=staffSalaryRows.map(r=>({Staff:r.teachers?.name||'',Registration:r.teachers?.teacher_code||'',Month:String(r.salary_month||'').slice(0,7),Amount:r.amount,PaidBy:r.paid_by||'',Bank:r.bank_name||'',Status:r.status||'Pending',Submitted:r.submitted_at||''}));
  if(!rows.length)return toast('No salary records to export.');
@@ -1234,15 +1287,18 @@ async function login(){
  const {data,error}=await supabaseClient.auth.signInWithPassword({email:e,password:p});
  if(error)return toast(error.message);
  remoteReady=true;db.account={name:data.user.user_metadata?.name||'School Administrator',email:data.user.email};saveLocal();
+ // Authentication must not be blocked by a non-critical cloud-table error.
+ // Open the portal first, then try to hydrate remote data.
+ openApp();
+ toast('Signed in successfully.');
  try{
    await loadRemote();
-   openApp();
-   toast('Signed in successfully.');
+   refreshAll();
  }catch(err){
    console.error('TPLS cloud load failed after sign-in:',err);
    const msg=String(err?.message||err||'Cloud data could not be loaded.');
    const box=document.getElementById('adminLoginMessage');
-   if(box) box.innerHTML=`Cloud connection needs attention: ${esc(msg)}<div class="cloud-retry">Your login was accepted by Supabase, but the database request was rejected. This can happen during a Supabase JWT/API clock synchronization problem. Please wait a few seconds and retry.<br><button class="btn btn-secondary" onclick="retryCloudAfterLogin()">Retry Cloud Connection</button></div>`;
+   if(box) box.innerHTML=`Login successful, but some cloud data could not be loaded: ${esc(msg)}<div class="cloud-retry">The portal is open. You can retry the cloud connection below.<br><button class="btn btn-secondary" onclick="retryCloudAfterLogin()">Retry Cloud Connection</button></div>`;
  }
 }
 async function retryCloudAfterLogin(){
@@ -1426,15 +1482,15 @@ function renderStudents(){
  const currentClass=document.getElementById('studentClass')?.value||'';
  populateClassFilter();
  const q=(document.getElementById('studentSearch').value||'').toLowerCase().trim(),cl=currentClass||document.getElementById('studentClass').value,st=(document.getElementById('studentStatus')?.value||'').toLowerCase();
- const arr=db.students.filter(s=>(!q||`${s.name} ${s.id} ${s.phone}`.toLowerCase().includes(q))&&(!cl||s.class===cl)&&(!st||(st==='free'?Number(s.fee||0)<=0:String(s.status||'Active').toLowerCase()===st))).sort((a,b)=>{const r=classRank(a.class)-classRank(b.class);return r||String(a.name||'').localeCompare(String(b.name||''),undefined,{sensitivity:'base'});});
- document.getElementById('studentRows').innerHTML=arr.length?arr.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${s.photo||'school-logo.jpg'}"><strong>${esc(s.name)}</strong></div></td><td>${esc(s.id)}</td><td>${esc(s.class)} ${s.section?'/ '+esc(s.section):''}</td><td>${esc(s.guardian)}</td><td>${esc(s.phone)}</td><td>${Number(s.fee||0)===0?'Free':money(s.fee)}</td><td><span class="badge ${String(s.status||'Active').toLowerCase()==='inactive'?'pending':'active-badge'}">${esc(s.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="editStudent('${s.id}')">Edit</button> ${String(s.status||'Active').toLowerCase()==='inactive'?`<button class="btn btn-secondary" onclick="reactivateStudent('${s.id}')">Reactivate</button>`:`<button class="btn btn-primary" onclick="deactivateStudent('${s.id}')">Deactivate</button>`} <button class="btn btn-danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">No students found.</td></tr>`;
+ const arr=db.students.filter(s=>(!q||`${s.name} ${s.id} ${s.rollNumber||''} ${s.phone}`.toLowerCase().includes(q))&&(!cl||s.class===cl)&&(!st||(st==='free'?Number(s.fee||0)<=0:String(s.status||'Active').toLowerCase()===st))).sort((a,b)=>{const r=classRank(a.class)-classRank(b.class);return r||String(a.rollNumber||'999999').localeCompare(String(b.rollNumber||'999999'),undefined,{numeric:true})||String(a.name||'').localeCompare(String(b.name||''),undefined,{sensitivity:'base'});});
+ document.getElementById('studentRows').innerHTML=arr.length?arr.map(s=>`<tr><td><div style="display:flex;gap:9px;align-items:center"><img class="photo" src="${s.photo||'school-logo.jpg'}" onerror="this.onerror=null;this.src='school-logo.jpg'"><strong>${esc(s.name)}</strong></div></td><td>${esc(s.id)}</td><td>${esc(s.rollNumber||'—')}</td><td>${esc(s.class)} ${s.section?'/ '+esc(s.section):''}</td><td>${esc(s.guardian)}</td><td>${esc(s.phone)}</td><td>${Number(s.fee||0)===0?'Free':money(s.fee)}</td><td><span class="badge ${String(s.status||'Active').toLowerCase()==='inactive'?'pending':'active-badge'}">${esc(s.status||'Active')}</span></td><td><button class="btn btn-secondary" onclick="editStudent('${s.id}')">Edit</button> ${String(s.status||'Active').toLowerCase()==='inactive'?`<button class="btn btn-secondary" onclick="reactivateStudent('${s.id}')">Reactivate</button>`:`<button class="btn btn-primary" onclick="deactivateStudent('${s.id}')">Deactivate</button>`} <button class="btn btn-danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`).join(''):`<tr><td colspan="9" class="empty">No students found.</td></tr>`;
 }
-function openStudent(s=null){currentPhoto=s?.photo||'';document.getElementById('studentModalTitle').textContent=s?'Edit Student':'Add Student';document.getElementById('studentEditId').value=s?.id||'';['Name','Id','Guardian','BForm','Phone','Class','Section','Dob','Gender','Fee','Admission','Address'].forEach(k=>{let el=document.getElementById('st'+k);if(el)el.value=s?({Name:s.name,Id:s.id,Guardian:s.guardian,BForm:s.bForm,Phone:s.phone,Class:s.class,Section:s.section,Dob:s.dob,Gender:s.gender,Fee:s.fee,Admission:s.admission,Address:s.address}[k]??''):k==='Fee'?'2000':''});syncStudentSectionOptions();if(s?.section)document.getElementById('stSection').value=s.section;document.getElementById('photoPreview').src=currentPhoto||'school-logo.jpg';document.getElementById('stPhoto').value='';document.getElementById('studentModal').classList.add('show')}
+function openStudent(s=null){currentPhoto=s?.photo||'';document.getElementById('studentModalTitle').textContent=s?'Edit Student':'Add Student';document.getElementById('studentEditId').value=s?.id||'';['Name','Id','Guardian','BForm','Phone','RollNumber','Class','Section','Dob','Gender','Fee','Admission','Address'].forEach(k=>{let el=document.getElementById('st'+k);if(el)el.value=s?({Name:s.name,Id:s.id,Guardian:s.guardian,BForm:s.bForm,Phone:s.phone,RollNumber:s.rollNumber||'',Class:s.class,Section:s.section,Dob:s.dob,Gender:s.gender,Fee:s.fee,Admission:s.admission,Address:s.address}[k]??''):k==='Fee'?'2000':''});syncStudentSectionOptions();if(s?.section)document.getElementById('stSection').value=s.section;document.getElementById('photoPreview').src=currentPhoto||'school-logo.jpg';document.getElementById('stPhoto').value='';document.getElementById('studentModal').classList.add('show')}
 function previewPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{currentPhoto=r.result;document.getElementById('photoPreview').src=currentPhoto};r.readAsDataURL(f)}
 async function saveStudent(){
   const id=document.getElementById('studentEditId').value||document.getElementById('stId').value.trim();
   const existing=db.students.find(x=>x.id===id);
-  const s={id,name:document.getElementById('stName').value.trim(),guardian:document.getElementById('stGuardian').value.trim(),bForm:document.getElementById('stBForm').value.trim(),phone:document.getElementById('stPhone').value.trim(),class:document.getElementById('stClass').value.trim(),section:document.getElementById('stSection').value.trim(),dob:document.getElementById('stDob').value,gender:document.getElementById('stGender').value,fee:Number(document.getElementById('stFee').value||0),admission:document.getElementById('stAdmission').value,address:document.getElementById('stAddress').value.trim(),photo:currentPhoto,status:existing?.status||'Active',_remoteId:existing?._remoteId};
+  const s={id,name:document.getElementById('stName').value.trim(),guardian:document.getElementById('stGuardian').value.trim(),bForm:document.getElementById('stBForm').value.trim(),phone:document.getElementById('stPhone').value.trim(),rollNumber:document.getElementById('stRollNumber').value.trim(),class:document.getElementById('stClass').value.trim(),section:document.getElementById('stSection').value.trim(),dob:document.getElementById('stDob').value,gender:document.getElementById('stGender').value,fee:Number(document.getElementById('stFee').value||0),admission:document.getElementById('stAdmission').value,address:document.getElementById('stAddress').value.trim(),photo:currentPhoto,status:existing?.status||'Active',_remoteId:existing?._remoteId};
   if(!s.name||!s.id||!s.class)return toast('Name, Student ID and Class are required.');
   if((s.class==='9th'||s.class==='10th')&&!['Arts','Science'].includes(s.section))return toast(`Please select Arts or Science for ${s.class}.`);
   if(!remoteReady)return toast('Please sign in to save students to the cloud.');
@@ -1443,7 +1499,7 @@ async function saveStudent(){
       s.photoPath=await uploadImageData('student-photos',s.id,s.photo);
       s.photo=await signedImage('student-photos',s.photoPath);
     }
-    const row={student_code:s.id,name:s.name,gender:s.gender||null,class_name:s.class||null,section:s.section||null,date_of_birth:s.dob||null,admission_date:s.admission||null,address:s.address||null,guardian_name:s.guardian||null,b_form_no:s.bForm||null,phone:s.phone||null,monthly_fee:Number(s.fee||0),photo_path:s.photoPath||null,status:s.status||'Active'};
+    const row={student_code:s.id,name:s.name,gender:s.gender||null,class_name:s.class||null,section:s.section||null,roll_number:s.rollNumber||null,date_of_birth:s.dob||null,admission_date:s.admission||null,address:s.address||null,guardian_name:s.guardian||null,b_form_no:s.bForm||null,phone:s.phone||null,monthly_fee:Number(s.fee||0),photo_path:s.photoPath||existing?.photoPath||null,status:s.status||'Active'};
     const {data,error}=await supabaseClient.from('students').upsert(row,{onConflict:'student_code'}).select('id,student_code').single();
     if(error){
       console.error('Student save error:',error);
@@ -1458,6 +1514,29 @@ async function saveStudent(){
     console.error('Student save error:',err);
     toast('Student could not be saved: '+(err?.message||'Unknown error'));
   }
+}
+async function assignStudentRollNumbers(){
+  const active=db.students.filter(s=>String(s.status||'Active').toLowerCase()!=='inactive');
+  if(!active.length)return toast('No active students found.');
+  if(!confirm('Assign sequential roll numbers starting from 1 for each class and section? Existing roll numbers will be replaced.'))return;
+  const groups={};
+  active.forEach(s=>{
+    const key=`${s.class||'Unassigned'}|${s.section||''}`;
+    (groups[key]||(groups[key]=[])).push(s);
+  });
+  Object.values(groups).forEach(list=>{
+    list.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),undefined,{sensitivity:'base'}));
+    list.forEach((s,i)=>s.rollNumber=String(i+1));
+  });
+  if(remoteReady && supabaseClient){
+    for(const s of active){
+      if(!s._remoteId)continue;
+      const {error}=await supabaseClient.from('students').update({roll_number:s.rollNumber}).eq('id',s._remoteId);
+      if(error){console.error('Roll number update error:',error);return toast('Roll numbers could not be saved: '+error.message);}
+    }
+  }
+  saveLocal();renderStudents();refreshDashboard();
+  toast(`Roll numbers assigned to ${active.length} students.`);
 }
 function editStudent(id){openStudent(db.students.find(s=>s.id===id))}
 async function setStudentStatus(id,status){
@@ -1768,7 +1847,7 @@ function showReceipt(f){
  const paymentMethod=f.paymentMethod||'Cash';
  const status=Number(f.remaining||0)<=0?'✓ PAID':'PARTIAL';
  document.getElementById('receiptPrintArea').innerHTML=`<div class="receipt">
- <div class="receipt-head"><img class="receipt-logo" src="school-logo.jpg" alt="School Logo"><div class="receipt-school"><h2>THE PROGRESS OF LIFE SCHOOL</h2><p>Chak 8JB, Mehboob Town, Daewoo Road, Faisalabad</p><p>Phone: +92 300 0619792 | Email: theprogressoflifeschool@gmail.com</p></div><div class="receipt-no"><strong>SCHOOL FEE RECEIPT</strong><br>Receipt No.: ${esc(f.receipt)}<br>Date: ${esc(f.date)}</div></div>
+ <div class="receipt-head"><img class="receipt-logo" src="school-logo.jpg" alt="School Logo"><div class="receipt-school"><h2>THE PROGRESS OF LIFE SCHOOL</h2><p>8JB Mehboob Town, Daewoo Road, Faisalabad</p><p>Phone: +92 300 0619792 | Email: theprogressoflifeschool@gmail.com</p></div><div class="receipt-no"><strong>SCHOOL FEE RECEIPT</strong><br>Receipt No.: ${esc(f.receipt)}<br>Date: ${esc(f.date)}</div></div>
  <div style="text-align:center;font-weight:800;color:var(--navy);font-size:11px;margin-top:3mm">FEE RECEIPT</div>
  <div class="receipt-student"><img class="photo-lg" src="${s.photo||'school-logo.jpg'}" alt="Student"><div><strong>STUDENT INFORMATION</strong><br><b>Student Name:</b> ${esc(s.name||'')}<br><b>Admission No.:</b> ${esc(s.admission||s.id||'')}<br><b>Father/Guardian Name:</b> ${esc(s.guardian||'')}<br><b>Class:</b> ${esc(s.class||'')} &nbsp; <b>Section:</b> ${esc(s.section||'')}</div></div>
  <div style="font-weight:800;color:var(--navy);margin-bottom:1mm">FEE DETAILS</div>
@@ -1825,7 +1904,7 @@ function printFinancialReport(){
  if(!w){toast('Please allow pop-ups to print the report');return;}
  const logo=document.querySelector('.school-mark')?.src||document.querySelector('.brand img')?.src||'school-logo.jpg';
  w.document.write(`<html><head><title>Financial Report - ${esc(label)}</title><style>body{font-family:Arial,sans-serif;padding:28px;color:#182335}h1{margin-bottom:4px}.meta{color:#667085;margin-bottom:18px}.cards{display:flex;gap:12px;margin:18px 0}.card{border:1px solid #ddd;padding:12px;flex:1}.num{font-size:20px;font-weight:bold}table{width:100%;border-collapse:collapse;margin:16px 0}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#f3f5f8}.right{text-align:right}.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chip{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:20px;background:#eef4ff;color:#164b8a;font-size:12px}.chip button{border:0;background:none;cursor:pointer;font-weight:bold}.hint{font-size:12px;color:var(--muted)}
-</style></head><body><div style="display:flex;align-items:center;gap:14px;border-bottom:2px solid #123d73;padding-bottom:10px"><img src="${logo}" style="width:55px;height:55px;object-fit:contain"><div><h1 style="margin:0">The Progress of Life School</h1><div>Chak 8JB, Mehboob Town, Daewoo Road, Faisalabad</div></div></div><div class="meta">Financial Report: ${esc(label)}</div><div class="cards"><div class="card">Fees Collected<div class="num">${money(collected)}</div></div><div class="card">Expenses<div class="num">${money(expenses)}</div></div><div class="card">Net Balance<div class="num">${money(collected-expenses)}</div></div></div><h2>Fee Payments</h2><table><tr><th>Receipt</th><th>Student</th><th>Month</th><th>Date</th><th>Paid</th></tr>${rows||'<tr><td colspan="5">No payments</td></tr>'}</table><h2>Expenses</h2><table><tr><th>Date</th><th>Description</th><th>Amount</th></tr>${expRows||'<tr><td colspan="3">No expenses</td></tr>'}</table><script>window.onload=()=>window.print()<\/script></body></html>`);
+</style></head><body><div style="display:flex;align-items:center;gap:14px;border-bottom:2px solid #123d73;padding-bottom:10px"><img src="${logo}" style="width:55px;height:55px;object-fit:contain"><div><h1 style="margin:0">The Progress of Life School</h1><div>8JB Mehboob Town, Daewoo Road, Faisalabad</div></div></div><div class="meta">Financial Report: ${esc(label)}</div><div class="cards"><div class="card">Fees Collected<div class="num">${money(collected)}</div></div><div class="card">Expenses<div class="num">${money(expenses)}</div></div><div class="card">Net Balance<div class="num">${money(collected-expenses)}</div></div></div><h2>Fee Payments</h2><table><tr><th>Receipt</th><th>Student</th><th>Month</th><th>Date</th><th>Paid</th></tr>${rows||'<tr><td colspan="5">No payments</td></tr>'}</table><h2>Expenses</h2><table><tr><th>Date</th><th>Description</th><th>Amount</th></tr>${expRows||'<tr><td colspan="3">No expenses</td></tr>'}</table><script>window.onload=()=>window.print()<\/script></body></html>`);
  w.document.close();
 }
 
@@ -1833,9 +1912,10 @@ function openPrintWindow(title,body,landscape){
  const w=window.open('','_blank');
  if(!w){toast('Please allow pop-ups to print');return;}
  const logo=document.querySelector('.school-mark')?.src||document.querySelector('.brand img')?.src||'school-logo.jpg';
- body=`<div style="display:flex;align-items:center;gap:14px;border-bottom:2px solid #123d73;padding-bottom:10px;margin-bottom:16px"><img src="${logo}" style="width:55px;height:55px;object-fit:contain"><div><h1 style="margin:0">The Progress of Life School</h1><div>Chak 8JB, Mehboob Town, Daewoo Road, Faisalabad</div></div></div>`+body;
+ body=`<div style="display:flex;align-items:center;gap:14px;border-bottom:2px solid #123d73;padding-bottom:10px;margin-bottom:16px"><img src="${logo}" style="width:55px;height:55px;object-fit:contain"><div><h1 style="margin:0">The Progress of Life School</h1><div>8JB Mehboob Town, Daewoo Road, Faisalabad</div></div></div>`+body+`<div class="print-footer"><span>8JB Mehboob Town, Daewoo Road, Faisalabad</span><strong>Principal Signature: ____________________</strong></div>`;
  w.document.write(`<html><head><title>${esc(title)}</title><style>
  body{font-family:Arial,Segoe UI,sans-serif;padding:28px;color:#182335}
+ .print-footer{margin-top:28px;padding-top:10px;border-top:1px solid #d7dee8;font-size:10px;color:#667085;display:flex;justify-content:space-between;gap:20px}
  h1{font-size:22px;margin:0 0 4px;color:#082e63}
  h2{font-size:17px;margin:22px 0 10px;color:#082e63}
  .meta{color:#667085;margin-bottom:18px}
@@ -2123,12 +2203,19 @@ function renderStudentResults(){
  const head=document.getElementById('resultHead');head.innerHTML=`<tr><th>Position</th><th>Student</th><th>Class</th>${visibleSubjects.map(x=>`<th>${esc(x)}</th>`).join('')}<th>Total Result</th></tr>`;
  let complete=0,waiting=0;
  const rows=students.map(s=>{
-   const scope=resultScopeLabel(s), subjects=expectedSubjectsForClass(scope), checkSubjects=subjectFilter?[subjectFilter]:subjects;
+   const scope=resultScopeLabel(s), subjects=expectedSubjectsForClass(scope), checkSubjects=subjects;
+   // Always calculate the Total Result from ALL subjects assigned to the student,
+   // even when the user is filtering the table to one subject.
    let uploaded=0,totalObt=0,totalMarks=0;
+   const allSubjectResults={};
+   subjects.forEach(subject=>{
+     const r=latestResultFor(s,subject,scope,term,assessment);
+     if(r){uploaded++;totalObt+=Number(r.obtained_marks||0);totalMarks+=Number(r.total_marks||0);allSubjectResults[subject]=r;}
+   });
    const cells=visibleSubjects.map(subject=>{
      if(!subjects.includes(subject))return `<td class="result-cell"><span class="hint">—</span></td>`;
-     const r=latestResultFor(s,subject,scope,term,assessment); if(!r)return `<td class="result-cell waiting"><strong>Waiting</strong><div class="gr">Not uploaded</div></td>`;
-     uploaded++;totalObt+=Number(r.obtained_marks||0);totalMarks+=Number(r.total_marks||0);const pct=Number(r.percentage??(Number(r.obtained_marks||0)/Number(r.total_marks||1)*100));const grade=r.grade||gradeFromPercentage(pct);
+     const r=allSubjectResults[subject]; if(!r)return `<td class="result-cell waiting"><strong>Waiting</strong><div class="gr">Not uploaded</div></td>`;
+     const pct=Number(r.percentage??(Number(r.obtained_marks||0)/Number(r.total_marks||1)*100));const grade=r.grade||gradeFromPercentage(pct);
      return `<td class="result-cell"><div class="marks"><strong>${esc(resultMarkDisplay(r.obtained_marks))} / ${esc(resultMarkDisplay(r.total_marks))}</strong></div><div class="pct">${pct.toFixed(1)}%</div><div class="gr">Grade ${esc(grade)}</div><div class="gr">${esc(teacherName(r.teacher_id))}</div></td>`;
    });
    const expected=checkSubjects.length,isComplete=expected>0&&uploaded>=expected;if(isComplete)complete++;else waiting++;
@@ -2345,7 +2432,7 @@ function renderGrowthAnalytics(){
    return `<tr><td><strong>${esc(a.label)}</strong></td><td>${a.avg.toFixed(1)}%</td><td>${prev===null?'—':prev.toFixed(1)+'%'}</td><td class="${ch!==null&&ch<0?'negative':'positive'}">${ch===null?'—':(ch>=0?'+':'')+ch.toFixed(1)+' pp'}</td><td>${valid.filter(x=>String(x.r.assessment_name||x.r.term||'Assessment')===a.label).length}</td></tr>`;
  }).join('')||'<tr><td colspan="5" class="empty">No result data available.</td></tr>';
 }
-function exportStudents(){const rows=[['Student ID','Name','Guardian','B-Form No.','Phone','Class','Section','Monthly Fee','Admission Date'],...db.students.map(s=>[s.id,s.name,s.guardian,s.bForm,s.phone,s.class,s.section,s.fee,s.admission])];const csv=rows.map(r=>r.map(x=>`"${String(x??'').replaceAll('"','""')}"`).join(',')).join('\\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='students.csv';a.click()}
+function exportStudents(){const rows=[['Student ID','Roll Number','Name','Guardian','B-Form No.','Phone','Class','Section','Monthly Fee','Admission Date'],...db.students.map(s=>[s.id,s.rollNumber||'',s.name,s.guardian,s.bForm,s.phone,s.class,s.section,s.fee,s.admission])];const csv=rows.map(r=>r.map(x=>`"${String(x??'').replaceAll('"','""')}"`).join(',')).join('\\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='students.csv';a.click()}
 window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show'))});
 (async()=>{
  if(!initSupabase()) return;
@@ -2363,7 +2450,7 @@ window.addEventListener('error',e=>{console.error('TPLS Admin Portal runtime err
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script>
 (function(){
-  const SCHOOL={name:'THE PROGRESS OF LIFE SCHOOL',under:'',address:'Chak 8JB, Mehboob Town, Daewoo Road, Faisalabad',mission:'PROGRESS FOR CHRISTIAN CHILDREN'};
+  const SCHOOL={name:'THE PROGRESS OF LIFE SCHOOL',under:'',address:'8JB Mehboob Town, Daewoo Road, Faisalabad',mission:'PROGRESS FOR CHRISTIAN CHILDREN'};
   const EMBED_LOGO='data:image/jpeg;base64,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';
   document.querySelectorAll('.school-mark,.brand img,.receipt-logo').forEach(img=>{img.src=EMBED_LOGO;img.removeAttribute('onerror');img.style.display='';});
   const PDF={};
@@ -2473,7 +2560,7 @@ async function downloadTeachersPDF(){
     const logo=document.querySelector('.school-mark,.brand img,.receipt-logo');
     if(logo?.src){try{doc.addImage(logo.src,'JPEG',12,10,18,18)}catch(e){}}
     doc.setTextColor(18,61,115);doc.setFont('helvetica','bold');doc.setFontSize(16);doc.text('THE PROGRESS OF LIFE SCHOOL',34,16);
-    doc.setFontSize(8);doc.setTextColor(82,98,122);doc.text('Chak 8JB, Mehboob Town, Daewoo Road, Faisalabad',34,22);
+    doc.setFontSize(8);doc.setTextColor(82,98,122);doc.text('8JB Mehboob Town, Daewoo Road, Faisalabad',34,22);
     doc.setFontSize(12);doc.setTextColor(18,61,115);doc.text('Teacher & Staff Information',12,36);
     const rows=teachers.map(t=>{
       const assignments=(t.assignments||[]).map(a=>`${a.className} — ${a.subject}`).join('\n')||'None';
@@ -2492,7 +2579,7 @@ async function downloadTeachersPDF(){
 (function(){
   'use strict';
   const SCHOOL_NAME='The Progress of Life School';
-  const SCHOOL_ADDRESS='Chak 8JB, Mehboob Town, Daewoo Road, Faisalabad';
+  const SCHOOL_ADDRESS='8JB Mehboob Town, Daewoo Road, Faisalabad';
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
   function cfg(id){
     if(id==='leave-applications') return {title:'Leave Applications Report',orientation:'portrait'};
@@ -2529,9 +2616,12 @@ async function downloadTeachersPDF(){
       doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(10);doc.text(c.title,L+4,44.5);
     }
     function footer(){
-      doc.setDrawColor(215,224,235);doc.line(L,H-10,R,H-10);
-      doc.setFont('helvetica','normal');doc.setTextColor(100,116,139);doc.setFontSize(6.5);
-      doc.text(SCHOOL_NAME+' - Official School Record',L,H-5);
+      doc.setDrawColor(215,224,235);doc.line(L,H-17,R,H-17);
+      doc.setFont('helvetica','normal');doc.setTextColor(82,98,122);doc.setFontSize(6.5);
+      doc.text(SCHOOL_NAME+' - Official School Record',L,H-12);
+      doc.text(SCHOOL_ADDRESS,L,H-8);
+      doc.setFont('helvetica','bold');doc.setTextColor(45,55,72);
+      doc.text('Principal Signature: ____________________',R,H-8,{align:'right'});
     }
     header();
     doc.autoTable({
