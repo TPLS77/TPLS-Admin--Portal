@@ -825,7 +825,7 @@ input:focus,select:focus,textarea:focus{
     <div class="card stat"><div><p>Subjects Expected</p><h3 id="resultSubjectCount">0</h3><p>Based on teacher assignments</p></div><div class="icon">📚</div></div>
   </div>
   <div class="card" style="margin-top:18px"><div class="table-wrap"><table class="table result-table"><thead id="resultHead"></thead><tbody id="resultRows"></tbody></table></div></div>
-  <div class="hint" style="margin-top:10px">Each subject shows <strong>Obtained / Total</strong> marks. A zero mark is displayed as <strong>Free</strong>. Position is calculated within each selected class/stream from the highest complete-result percentage. A student's total is calculated from the combined obtained marks ÷ combined total marks for the uploaded subjects. If any assigned subject is missing, the overall result is marked <strong>Waiting</strong>.</div>
+  <div class="hint" style="margin-top:10px">Each subject shows <strong>Obtained / Total</strong> marks. A zero mark is displayed as <strong>Free</strong>. Position is calculated within each selected class/stream from the highest complete-result percentage. Only the official subjects configured for that class are shown. A student's total is calculated from the combined obtained marks ÷ combined total marks for the class subjects. If any required subject is missing, the overall result is marked <strong>Waiting</strong>.</div>
 </div>
 
 <div id="teacher-notifications" class="page">
@@ -2032,7 +2032,18 @@ function isAdminSession(){return !!remoteReady;}
 function teacherByRemoteId(id){return db.teachers.find(t=>t._remoteId===id)||null}
 function studentByRemoteId(id){return db.students.find(s=>s._remoteId===id)||null}
 function typeLabel(t){return t==='leave'?'📝 Leave':t==='suggestion'?'💡 Suggestion':t==='result'?'📊 Result':'📚 Lesson Plan'}
-function gradeFromPercentage(p){p=Number(p);if(!Number.isFinite(p))return '—';if(p>=90)return 'A+';if(p>=80)return 'A';if(p>=70)return 'B';if(p>=60)return 'C';if(p>=50)return 'D';return 'F'}
+function gradeInfoFromPercentage(p){
+ p=Number(p);if(!Number.isFinite(p))return {grade:'—',remarks:'—'};
+ if(p>=90)return {grade:'A+',remarks:'Outstanding'};
+ if(p>=80)return {grade:'A',remarks:'Excellent'};
+ if(p>=70)return {grade:'B+',remarks:'Very Good'};
+ if(p>=60)return {grade:'B',remarks:'Good'};
+ if(p>=50)return {grade:'C',remarks:'Satisfactory'};
+ if(p>=40)return {grade:'D',remarks:'Pass'};
+ return {grade:'F',remarks:'Fail'};
+}
+function gradeFromPercentage(p){return gradeInfoFromPercentage(p).grade}
+function remarksFromPercentage(p){return gradeInfoFromPercentage(p).remarks}
 function resultMarkDisplay(v){const n=Number(v);return Number.isFinite(n)&&n===0?'Free':(v===null||v===undefined||v===''?'—':String(v));}
 function formatDate(v){return v?String(v).slice(0,10):'—'}
 function teacherName(id){return teacherByRemoteId(id)?.name||'Teacher'}
@@ -2161,50 +2172,33 @@ function resultScopeForStudent(s){return resultScopeLabel(s);}
 function resultScopeLabel(s){return normalizeResultScope(s?.class,s?.section);}
 function expectedSubjectsForClass(className){
  const scope=normalizeResultScope(className,'');
- const fixed={
-   '9th (Arts)':['Ethic','General Science','Education','Economics','Math','Urdu','English'],
-   '10th (Arts)':['P.S','General Science','Education','Economics','Math','Urdu','English'],
-   '9th (Science)':['Ethic','Chemistry','Physics','Biology','Math','Urdu','English'],
-   '10th (Science)':['P.S','Chemistry','Physics','Biology','Math','Urdu','English']
- };
- if(fixed[scope])return fixed[scope];
- const set=new Set();
- db.teachers.forEach(t=>(t.assignments||[]).forEach(a=>{
-   if(a.subject==='__CLASS_INCHARGE__')return;
-   const ascope=normalizeResultScope(a.className,'');
-   if(ascope===scope)set.add(a.subject);
- }));
- teacherInboxData.results.filter(r=>normalizeResultScope(r.class_name,r.section||'')===scope).forEach(r=>{if(r.subject)set.add(r.subject)});
- return [...set].sort((a,b)=>a.localeCompare(b));
+ return curriculumSubjectsForClass(scope).slice();
 }
 function resultSubjectAliases(subject){
  const map={
-   'Ethic':['Ethic','Ethics'],
-   'P.S':['P.S','Pakistan Studies'],
-   'General Science':['General Science'],
-   'Education':['Education'],
-   'Economics':['Economics'],
-   'Math':['Math','Mathematics'],
-   'Urdu':['Urdu'],
-   'English':['English'],
-   'Chemistry':['Chemistry'],
-   'Physics':['Physics'],
-   'Biology':['Biology']
+   'English':['English'], 'Urdu':['Urdu'], 'Math':['Math','Mathematics'],
+   'Art':['Art','Arts'], 'Bible':['Bible'], 'Drawing':['Drawing'],
+   'General Knowledge':['General Knowledge','General Knowledge1st','General Knowledge2nd','General Knowledge3rd'],
+   'General Science':['General Science','General Science1st','General Science2nd','General Sci'],
+   'Social Studies':['Social Studies','Social Studdies','SST','Social Studies4th'],
+   'Computer Science':['Computer Science','Computer','Com'],
+   'Geography':['Geography','Geo'], 'History':['History','His'],
+   'Ethic':['Ethic','Ethics'], 'P.S':['P.S','Pakistan Studies'],
+   'Education':['Education'], 'Economics':['Economics'],
+   'Chemistry':['Chemistry'], 'Physics':['Physics'], 'Biology':['Biology']
  };
  return map[subject]||[subject];
 }
 function latestResultFor(student,subject,className,term,assessment){
  const ids=new Set([student?._remoteId,student?.id].filter(v=>v!==undefined&&v!==null).map(String));
  const scope=normalizeResultScope(className,student?.section||'');
- const base=scope.match(/^(9th|10th) \((Arts|Science)\)$/)?.[1]||scope;
  const aliases=new Set(resultSubjectAliases(subject).map(x=>String(x).toLowerCase()));
  let rows=teacherInboxData.results.filter(r=>ids.has(String(r.student_id))&&aliases.has(String(r.subject||'').toLowerCase()));
- rows=rows.filter(r=>{const rs=normalizeResultScope(r.class_name,r.section||'');return rs===scope||rs===base;});
+ rows=rows.filter(r=>normalizeResultScope(r.class_name,r.section||'')===scope);
  if(term)rows=rows.filter(r=>String(r.term||'')===term);if(assessment)rows=rows.filter(r=>String(r.assessment_name||'')===assessment);
  rows.sort((a,b)=>String(b.created_at||b.exam_date||'').localeCompare(String(a.created_at||a.exam_date||'')));
  return rows[0]||null;
 }
-function resultScopeLabel(s){const c=String(s?.class||'');const sec=String(s?.section||'').trim();return (c==='9th'||c==='10th')&&sec?`${c} (${sec})`:c}
 function parseResultScope(v){const m=String(v||'').match(/^(9th|10th) \((Arts|Science)\)$/);return m?{className:m[1],section:m[2]}:{className:String(v||''),section:''}}
 function initResultFilters(){
  const cf=document.getElementById('resultClassFilter'), sf=document.getElementById('resultSectionFilter');
@@ -2261,12 +2255,12 @@ function renderStudentResults(){
    const cells=visibleSubjects.map(subject=>{
      if(!subjects.includes(subject))return `<td class="result-cell"><span class="hint">—</span></td>`;
      const r=allSubjectResults[subject]; if(!r)return `<td class="result-cell waiting"><strong>Waiting</strong><div class="gr">Not uploaded</div></td>`;
-     const pct=Number(r.percentage??(Number(r.obtained_marks||0)/Number(r.total_marks||1)*100));const grade=r.grade||gradeFromPercentage(pct);
-     return `<td class="result-cell"><div class="marks"><strong>${esc(resultMarkDisplay(r.obtained_marks))} / ${esc(resultMarkDisplay(r.total_marks))}</strong></div><div class="pct">${pct.toFixed(1)}%</div><div class="gr">Grade ${esc(grade)}</div><div class="gr">${esc(teacherName(r.teacher_id))}</div></td>`;
+     const pct=Number(r.percentage??(Number(r.obtained_marks||0)/Number(r.total_marks||1)*100));const gi=gradeInfoFromPercentage(pct);
+     return `<td class="result-cell"><div class="marks"><strong>${esc(resultMarkDisplay(r.obtained_marks))} / ${esc(resultMarkDisplay(r.total_marks))}</strong></div><div class="pct">${pct.toFixed(1)}%</div><div class="gr">Grade ${esc(gi.grade)}</div><div class="gr">${esc(gi.remarks)}</div><div class="gr">${esc(teacherName(r.teacher_id))}</div></td>`;
    });
    const expected=checkSubjects.length,isComplete=expected>0&&uploaded>=expected;if(isComplete)complete++;else waiting++;
-   const totalPct=totalMarks?totalObt/totalMarks*100:0;
-   const totalCell=isComplete?`<td class="result-total"><div class="marks"><strong>${esc(resultMarkDisplay(totalObt))} / ${esc(resultMarkDisplay(totalMarks))}</strong></div><div class="pct">${totalPct.toFixed(1)}%</div><div class="gr">Grade ${gradeFromPercentage(totalPct)}</div><div class="result-complete">Complete</div></td>`:`<td class="result-total"><div class="result-pending">Waiting</div><div class="gr">${uploaded}/${expected} subjects uploaded</div>${totalMarks?`<div class="gr">Current: ${totalPct.toFixed(1)}%</div>`:''}</td>`;
+   const totalPct=totalMarks?totalObt/totalMarks*100:0; const totalGrade=gradeInfoFromPercentage(totalPct);
+   const totalCell=isComplete?`<td class="result-total"><div class="marks"><strong>${esc(resultMarkDisplay(totalObt))} / ${esc(resultMarkDisplay(totalMarks))}</strong></div><div class="pct">${totalPct.toFixed(1)}%</div><div class="gr">Grade ${esc(totalGrade.grade)}</div><div class="gr">${esc(totalGrade.remarks)}</div><div class="result-complete">Complete</div></td>`:`<td class="result-total"><div class="result-pending">Waiting</div><div class="gr">${uploaded}/${expected} subjects uploaded</div>${totalMarks?`<div class="gr">Current: ${totalPct.toFixed(1)}%</div>`:''}</td>`;
    return `<tr><td><strong>${esc(positions[String(s.id)]||'—')}</strong></td><td><div class="result-name">${esc(s.name)}</div><div class="hint">${esc(s.id)}</div></td><td>${esc(s.class)}${s.section?' / '+esc(s.section):''}</td>${cells.join('')}${totalCell}</tr>`;
  }).join('');
  document.getElementById('resultRows').innerHTML=rows||`<tr><td colspan="${visibleSubjects.length+4}" class="empty">No students found for the selected filters.</td></tr>`;
