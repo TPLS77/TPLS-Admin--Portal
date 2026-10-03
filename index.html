@@ -1593,10 +1593,45 @@ function addTeacherIncharge(){
  if(!teacherInchargeClasses.some(a=>a.className===c&&a.section===sec)){teacherInchargeClasses.push({className:c,section:sec});renderTeacherInchargeChips();}
 }
 function inchargeScopeName(a){return a.section?`${a.className} (${a.section})`:a.className}
+// TPLS official class curriculum supplied by the school.
+const TPLS_CLASS_SUBJECTS={
+ 'play group':['English','Urdu','Math','Art','Bible'],
+ 'nursery':['English','Urdu','Math','Art','Bible'],
+ 'prep':['English','Urdu','Math','Art'],
+ '1st':['General Knowledge','General Science','English','Urdu','Bible','Math','Drawing'],
+ '2nd':['Urdu','English','Math','General Science','Bible','Drawing','General Knowledge'],
+ '3rd':['General Knowledge','Math','English','Urdu','General Science','Drawing'],
+ '4th':['Bible','Urdu','English','Social Studies','Math','General Science','Drawing'],
+ '5th':['English','Urdu','Math','Social Studies','General Science','Bible','Art'],
+ '6th':['English','Urdu','Math','Bible','General Science','Computer Science','Geography','History'],
+ '7th':['English','Urdu','Bible','Math','General Science','Computer Science','Geography','History'],
+ '8th':['English','Urdu','Math','Bible','History','Geography','General Science','Computer Science'],
+ '9th (arts)':['Ethic','General Science','Education','Economics','Math','Urdu','English'],
+ '9th (science)':['Ethic','Chemistry','Physics','Biology','Math','Urdu','English'],
+ '10th (arts)':['P.S','General Science','Education','Economics','Math','Urdu','English'],
+ '10th (science)':['P.S','Chemistry','Physics','Biology','Math','Urdu','English']
+};
+const TPLS_SUBJECT_ALIASES={eng:'English',english:'English',urdu:'Urdu',math:'Math',mathematics:'Math',art:'Art',drawing:'Drawing',bible:'Bible','general knowledge':'General Knowledge','general science':'General Science','general sci':'General Science',sst:'Social Studies','social studies':'Social Studies',com:'Computer Science',computer:'Computer Science','computer science':'Computer Science',geo:'Geography',geography:'Geography',his:'History',history:'History',ethic:'Ethic',ethics:'Ethic','p.s':'P.S','pakistan studies':'P.S'};
+function normalizeCurriculumClass(value){
+ let raw=String(value||'').trim().replace(/\s+/g,' ');
+ const m=raw.match(/^(9th|10th)\s*(?:\((Arts|Science)\)|[-\/]?\s*(Arts|Science))$/i);
+ if(m)raw=`${m[1]} (${m[2]||m[3]})`;
+ if(/^5(?:th|\s*five)$/i.test(raw)||/^class\s+five$/i.test(raw))raw='5th';
+ return raw.toLowerCase();
+}
+function canonicalTeacherSubject(value){const raw=String(value||'').trim();return TPLS_SUBJECT_ALIASES[raw.toLowerCase()]||raw;}
+function curriculumSubjectsForClass(cls){return TPLS_CLASS_SUBJECTS[normalizeCurriculumClass(cls)]||[];}
+function updateTeacherSubjectOptions(){
+ const s=document.getElementById('teSubjectSelect'), cls=document.getElementById('teClass')?.value||''; if(!s)return;
+ const allowed=curriculumSubjectsForClass(cls); const options=allowed.length?allowed:TEACHER_SUBJECTS;
+ const old=s.value; s.innerHTML=options.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join(''); if(options.includes(old))s.value=old;
+}
 function initTeacherSelectors(){
  const c=document.getElementById('teClass'), s=document.getElementById('teSubjectSelect');
- if(c)c.innerHTML=TEACHER_CLASSES.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join(''); const ic=document.getElementById('teInchargeClass'); if(ic){ic.innerHTML=['Play Group','Nursery','Prep','Kindergarten','1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'].map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join(''); updateInchargeSectionOptions();}
+ if(c){c.innerHTML=TEACHER_CLASSES.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join(''); c.onchange=updateTeacherSubjectOptions;}
  if(s)s.innerHTML=TEACHER_SUBJECTS.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+ const ic=document.getElementById('teInchargeClass'); if(ic){ic.innerHTML=['Play Group','Nursery','Prep','Kindergarten','1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'].map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join(''); updateInchargeSectionOptions();}
+ updateTeacherSubjectOptions();
 }
 function renderTeacherAssignmentChips(){
  const el=document.getElementById('teacherAssignmentChips'); if(!el)return;
@@ -1606,8 +1641,10 @@ function renderTeacherAssignmentChips(){
 }
 function addTeacherAssignment(){
  const className=document.getElementById('teClass').value, subject=document.getElementById('teSubjectSelect').value;
- if(!teacherAssignments.some(a=>a.className===className&&a.subject===subject)){
-   teacherAssignments.push({className,subject});
+ const allowed=curriculumSubjectsForClass(className);
+ if(allowed.length && !allowed.includes(canonicalTeacherSubject(subject)))return toast('That subject is not part of '+className+'.');
+ if(!teacherAssignments.some(a=>a.className===className&&canonicalTeacherSubject(a.subject)===canonicalTeacherSubject(subject))){
+   teacherAssignments.push({className,subject:canonicalTeacherSubject(subject)});
    renderTeacherAssignmentChips();
  }
 }
@@ -1689,7 +1726,10 @@ async function saveTeacher(){
   const designation=[primary,...extras.filter(x=>x.toLowerCase()!==primary.toLowerCase())].join(' + ');
   const t={id,name:document.getElementById('teName').value.trim(),staffType:'Teacher',designation,cnic:document.getElementById('teCnic').value.trim(),gender:document.getElementById('teGender').value,phone:document.getElementById('tePhone').value.trim(),email:document.getElementById('teEmail').value.trim(),qualification:document.getElementById('teQualification').value.trim(),joining:document.getElementById('teJoining').value,status:document.getElementById('teStatus').value,photo:currentTeacherPhoto,photoPath:existing?.photoPath||'',assignments:teacherAssignments.map(a=>({...a}))};
   if(!t.name)return toast('Teacher name is required.');
-  if(!t.assignments.length)return toast('Please add at least one class and subject assignment.');
+  if(!t.assignments.length && !teacherInchargeClasses.length)return toast('Please add at least one class/subject assignment or Class Incharge class.');
+  // Clean invalid legacy assignments for classes whose curriculum is now configured.
+  t.assignments=t.assignments.map(a=>({className:a.className,subject:canonicalTeacherSubject(a.subject)}))
+    .filter(a=>{const allowed=curriculumSubjectsForClass(a.className);return !allowed.length||allowed.includes(a.subject);});
   if(!remoteReady)return toast('Please sign in to save teachers to the cloud.');
   try{
     if(t.photo && String(t.photo).startsWith('data:image/')){
@@ -1703,25 +1743,31 @@ async function saveTeacher(){
       return toast('Teacher could not be saved: '+(error.message||'Database error'));
     }
     t._remoteId=data.id;
-    const del=await supabaseClient.from('teacher_assignments').delete().eq('teacher_id',t._remoteId);
-    if(del.error){
-      console.error('Teacher assignment cleanup error:',del.error);
-      return toast('Teacher saved, but assignments could not be updated: '+del.error.message);
-    }
-    const assignments=t.assignments.map(x=>({teacher_id:t._remoteId,class_name:x.className,subject:x.subject})).concat(teacherInchargeClasses.map(x=>({teacher_id:t._remoteId,class_name:inchargeScopeName(x),subject:'__CLASS_INCHARGE__'})));
-    // De-duplicate assignments before inserting. The database has a unique constraint
-    // on teacher_id + class_name + subject, so repeated class/subject entries must be removed.
+    const assignments=t.assignments.map(x=>({teacher_id:t._remoteId,class_name:x.className,subject:x.subject}))
+      .concat(teacherInchargeClasses.map(x=>({teacher_id:t._remoteId,class_name:inchargeScopeName(x),subject:'__CLASS_INCHARGE__'})));
     const uniqueAssignments=[...new Map(assignments.map(a=>[`${a.teacher_id}|${a.class_name}|${a.subject}`,a])).values()];
+    // Save desired assignments first. This means a blocked DELETE policy cannot
+    // prevent ordinary teacher profile edits or newly added assignments.
     if(uniqueAssignments.length){
-      const ins=await supabaseClient.from('teacher_assignments').insert(uniqueAssignments);
+      const ins=await supabaseClient.from('teacher_assignments').upsert(uniqueAssignments,{onConflict:'teacher_id,class_name,subject'});
       if(ins.error){
-        console.error('Teacher assignment insert error:',ins.error);
+        console.error('Teacher assignment upsert error:',ins.error);
         return toast('Teacher saved, but class/subject assignments failed: '+ins.error.message);
       }
     }
+    // Remove only assignments that are no longer wanted. If DELETE is blocked by
+    // an existing RLS policy, keep the saved teacher/new assignments and explain it.
+    let assignmentWarning='';
+    const {data:oldAssignments}=await supabaseClient.from('teacher_assignments').select('id,class_name,subject').eq('teacher_id',t._remoteId);
+    const desiredKeys=new Set(uniqueAssignments.map(a=>`${a.class_name}|${a.subject}`));
+    const stale=(oldAssignments||[]).filter(a=>!desiredKeys.has(`${a.class_name}|${a.subject}`));
+    for(const a of stale){
+      const del=await supabaseClient.from('teacher_assignments').delete().eq('id',a.id);
+      if(del.error){assignmentWarning=' Teacher profile and new assignments were saved, but an old removed assignment could not be deleted because of Supabase permissions.'; console.warn('Teacher assignment delete blocked:',del.error);break;}
+    }
     if(existing)Object.assign(existing,t);else db.teachers.push(t);
     saveLocal();closeModal('teacherModal');renderTeachers();refreshDashboard();
-    toast('Teacher saved successfully to cloud.');
+    toast('Teacher saved successfully to cloud.'+assignmentWarning);
   }catch(err){
     console.error('Teacher save error:',err);
     toast('Teacher could not be saved: '+(err?.message||'Unknown error'));
